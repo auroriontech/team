@@ -1,0 +1,862 @@
+---
+/**
+ * Repository List Component
+ * 
+ * Displays a dynamic list of repositories with:
+ * - Search and filtering capabilities
+ * - Loading states and error handling
+ * - Empty state management
+ * - Real-time updates from localStorage
+ * - Responsive grid layout
+ * 
+ * Team Input Incorporated:
+ * - Architect-Engineer: Clean component architecture with separation of concerns
+ * - Tester-Reviewer: Error handling and loading states
+ * - Optimizer-Watchdog: Performance optimizations and search debouncing
+ * - Scrum-Knowledge: Clear information hierarchy and filtering
+ * - Technical Enablement: Robust data loading and state management
+ * 
+ * @author Aurorion Teams Collective
+ * @version 1.0.0
+ */
+
+// This component will be populated dynamically via JavaScript
+// No server-side props needed as we're loading from localStorage
+---
+
+<!-- Repository List Container -->
+<section class="repository-list" id="repository-list">
+  <!-- Search and Filter Controls -->
+  <div class="list-controls">
+    <div class="search-container">
+      <label for="repo-search" class="sr-only">Search repositories</label>
+      <input
+        type="search"
+        id="repo-search"
+        class="search-input"
+        placeholder="Search repositories..."
+        aria-describedby="search-help"
+      >
+      <span class="search-icon" aria-hidden="true">🔍</span>
+    </div>
+    
+    <div class="filter-container">
+      <label for="status-filter" class="filter-label">Filter by status:</label>
+      <select id="status-filter" class="filter-select">
+        <option value="">All Repositories</option>
+        <option value="setup">Setup Required</option>
+        <option value="progress">In Progress</option>
+        <option value="active">Active</option>
+        <option value="mixed">Mixed Status</option>
+      </select>
+    </div>
+    
+    <div class="sort-container">
+      <label for="sort-select" class="filter-label">Sort by:</label>
+      <select id="sort-select" class="filter-select">
+        <option value="updated">Last Updated</option>
+        <option value="created">Date Created</option>
+        <option value="name">Name (A-Z)</option>
+        <option value="team-size">Team Size</option>
+      </select>
+    </div>
+  </div>
+  
+  <!-- Search Help Text -->
+  <div id="search-help" class="search-help">
+    Search by repository name or description
+  </div>
+  
+  <!-- Loading State -->
+  <div class="loading-state" id="loading-state">
+    <div class="loading-spinner" aria-hidden="true">⏳</div>
+    <p>Loading repositories...</p>
+  </div>
+  
+  <!-- Error State -->
+  <div class="error-state" id="error-state" style="display: none;">
+    <div class="error-icon" aria-hidden="true">⚠️</div>
+    <h3>Failed to Load Repositories</h3>
+    <p>There was an error loading your repositories. Please try again.</p>
+    <button class="btn btn-primary" id="retry-btn">
+      🔄 Retry
+    </button>
+  </div>
+  
+  <!-- Repository Grid -->
+  <div class="repo-grid" id="repo-grid">
+    <!-- Repository cards will be populated here -->
+  </div>
+  
+  <!-- Empty State (when no repositories match search/filter) -->
+  <div class="empty-search-state" id="empty-search-state" style="display: none;">
+    <div class="empty-icon" aria-hidden="true">🔍</div>
+    <h3>No repositories found</h3>
+    <p>Try adjusting your search terms or filters.</p>
+    <button class="btn btn-secondary" id="clear-filters-btn">
+      Clear Filters
+    </button>
+  </div>
+  
+  <!-- No Repositories State -->
+  <div class="empty-state" id="empty-state" style="display: none;">
+    <div class="empty-icon" aria-hidden="true">📁</div>
+    <h3>No repositories yet</h3>
+    <p>Create your first repository to get started with team management!</p>
+    <button class="btn btn-primary" id="create-first-repo-btn">
+      🚀 Create Repository
+    </button>
+  </div>
+</section>
+
+<style>
+  /* ========================================
+     REPOSITORY LIST CONTAINER
+     ======================================== */
+  
+  .repository-list {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* ========================================
+     LIST CONTROLS STYLES
+     ======================================== */
+  
+  .list-controls {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-lg);
+    background: var(--section-bg);
+    border-radius: var(--border-radius-lg);
+    border: 1px solid var(--border-color);
+  }
+  
+  .search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .search-input {
+    width: 100%;
+    padding: var(--input-padding);
+    padding-right: 2.5rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background: var(--card-bg);
+    color: var(--text-color);
+    font-size: 1rem;
+    transition: all 0.2s ease;
+  }
+  
+  .search-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+  
+  .search-icon {
+    position: absolute;
+    right: var(--spacing-md);
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+  
+  .filter-container,
+  .sort-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    min-width: 150px;
+  }
+  
+  .filter-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-color);
+  }
+  
+  .filter-select {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background: var(--card-bg);
+    color: var(--text-color);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .filter-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+  
+  .search-help {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-md);
+    font-style: italic;
+  }
+  
+  /* ========================================
+     LOADING AND ERROR STATES
+     ======================================== */
+  
+  .loading-state,
+  .error-state {
+    text-align: center;
+    padding: var(--spacing-2xl);
+    background: var(--section-bg);
+    border-radius: var(--border-radius-lg);
+    border: 2px dashed var(--border-color);
+  }
+  
+  .loading-spinner {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-lg);
+    animation: spin 2s linear infinite;
+  }
+  
+  .error-icon {
+    font-size: 4rem;
+    margin-bottom: var(--spacing-lg);
+    opacity: 0.6;
+  }
+  
+  .error-state h3 {
+    font-size: 1.5rem;
+    color: var(--text-color);
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .error-state p {
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  /* ========================================
+     REPOSITORY GRID STYLES
+     ======================================== */
+  
+  .repo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: var(--spacing-lg);
+    min-height: 200px;
+  }
+  
+  /* ========================================
+     EMPTY STATES
+     ======================================== */
+  
+  .empty-state,
+  .empty-search-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: var(--spacing-2xl);
+    background: var(--section-bg);
+    border-radius: var(--border-radius-lg);
+    border: 2px dashed var(--border-color);
+    transition: all 0.3s ease;
+  }
+  
+  .empty-state:hover,
+  .empty-search-state:hover {
+    border-style: solid;
+    transform: translateY(-2px);
+  }
+  
+  .empty-icon {
+    font-size: 4rem;
+    margin-bottom: var(--spacing-lg);
+    opacity: 0.6;
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .empty-state h3,
+  .empty-search-state h3 {
+    font-size: 1.5rem;
+    color: var(--text-color);
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .empty-state p,
+  .empty-search-state p {
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  /* ========================================
+     PRICE IS RIGHT THEME ENHANCEMENTS
+     ======================================== */
+  
+  .price-is-right .list-controls {
+    background: var(--nav-bg);
+    border: 2px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .price-is-right .list-controls::before {
+    content: '🎯';
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    font-size: 2rem;
+    animation: bounce 2s infinite;
+  }
+  
+  .price-is-right .search-input:focus,
+  .price-is-right .filter-select:focus {
+    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3);
+  }
+  
+  .price-is-right .loading-spinner {
+    animation: bounce 1s infinite, spin 2s linear infinite;
+  }
+  
+  .price-is-right .empty-state,
+  .price-is-right .empty-search-state {
+    border-style: solid;
+    border-color: var(--primary-color);
+    background: var(--card-bg);
+    animation: gentle-bounce 3s ease-in-out infinite;
+  }
+  
+  /* ========================================
+     ANIMATIONS
+     ======================================== */
+  
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  @keyframes gentle-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+  }
+  
+  /* ========================================
+     RESPONSIVE DESIGN
+     ======================================== */
+  
+  @media (max-width: 1024px) {
+    .list-controls {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-md);
+    }
+    
+    .repo-grid {
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .list-controls {
+      padding: var(--spacing-md);
+    }
+    
+    .filter-container,
+    .sort-container {
+      min-width: unset;
+    }
+    
+    .repo-grid {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-md);
+    }
+  }
+  
+  /* ========================================
+     ACCESSIBILITY IMPROVEMENTS
+     ======================================== */
+  
+  @media (prefers-reduced-motion: reduce) {
+    .loading-spinner,
+    .empty-icon,
+    .price-is-right .loading-spinner,
+    .price-is-right .empty-state,
+    .price-is-right .empty-search-state {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  /**
+   * Repository List Interactive Functionality
+   * 
+   * Handles:
+   * - Loading repositories from localStorage
+   * - Search and filtering with debouncing
+   * - Sorting and display management
+   * - Real-time updates when repositories change
+   * - Error handling and retry logic
+   * 
+   * Team Input:
+   * - Optimizer-Watchdog: Debounced search and performance optimizations
+   * - Tester-Reviewer: Comprehensive error handling and loading states
+   * - Technical Enablement: Robust data loading and state management
+   * - Architect-Engineer: Clean separation of concerns and modularity
+   */
+  
+  class RepositoryListManager {
+    constructor() {
+      // DOM elements
+      this.container = document.getElementById('repository-list');
+      this.searchInput = document.getElementById('repo-search');
+      this.statusFilter = document.getElementById('status-filter');
+      this.sortSelect = document.getElementById('sort-select');
+      this.repoGrid = document.getElementById('repo-grid');
+      this.loadingState = document.getElementById('loading-state');
+      this.errorState = document.getElementById('error-state');
+      this.emptyState = document.getElementById('empty-state');
+      this.emptySearchState = document.getElementById('empty-search-state');
+      
+      // State
+      this.repositories = [];
+      this.filteredRepositories = [];
+      this.searchTimeout = null;
+      this.isLoading = false;
+      
+      this.initializeEventListeners();
+      this.loadRepositories();
+      
+      // Failsafe: if loading takes more than 10 seconds, show empty state
+      setTimeout(() => {
+        if (this.isLoading) {
+          console.warn('Loading timeout reached, forcing empty state');
+          this.setLoadingState(false);
+          this.hideAllStates();
+          this.emptyState.style.display = 'block';
+        }
+      }, 10000);
+    }
+    
+    /**
+     * Fallback function to load app state directly from localStorage
+     */
+    loadAppStateFromStorage() {
+      const STORAGE_KEY = 'aurorion-teams-data';
+      const defaultState = {
+        repositories: [],
+        agentRoles: [],
+        theme: 'professional'
+      };
+      
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (!stored) return defaultState;
+        
+        const parsed = JSON.parse(stored);
+        return { ...defaultState, ...parsed.data };
+      } catch (error) {
+        console.error('Failed to load app state:', error);
+        return defaultState;
+      }
+    }
+    
+    /**
+     * Initialize event listeners
+     */
+    initializeEventListeners() {
+      // Search with debouncing
+      this.searchInput?.addEventListener('input', () => {
+        clearTimeout(this.searchTimeout);
+        this.searchTimeout = setTimeout(() => {
+          this.applyFilters();
+        }, 300);
+      });
+      
+      // Filter and sort changes
+      this.statusFilter?.addEventListener('change', () => this.applyFilters());
+      this.sortSelect?.addEventListener('change', () => this.applyFilters());
+      
+      // Retry button
+      document.getElementById('retry-btn')?.addEventListener('click', () => {
+        this.loadRepositories();
+      });
+      
+      // Clear filters button
+      document.getElementById('clear-filters-btn')?.addEventListener('click', () => {
+        this.clearFilters();
+      });
+      
+      // Create first repo button
+      document.getElementById('create-first-repo-btn')?.addEventListener('click', () => {
+        if (window.repositoryModal) {
+          window.repositoryModal.open();
+        }
+      });
+      
+      // Listen for repository changes
+      window.addEventListener('repositoryCreated', (e) => {
+        this.handleRepositoryCreated(e.detail);
+      });
+      
+      window.addEventListener('repositoryDeleted', (e) => {
+        this.handleRepositoryDeleted(e.detail);
+      });
+    }
+    
+    /**
+     * Load repositories from localStorage
+     */
+    async loadRepositories() {
+      console.log('Starting loadRepositories...');
+      this.setLoadingState(true);
+      
+      try {
+        // Use the global dataManager or import functions directly
+        let appState;
+        if (window.dataManager && window.dataManager.loadAppState) {
+          console.log('Using global dataManager');
+          appState = window.dataManager.loadAppState();
+        } else {
+          console.log('Using fallback loadAppStateFromStorage');
+          appState = this.loadAppStateFromStorage();
+        }
+        
+        console.log('Loaded app state:', appState);
+        
+        // Simulate loading delay for UX
+        await new Promise(resolve => setTimeout(resolve, 500));
+        this.repositories = appState.repositories || [];
+        
+        console.log('Repositories set:', this.repositories.length);
+        
+        this.applyFilters();
+        console.log('Filters applied');
+        
+        this.setLoadingState(false);
+        console.log('Loading state cleared');
+        
+      } catch (error) {
+        console.error('Failed to load repositories:', error);
+        this.setErrorState(true);
+        this.setLoadingState(false);
+      }
+    }
+    
+    /**
+     * Apply search, filter, and sort
+     */
+    applyFilters() {
+      let filtered = [...this.repositories];
+      
+      // Apply search filter
+      const searchTerm = this.searchInput?.value.toLowerCase().trim();
+      if (searchTerm) {
+        filtered = filtered.filter(repo => 
+          repo.name.toLowerCase().includes(searchTerm) ||
+          repo.description.toLowerCase().includes(searchTerm)
+        );
+      }
+      
+      // Apply status filter
+      const statusFilter = this.statusFilter?.value;
+      if (statusFilter) {
+        filtered = filtered.filter(repo => {
+          const status = this.getRepositoryStatus(repo);
+          return status.class === statusFilter;
+        });
+      }
+      
+      // Apply sorting
+      const sortBy = this.sortSelect?.value || 'updated';
+      filtered.sort((a, b) => {
+        switch (sortBy) {
+          case 'created':
+            return new Date(b.createdAt) - new Date(a.createdAt);
+          case 'updated':
+            return new Date(b.updatedAt) - new Date(a.updatedAt);
+          case 'name':
+            return a.name.localeCompare(b.name);
+          case 'team-size':
+            return b.team.length - a.team.length;
+          default:
+            return 0;
+        }
+      });
+      
+      this.filteredRepositories = filtered;
+      this.renderRepositories();
+    }
+    
+    /**
+     * Get repository status (same logic as RepositoryCard)
+     */
+    getRepositoryStatus(repository) {
+      const teamSize = repository.team.length;
+      const activeMembers = repository.team.filter(member => member.status === 'active').length;
+      const pendingMembers = repository.team.filter(member => member.status === 'pending').length;
+      
+      if (teamSize === 0) return { text: 'Setup Required', class: 'setup' };
+      if (pendingMembers > 0) return { text: 'In Progress', class: 'progress' };
+      if (activeMembers === teamSize) return { text: 'Active', class: 'active' };
+      return { text: 'Mixed Status', class: 'mixed' };
+    }
+    
+    /**
+     * Render repositories in the grid
+     */
+    async renderRepositories() {
+      console.log('Starting renderRepositories...');
+      console.log('repoGrid element:', this.repoGrid);
+      
+      if (!this.repoGrid) {
+        console.error('repoGrid element not found!');
+        return;
+      }
+      
+      // Hide all states first
+      this.hideAllStates();
+      console.log('All states hidden');
+      
+      console.log('Filtered repositories count:', this.filteredRepositories.length);
+      console.log('Total repositories count:', this.repositories.length);
+      
+      if (this.filteredRepositories.length === 0) {
+        if (this.repositories.length === 0) {
+          // No repositories at all
+          console.log('Showing empty state - no repositories');
+          this.emptyState.style.display = 'block';
+        } else {
+          // No repositories match current filters
+          console.log('Showing empty search state - no matches');
+          this.emptySearchState.style.display = 'block';
+        }
+        this.repoGrid.innerHTML = '';
+        return;
+      }
+      
+      // Clear existing content
+      this.repoGrid.innerHTML = '';
+      
+      // Render repository cards
+      for (const repository of this.filteredRepositories) {
+        const cardElement = await this.createRepositoryCard(repository);
+        this.repoGrid.appendChild(cardElement);
+      }
+    }
+    
+    /**
+     * Create a repository card element
+     */
+    async createRepositoryCard(repository) {
+      // Calculate stats
+      const teamSize = repository.team.length;
+      const activeMembers = repository.team.filter(member => member.status === 'active').length;
+      const pendingMembers = repository.team.filter(member => member.status === 'pending').length;
+      const status = this.getRepositoryStatus(repository);
+      
+      // Format dates
+      const createdDate = new Date(repository.createdAt).toLocaleDateString();
+      const updatedDate = new Date(repository.updatedAt).toLocaleDateString();
+      const isRecentlyUpdated = (Date.now() - new Date(repository.updatedAt).getTime()) < 24 * 60 * 60 * 1000;
+      
+      // Create card element
+      const card = document.createElement('article');
+      card.className = 'repo-card';
+      card.setAttribute('data-repo-id', repository.id);
+      
+      card.innerHTML = `
+        <!-- Card Header -->
+        <header class="card-header">
+          <div class="repo-info">
+            <h3 class="repo-name" title="${repository.name}">
+              ${repository.name}
+            </h3>
+            <div class="repo-meta">
+              <span class="team-size" aria-label="Team size: ${teamSize} members">
+                👥 ${teamSize} ${teamSize === 1 ? 'member' : 'members'}
+              </span>
+              <span class="repo-status ${status.class}" aria-label="Repository status: ${status.text}">
+                ${status.text}
+              </span>
+              ${isRecentlyUpdated ? '<span class="recent-badge" aria-label="Recently updated">🆕 New</span>' : ''}
+            </div>
+          </div>
+          
+          <!-- Quick Actions -->
+          <div class="card-actions">
+            <button 
+              class="action-btn view-btn" 
+              data-action="view"
+              aria-label="View ${repository.name} repository"
+              title="View Repository"
+            >
+              👁️
+            </button>
+            <button 
+              class="action-btn edit-btn" 
+              data-action="edit"
+              aria-label="Edit ${repository.name} repository"
+              title="Edit Repository"
+            >
+              ✏️
+            </button>
+            <button 
+              class="action-btn delete-btn" 
+              data-action="delete"
+              aria-label="Delete ${repository.name} repository"
+              title="Delete Repository"
+            >
+              🗑️
+            </button>
+          </div>
+        </header>
+
+        <!-- Card Content -->
+        <div class="card-content">
+          <!-- Description -->
+          ${repository.description ? 
+            `<p class="repo-description" title="${repository.description}">${repository.description}</p>` :
+            '<p class="repo-description empty">No description provided</p>'
+          }
+
+          ${teamSize > 0 ? `
+            <!-- Team Composition Preview -->
+            <div class="team-preview">
+              <h4 class="team-preview-title">Team Composition</h4>
+              <div class="team-stats">
+                ${activeMembers > 0 ? `<span class="stat active">✅ ${activeMembers} Active</span>` : ''}
+                ${pendingMembers > 0 ? `<span class="stat pending">⏳ ${pendingMembers} Pending</span>` : ''}
+                ${repository.team.filter(m => m.status === 'standby').length > 0 ? 
+                  `<span class="stat standby">💤 ${repository.team.filter(m => m.status === 'standby').length} Standby</span>` : ''
+                }
+              </div>
+            </div>
+
+            <!-- Agent Role Pills -->
+            <div class="agent-roles">
+              <h4 class="sr-only">Agent Roles in Team</h4>
+              <div class="role-pills">
+                ${repository.team.slice(0, 3).map(member => 
+                  `<span class="role-pill" title="${member.roleId} - ${member.status}">
+                    ${member.roleId.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                  </span>`
+                ).join('')}
+                ${teamSize > 3 ? `<span class="role-pill more">+${teamSize - 3} more</span>` : ''}
+              </div>
+            </div>
+          ` : ''}
+        </div>
+
+        <!-- Card Footer -->
+        <footer class="card-footer">
+          <div class="repo-dates">
+            <span class="created-date" title="Created: ${createdDate}">
+              📅 Created ${createdDate}
+            </span>
+            ${updatedDate !== createdDate ? 
+              `<span class="updated-date" title="Last updated: ${updatedDate}">🔄 Updated ${updatedDate}</span>` : ''
+            }
+          </div>
+          
+          <!-- Primary Action Button -->
+          <button 
+            class="btn btn-primary view-repo-btn"
+            data-action="view"
+            aria-label="Open ${repository.name} repository"
+          >
+            ${teamSize === 0 ? 'Setup Team' : 'Manage Team'}
+          </button>
+        </footer>
+      `;
+      
+      return card;
+    }
+    
+    /**
+     * Handle repository creation event
+     */
+    handleRepositoryCreated(repositoryData) {
+      // Reload repositories to get the latest data
+      this.loadRepositories();
+    }
+    
+    /**
+     * Handle repository deletion event
+     */
+    handleRepositoryDeleted({ repoId }) {
+      // Remove from local arrays
+      this.repositories = this.repositories.filter(repo => repo.id !== repoId);
+      this.applyFilters();
+    }
+    
+    /**
+     * Clear all filters
+     */
+    clearFilters() {
+      if (this.searchInput) this.searchInput.value = '';
+      if (this.statusFilter) this.statusFilter.value = '';
+      if (this.sortSelect) this.sortSelect.value = 'updated';
+      this.applyFilters();
+    }
+    
+    /**
+     * Set loading state
+     */
+    setLoadingState(loading) {
+      this.isLoading = loading;
+      if (loading) {
+        this.hideAllStates();
+        this.loadingState.style.display = 'block';
+      } else {
+        this.loadingState.style.display = 'none';
+      }
+    }
+    
+    /**
+     * Set error state
+     */
+    setErrorState(error) {
+      if (error) {
+        this.hideAllStates();
+        this.errorState.style.display = 'block';
+      } else {
+        this.errorState.style.display = 'none';
+      }
+    }
+    
+    /**
+     * Hide all state displays
+     */
+    hideAllStates() {
+      this.loadingState.style.display = 'none';
+      this.errorState.style.display = 'none';
+      this.emptyState.style.display = 'none';
+      this.emptySearchState.style.display = 'none';
+    }
+  }
+  
+  // Initialize when DOM is ready
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM ready, initializing RepositoryListManager...');
+    try {
+      window.repositoryListManager = new RepositoryListManager();
+      console.log('RepositoryListManager initialized successfully');
+    } catch (error) {
+      console.error('Failed to initialize RepositoryListManager:', error);
+      // Fallback: show empty state immediately
+      const loadingState = document.getElementById('loading-state');
+      const emptyState = document.getElementById('empty-state');
+      if (loadingState) loadingState.style.display = 'none';
+      if (emptyState) emptyState.style.display = 'block';
+    }
+  });
+</script>

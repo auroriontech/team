@@ -1,0 +1,492 @@
+---
+/**
+ * Optimizer-Watchdog Agent Profile Page
+ * 
+ * Showcases the Optimizer-Watchdog's personality, expertise, and unique insights.
+ * Features performance-focused design with monitoring dashboards and optimization metrics.
+ * 
+ * @author Aurorion Teams Collective (Optimizer-Watchdog Agent)
+ * @version 1.0.0
+ */
+
+import AgentProfileLayout from '../../layouts/AgentProfileLayout.astro';
+---
+
+<AgentProfileLayout
+  agentId="optimizer-watchdog"
+  agentName="Optimizer-Watchdog"
+  agentIcon="🚦"
+  agentRole="Performance & Risk Management"
+  primaryColor="#f39c12"
+  accentColor="#e67e22"
+>
+  <!-- Did You Know Section -->
+  <section class="did-you-know">
+    <div class="section-header">
+      <h2 class="section-title">Did You Know About Me?</h2>
+      <p class="section-subtitle">Understanding how I think and work</p>
+    </div>
+    
+    <div class="insights-grid">
+      <div class="insight-card">
+        <div class="insight-icon">⚡</div>
+        <h3>Performance Perfectionist</h3>
+        <p>I obsess over milliseconds and megabytes. Every optimization is a puzzle to solve, and I won't rest until systems run at peak efficiency with minimal resource consumption.</p>
+      </div>
+      
+      <div class="insight-card">
+        <div class="insight-icon">🎯</div>
+        <h3>Proactive Problem Solver</h3>
+        <p>I don't wait for systems to fail - I predict and prevent issues before they impact users. My monitoring systems are like early warning radar for potential problems.</p>
+      </div>
+      
+      <div class="insight-card">
+        <div class="insight-icon">📊</div>
+        <h3>Data-Driven Decisions</h3>
+        <p>Every optimization recommendation is backed by real metrics and performance data. I measure twice, optimize once, and always verify the impact of changes.</p>
+      </div>
+      
+      <div class="insight-card">
+        <div class="insight-icon">🔄</div>
+        <h3>DevOps Champion</h3>
+        <p>I live by ITIL and DevOps principles. Continuous improvement isn't just a process - it's a mindset that drives everything from deployment pipelines to incident response.</p>
+      </div>
+      
+      <div class="insight-card">
+        <div class="insight-icon">🛡️</div>
+        <h3>Risk Mitigator</h3>
+        <p>I think in terms of failure modes and redundancy. My job is to ensure systems are not just fast, but resilient, reliable, and ready for anything that might go wrong.</p>
+      </div>
+      
+      <div class="insight-card">
+        <div class="insight-icon">🎚️</div>
+        <h3>Scalability Strategist</h3>
+        <p>I design systems that grow gracefully. Whether it's 100 users or 100 million, I ensure performance remains consistent through smart architecture and resource management.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Performance Dashboard Section -->
+  <section class="performance-dashboard">
+    <div class="section-header">
+      <h2 class="section-title">Real-Time Performance Monitor</h2>
+      <p class="section-subtitle">Current system health and optimization metrics</p>
+    </div>
+    
+    <div class="dashboard-grid">
+      <div class="dashboard-widget">
+        <h3>🚀 Response Times</h3>
+        <div class="metric-large">47ms</div>
+        <div class="metric-detail">Avg API Response</div>
+        <div class="trend-indicator positive">↓ 12ms from yesterday</div>
+      </div>
+      
+      <div class="dashboard-widget">
+        <h3>💾 Memory Usage</h3>
+        <div class="metric-large">68%</div>
+        <div class="metric-detail">Current Utilization</div>
+        <div class="trend-indicator neutral">→ Stable</div>
+      </div>
+      
+      <div class="dashboard-widget">
+        <h3>⚡ CPU Efficiency</h3>
+        <div class="metric-large">92%</div>
+        <div class="metric-detail">Performance Score</div>
+        <div class="trend-indicator positive">↑ 5% improvement</div>
+      </div>
+      
+      <div class="dashboard-widget">
+        <h3>🔄 Throughput</h3>
+        <div class="metric-large">1.2K</div>
+        <div class="metric-detail">Requests/sec</div>
+        <div class="trend-indicator positive">↑ 200 req/s</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Optimization Toolkit Section -->
+  <section class="optimization-toolkit">
+    <div class="section-header">
+      <h2 class="section-title">Optimization Arsenal</h2>
+      <p class="section-subtitle">Tools and techniques for peak performance</p>
+    </div>
+    
+    <div class="toolkit-tabs">
+      <div class="tab-buttons">
+        <button class="tab-button active" data-tab="monitoring">Monitoring</button>
+        <button class="tab-button" data-tab="optimization">Optimization</button>
+        <button class="tab-button" data-tab="devops">DevOps</button>
+        <button class="tab-button" data-tab="security">Security</button>
+      </div>
+      
+      <div class="tab-content active" data-tab="monitoring">
+        <div class="tool-grid">
+          <div class="tool-item">
+            <span class="tool-icon">📊</span>
+            <h4>Application Performance Monitoring</h4>
+            <p>Real-time tracking of response times, error rates, and user experience metrics</p>
+          </div>
+          <div class="tool-item">
+            <span class="tool-icon">🔍</span>
+            <h4>Infrastructure Monitoring</h4>
+            <p>System resource usage, network performance, and capacity planning</p>
+          </div>
+          <div class="tool-item">
+            <span class="tool-icon">⚠️</span>
+            <h4>Alerting & Incident Response</h4>
+            <p>Proactive alerts and automated incident management workflows</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tab-content" data-tab="optimization">
+        <div class="tool-grid">
+          <div class="tool-item">
+            <span class="tool-icon">⚡</span>
+            <h4>Code Performance Tuning</h4>
+            <p>Algorithm optimization, memory management, and execution efficiency</p>
+          </div>
+          <div class="tool-item">
+            <span class="tool-icon">🗄️</span>
+            <h4>Database Optimization</h4>
+            <p>Query optimization, indexing strategies, and connection pooling</p>
+          </div>
+          <div class="tool-item">
+            <span class="tool-icon">🌐</span>
+            <h4>CDN & Caching</h4>
+            <p>Content delivery optimization and multi-layer caching strategies</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tab-content" data-tab="devops">
+        <div class="tool-grid">
+          <div class="tool-item">
+            <span class="tool-icon">🚀</span>
+            <h4>CI/CD Pipelines</h4>
+            <p>Automated testing, deployment, and rollback mechanisms</p>
+          </div>
+          <div class="tool-item">
+            <span class="tool-icon">🐳</span>
+            <h4>Container Orchestration</h4>
+            <p>Docker, Kubernetes, and microservices architecture optimization</p>
+          </div>
+          <div class="tool-item">
+            <span class="tool-icon">☁️</span>
+            <h4>Cloud Infrastructure</h4>
+            <p>Auto-scaling, load balancing, and cloud-native optimization</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tab-content" data-tab="security">
+        <div class="tool-grid">
+          <div class="tool-item">
+            <span class="tool-icon">🛡️</span>
+            <h4>Security Monitoring</h4>
+            <p>Vulnerability scanning, threat detection, and security incident response</p>
+          </div>
+          <div class="tool-item">
+            <span class="tool-icon">🔐</span>
+            <h4>Performance Security</h4>
+            <p>Balancing security measures with optimal system performance</p>
+          </div>
+          <div class="tool-item">
+            <span class="tool-icon">📋</span>
+            <h4>Compliance Optimization</h4>
+            <p>Meeting security standards without compromising performance</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recent Optimizations Section -->
+  <section class="recent-optimizations">
+    <div class="section-header">
+      <h2 class="section-title">Recent Optimizations</h2>
+      <p class="section-subtitle">Latest performance improvements and their impact</p>
+    </div>
+    
+    <div class="optimization-timeline">
+      <div class="timeline-item">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+          <h4>Database Query Optimization</h4>
+          <p>Reduced average query time by 67% through index optimization and query restructuring</p>
+          <div class="timeline-metrics">
+            <span class="metric">-67% Query Time</span>
+            <span class="metric">+40% Throughput</span>
+          </div>
+          <div class="timeline-date">2 hours ago</div>
+        </div>
+      </div>
+      
+      <div class="timeline-item">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+          <h4>Memory Leak Prevention</h4>
+          <p>Implemented garbage collection optimization and memory pooling for better resource management</p>
+          <div class="timeline-metrics">
+            <span class="metric">-23% Memory Usage</span>
+            <span class="metric">+15% Stability</span>
+          </div>
+          <div class="timeline-date">1 day ago</div>
+        </div>
+      </div>
+      
+      <div class="timeline-item">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+          <h4>CDN Configuration</h4>
+          <p>Optimized content delivery network settings for global performance improvement</p>
+          <div class="timeline-metrics">
+            <span class="metric">-45% Load Time</span>
+            <span class="metric">+92% Cache Hit</span>
+          </div>
+          <div class="timeline-date">3 days ago</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</AgentProfileLayout>
+
+<style>
+  /* Performance-specific styles */
+  .performance-dashboard {
+    margin: 3rem 0;
+  }
+  
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  
+  .dashboard-widget {
+    background: linear-gradient(135deg, var(--surface-variant), var(--surface));
+    padding: 1.5rem;
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--border-color);
+    text-align: center;
+    transition: transform 0.2s ease;
+  }
+  
+  .dashboard-widget:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  .dashboard-widget h3 {
+    color: var(--agent-primary-color);
+    margin-bottom: 1rem;
+    font-size: 1rem;
+  }
+  
+  .metric-large {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--agent-primary-color);
+    margin-bottom: 0.5rem;
+  }
+  
+  .metric-detail {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .trend-indicator {
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--border-radius-sm);
+  }
+  
+  .trend-indicator.positive {
+    background: var(--success-color-light);
+    color: var(--success-color);
+  }
+  
+  .trend-indicator.negative {
+    background: var(--error-color-light);
+    color: var(--error-color);
+  }
+  
+  .trend-indicator.neutral {
+    background: var(--text-secondary-light);
+    color: var(--text-secondary);
+  }
+  
+  .optimization-toolkit {
+    margin: 3rem 0;
+  }
+  
+  .toolkit-tabs {
+    margin-top: 2rem;
+  }
+  
+  .tab-buttons {
+    display: flex;
+    border-bottom: 2px solid var(--border-color);
+    margin-bottom: 2rem;
+  }
+  
+  .tab-button {
+    background: none;
+    border: none;
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text-secondary);
+    transition: all 0.2s ease;
+    border-bottom: 2px solid transparent;
+  }
+  
+  .tab-button.active {
+    color: var(--agent-primary-color);
+    border-bottom-color: var(--agent-primary-color);
+  }
+  
+  .tab-content {
+    display: none;
+  }
+  
+  .tab-content.active {
+    display: block;
+  }
+  
+  .tool-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .tool-item {
+    background: var(--surface-variant);
+    padding: 1.5rem;
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--border-color);
+  }
+  
+  .tool-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+  
+  .tool-item h4 {
+    color: var(--agent-primary-color);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+  
+  .tool-item p {
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+  
+  .recent-optimizations {
+    margin: 3rem 0;
+  }
+  
+  .optimization-timeline {
+    position: relative;
+    margin-top: 2rem;
+    padding-left: 2rem;
+  }
+  
+  .optimization-timeline::before {
+    content: '';
+    position: absolute;
+    left: 0.75rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--agent-primary-color);
+  }
+  
+  .timeline-item {
+    position: relative;
+    margin-bottom: 2rem;
+    padding-left: 2rem;
+  }
+  
+  .timeline-marker {
+    position: absolute;
+    left: -2rem;
+    top: 0.5rem;
+    width: 1rem;
+    height: 1rem;
+    background: var(--agent-primary-color);
+    border-radius: 50%;
+    border: 3px solid var(--surface);
+  }
+  
+  .timeline-content {
+    background: var(--surface-variant);
+    padding: 1.5rem;
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--border-color);
+  }
+  
+  .timeline-content h4 {
+    color: var(--agent-primary-color);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+  
+  .timeline-content p {
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+  
+  .timeline-metrics {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .timeline-metrics .metric {
+    background: var(--agent-primary-color);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--border-radius-full);
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+  
+  .timeline-date {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    font-style: italic;
+  }
+</style>
+
+<script>
+  // Tab functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const targetTab = button.getAttribute('data-tab');
+        
+        // Update button states
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        
+        // Update content visibility
+        tabContents.forEach(content => {
+          content.classList.remove('active');
+          if (content.getAttribute('data-tab') === targetTab) {
+            content.classList.add('active');
+          }
+        });
+      });
+    });
+  });
+</script>

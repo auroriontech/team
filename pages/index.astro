@@ -1,0 +1,604 @@
+---
+/**
+ * Aurorion Teams - Homepage
+ * 
+ * Main dashboard for the team management application.
+ * Features:
+ * - Welcome message and app overview
+ * - Quick access to create new repositories
+ * - Recent repositories list
+ * - Theme demonstration
+ * 
+ * Team Input Incorporated:
+ * - Architect-Engineer: Clean component structure with TypeScript
+ * - Tester-Reviewer: Accessibility and error handling considerations
+ * - Optimizer-Watchdog: Performance-optimized CSS and animations
+ * - Scrum-Knowledge: Comprehensive documentation
+ * - Morale-Catalyst: Fun celebrations and personality
+ * - Technical Enablement: Robust data management setup
+ * 
+ * @author Aurorion Teams Collective
+ * @version 1.0.0
+ */
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import RepositoryModal from '../components/RepositoryModal.astro';
+import RepositoryList from '../components/RepositoryList.astro';
+---
+
+<BaseLayout 
+  title="Aurorion Teams - AI Agent Team Management"
+  description="Manage AI agent teams across multiple projects with customizable roles and themes"
+>
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">
+        Welcome to 
+        <span class="brand-highlight">Aurorion Teams</span>
+      </h1>
+      <p class="hero-description">
+        Manage AI agent teams across multiple projects. Configure specialized roles, 
+        customize behavior, and switch between professional and fun themes!
+      </p>
+      
+      <!-- Quick Actions -->
+      <div class="hero-actions">
+        <button class="btn btn-primary" id="create-repo-btn" aria-label="Create a new repository">
+          🚀 Create New Repository
+        </button>
+        <button class="btn btn-outline" id="demo-theme-btn" aria-label="Demonstrate theme switching">
+          🎨 Demo Themes
+        </button>
+      </div>
+    </div>
+    
+    <!-- Feature Cards -->
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-icon" aria-hidden="true">🛠️</div>
+        <h3>7 Specialized Roles</h3>
+        <p>From Architect-Engineer to Morale-Catalyst, each agent has unique responsibilities</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon" aria-hidden="true">🎨</div>
+        <h3>Dual Themes</h3>
+        <p>Switch between Professional for work or Price is Right for fun!</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon" aria-hidden="true">📦</div>
+        <h3>Project Management</h3>
+        <p>Create multiple repositories with customized team configurations</p>
+      </div>
+      
+      <div class="feature-card">
+        <div class="feature-icon" aria-hidden="true">💾</div>
+        <h3>Export & Import</h3>
+        <p>Save and share your team configurations across projects</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Repository Dashboard Section -->
+  <section class="dashboard-section">
+    <div class="section-header">
+      <h2 class="section-title">Your Repositories</h2>
+      <button class="btn btn-secondary" id="refresh-repos-btn" aria-label="Refresh repository list">
+        🔄 Refresh
+      </button>
+    </div>
+    
+    <!-- Repository List Component -->
+    <RepositoryList />
+  </section>
+
+  <!-- Quick Start Guide -->
+  <section class="guide-section">
+    <h2 class="section-title">Quick Start Guide</h2>
+    <div class="guide-steps">
+      <div class="guide-step">
+        <div class="step-number" aria-label="Step 1">1</div>
+        <div class="step-content">
+          <h3>Create Repository</h3>
+          <p>Start by creating a new repository for your project</p>
+        </div>
+      </div>
+      
+      <div class="guide-step">
+        <div class="step-number" aria-label="Step 2">2</div>
+        <div class="step-content">
+          <h3>Configure Team</h3>
+          <p>Add AI agents and customize their roles and behavior</p>
+        </div>
+      </div>
+      
+      <div class="guide-step">
+        <div class="step-number" aria-label="Step 3">3</div>
+        <div class="step-content">
+          <h3>Manage & Export</h3>
+          <p>Monitor your team and export configurations for reuse</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Repository Creation Modal -->
+  <RepositoryModal />
+</BaseLayout>
+
+<style>
+  /* ========================================
+     HERO SECTION STYLES
+     ======================================== */
+  
+  .hero-section {
+    text-align: center;
+    margin-bottom: var(--spacing-2xl);
+  }
+  
+  .hero-content {
+    margin-bottom: var(--spacing-2xl);
+  }
+  
+  .hero-title {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--text-color);
+    margin-bottom: var(--spacing-lg);
+    line-height: 1.2;
+  }
+  
+  .brand-highlight {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    /* Fallback for browsers that don't support background-clip */
+    color: var(--primary-color);
+  }
+  
+  .hero-description {
+    font-size: 1.25rem;
+    color: var(--text-muted);
+    max-width: 600px;
+    margin: 0 auto var(--spacing-xl);
+    line-height: 1.6;
+  }
+  
+  .hero-actions {
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  /* ========================================
+     FEATURE GRID STYLES
+     ======================================== */
+  
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-2xl);
+  }
+  
+  .feature-card {
+    background: var(--card-bg);
+    padding: var(--spacing-xl);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 2px solid transparent;
+    /* Performance optimization - prepare for animations */
+    will-change: transform;
+  }
+  
+  .feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .feature-card:focus-within {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+  }
+  
+  .feature-icon {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-md);
+    display: block;
+  }
+  
+  .feature-card h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .feature-card p {
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  
+  /* ========================================
+     DASHBOARD SECTION STYLES
+     ======================================== */
+  
+  .dashboard-section {
+    margin: var(--spacing-2xl) 0;
+  }
+  
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-xl);
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+  }
+  
+  .section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-color);
+  }
+  
+  .repo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+  }
+  
+  /* ========================================
+     EMPTY STATE STYLES
+     ======================================== */
+  
+  .empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: var(--spacing-2xl);
+    background: var(--section-bg);
+    border-radius: var(--border-radius-lg);
+    border: 2px dashed var(--border-color);
+    transition: all 0.3s ease;
+  }
+  
+  .empty-state:hover {
+    border-style: solid;
+    transform: translateY(-2px);
+  }
+  
+  .empty-icon {
+    font-size: 4rem;
+    margin-bottom: var(--spacing-lg);
+    opacity: 0.6;
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .empty-state h3 {
+    font-size: 1.5rem;
+    color: var(--text-color);
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .empty-state p {
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  /* ========================================
+     GUIDE SECTION STYLES
+     ======================================== */
+  
+  .guide-section {
+    margin: var(--spacing-2xl) 0;
+    text-align: center;
+  }
+  
+  .guide-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-xl);
+  }
+  
+  .guide-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.3s ease;
+  }
+  
+  .guide-step:hover {
+    transform: translateY(-5px);
+  }
+  
+  .step-number {
+    width: 60px;
+    height: 60px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-lg);
+    transition: transform 0.3s ease;
+  }
+  
+  .step-number:hover {
+    transform: scale(1.1);
+  }
+  
+  .step-content h3 {
+    font-size: 1.25rem;
+    color: var(--text-color);
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .step-content p {
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  
+  /* ========================================
+     PRICE IS RIGHT THEME ENHANCEMENTS
+     ======================================== */
+  
+  .price-is-right .feature-card {
+    border: 2px solid var(--border-color);
+    transform: rotate(-1deg);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .price-is-right .feature-card::before {
+    content: '✨';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    animation: sparkle 2s infinite;
+  }
+  
+  .price-is-right .feature-card:nth-child(even) {
+    transform: rotate(1deg);
+  }
+  
+  .price-is-right .feature-card:hover {
+    transform: rotate(0deg) translateY(-5px);
+  }
+  
+  .price-is-right .step-number {
+    animation: pulse 2s infinite;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    border: 3px solid #ffd700;
+  }
+  
+  .price-is-right .empty-state {
+    border-style: solid;
+    border-color: var(--primary-color);
+    background: var(--card-bg);
+    animation: gentle-bounce 3s ease-in-out infinite;
+  }
+  
+  /* ========================================
+     ADDITIONAL ANIMATIONS
+     ======================================== */
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  @keyframes gentle-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+  }
+  
+  /* ========================================
+     RESPONSIVE DESIGN
+     ======================================== */
+  
+  @media (max-width: 768px) {
+    .hero-title {
+      font-size: 2rem;
+    }
+    
+    .hero-description {
+      font-size: 1rem;
+    }
+    
+    .hero-actions {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .section-header {
+      flex-direction: column;
+      text-align: center;
+    }
+    
+    .feature-grid,
+    .guide-steps {
+      grid-template-columns: 1fr;
+    }
+    
+    .repo-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  /* ========================================
+     ACCESSIBILITY IMPROVEMENTS
+     ======================================== */
+  
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+  
+  .btn:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+  }
+</style>
+
+<script>
+  /**
+   * Homepage Interactive Functionality
+   * 
+   * Handles demo actions and repository management with error handling
+   * Team Input:
+   * - Tester-Reviewer: Added proper error handling and validation
+   * - Optimizer-Watchdog: Performance optimizations and error boundaries
+   * - Technical Enablement: Robust event handling
+   */
+  
+  // Error handling wrapper
+  function safeExecute(fn, errorMessage) {
+    try {
+      fn();
+    } catch (error) {
+      console.error(errorMessage, error);
+      // In production, would send to error monitoring service
+    }
+  }
+  
+  // Demo theme switching with celebration
+  document.getElementById('demo-theme-btn')?.addEventListener('click', () => {
+    safeExecute(() => {
+      if (window.themeManager) {
+        window.themeManager.toggleTheme();
+        
+        // Show demo message with celebration
+        const currentTheme = window.themeManager.getCurrentTheme();
+        
+        if (currentTheme === 'price-is-right') {
+          showThemeNotification('🎉 Welcome to the Price is Right theme! 🎪', 'celebration');
+        } else {
+          showThemeNotification('💼 Back to Professional theme for serious work!', 'professional');
+        }
+      }
+    }, 'Failed to toggle theme');
+  });
+  
+  /**
+   * Show themed notification
+   * @param {string} message - Message to display
+   * @param {string} type - 'celebration' or 'professional'
+   */
+  function showThemeNotification(message, type) {
+    const notification = document.createElement('div');
+    notification.className = `theme-notification ${type}`;
+    notification.textContent = message;
+    notification.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--card-bg);
+      color: var(--text-color);
+      padding: var(--spacing-lg);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-lg);
+      border: 2px solid var(--primary-color);
+      z-index: 1000;
+      animation: slideInNotification 0.5s ease-out;
+      max-width: 300px;
+    `;
+    
+    // Add celebration effects for Price is Right theme
+    if (type === 'celebration') {
+      notification.style.animation = 'slideInNotification 0.5s ease-out, pulse 2s infinite 0.5s';
+    }
+    
+    document.body.appendChild(notification);
+    
+    // Auto-remove after 3 seconds
+    setTimeout(() => {
+      if (notification.parentNode) {
+        notification.style.animation = 'slideOutNotification 0.5s ease-in';
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 500);
+      }
+    }, 3000);
+  }
+  
+  // Create repository - now fully functional!
+  document.getElementById('create-repo-btn')?.addEventListener('click', () => {
+    safeExecute(() => {
+      if (window.repositoryModal) {
+        window.repositoryModal.open();
+      } else {
+        showThemeNotification('🚧 Modal loading... Please try again!', 'professional');
+      }
+    }, 'Failed to open repository creation modal');
+  });
+  
+  // Refresh repositories - now delegates to RepositoryList component
+  document.getElementById('refresh-repos-btn')?.addEventListener('click', () => {
+    safeExecute(() => {
+      if (window.repositoryListManager) {
+        window.repositoryListManager.loadRepositories();
+        showThemeNotification('🔄 Refreshing repositories...', 'professional');
+      } else {
+        showThemeNotification('🔄 Repository list loading...', 'professional');
+      }
+    }, 'Failed to refresh repositories');
+  });
+  
+  // Add notification animation styles
+  const notificationStyles = document.createElement('style');
+  notificationStyles.textContent = `
+    @keyframes slideInNotification {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    
+    @keyframes slideOutNotification {
+      from {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+    }
+  `;
+  document.head.appendChild(notificationStyles);
+  
+  // Initialize page with accessibility improvements
+  document.addEventListener('DOMContentLoaded', () => {
+    safeExecute(() => {
+      // Add keyboard navigation for cards
+      const cards = document.querySelectorAll('.feature-card, .guide-step');
+      cards.forEach(card => {
+        card.setAttribute('tabindex', '0');
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            card.click();
+          }
+        });
+      });
+    }, 'Failed to initialize accessibility features');
+  });
+</script>

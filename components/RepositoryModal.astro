@@ -1,0 +1,885 @@
+---
+/**
+ * Repository Creation Modal Component
+ * 
+ * A comprehensive modal for creating new repositories with:
+ * - Form validation and error handling (Tester-Reviewer input)
+ * - Performance optimizations (Optimizer-Watchdog input)
+ * - Accessibility features (Tester-Reviewer input)
+ * - Theme-aware styling (Morale-Catalyst input)
+ * - TypeScript integration (Architect-Engineer input)
+ * 
+ * Features:
+ * - Repository name and description validation
+ * - Real-time character counting
+ * - Error states and messaging
+ * - Loading states for async operations
+ * - Keyboard navigation support
+ * - Theme-responsive styling
+ * 
+ * @author Aurorion Teams Collective
+ * @version 1.0.0
+ */
+
+export interface Props {
+  isOpen?: boolean;
+}
+
+const { isOpen = false } = Astro.props;
+---
+
+<!-- Modal Backdrop -->
+<div class="modal-backdrop" id="repo-modal-backdrop" aria-hidden="true">
+  <!-- Modal Container -->
+  <div class="modal-container" role="dialog" aria-labelledby="modal-title" aria-describedby="modal-description">
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <h2 id="modal-title" class="modal-title">
+        <span class="modal-icon">🚀</span>
+        Create New Repository
+      </h2>
+      <button 
+        class="modal-close" 
+        id="close-modal-btn"
+        aria-label="Close repository creation modal"
+        type="button"
+      >
+        ✕
+      </button>
+    </div>
+
+    <!-- Modal Content -->
+    <div class="modal-content">
+      <p id="modal-description" class="modal-description">
+        Set up a new repository to manage your AI agent team configuration.
+      </p>
+
+      <!-- Repository Creation Form -->
+      <form class="repo-form" id="repo-creation-form" novalidate>
+        <!-- Repository Name Field -->
+        <div class="form-group">
+          <label for="repo-name" class="form-label required">
+            Repository Name
+          </label>
+          <input
+            type="text"
+            id="repo-name"
+            name="name"
+            class="form-input"
+            placeholder="Enter repository name (e.g., 'My AI Project')"
+            required
+            maxlength="50"
+            autocomplete="off"
+            aria-describedby="name-error name-counter"
+          >
+          <div class="form-footer">
+            <div class="form-error" id="name-error" aria-live="polite"></div>
+            <div class="char-counter" id="name-counter">0/50</div>
+          </div>
+        </div>
+
+        <!-- Repository Description Field -->
+        <div class="form-group">
+          <label for="repo-description" class="form-label">
+            Description
+            <span class="optional-label">(optional)</span>
+          </label>
+          <textarea
+            id="repo-description"
+            name="description"
+            class="form-textarea"
+            placeholder="Describe your project and team goals..."
+            maxlength="200"
+            rows="3"
+            aria-describedby="description-error description-counter"
+          ></textarea>
+          <div class="form-footer">
+            <div class="form-error" id="description-error" aria-live="polite"></div>
+            <div class="char-counter" id="description-counter">0/200</div>
+          </div>
+        </div>
+
+        <!-- Repository Template Selection (Future Enhancement) -->
+        <div class="form-group">
+          <label for="repo-template" class="form-label">
+            Quick Start Template
+            <span class="optional-label">(coming soon)</span>
+          </label>
+          <select 
+            id="repo-template" 
+            name="template" 
+            class="form-select" 
+            disabled
+            aria-describedby="template-info"
+          >
+            <option value="">Custom Setup</option>
+            <option value="full-stack">Full Stack Development</option>
+            <option value="data-science">Data Science Project</option>
+            <option value="mobile-app">Mobile Application</option>
+          </select>
+          <div class="form-info" id="template-info">
+            Templates will be available in a future update!
+          </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+          <button 
+            type="button" 
+            class="btn btn-secondary" 
+            id="cancel-btn"
+            aria-label="Cancel repository creation"
+          >
+            Cancel
+          </button>
+          <button 
+            type="submit" 
+            class="btn btn-primary" 
+            id="create-btn"
+            aria-label="Create repository"
+          >
+            <span class="btn-text">Create Repository</span>
+            <span class="btn-loading" aria-hidden="true">Creating...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* ========================================
+     MODAL BACKDROP & CONTAINER
+     ======================================== */
+  
+  .modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    padding: var(--spacing-md);
+  }
+  
+  .modal-backdrop.show {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .modal-container {
+    background: var(--container-bg);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+    max-width: 500px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: scale(0.95);
+    transition: transform 0.3s ease;
+    border: 2px solid var(--border-color);
+  }
+  
+  .modal-backdrop.show .modal-container {
+    transform: scale(1);
+  }
+  
+  /* ========================================
+     MODAL HEADER
+     ======================================== */
+  
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-lg);
+    border-bottom: 2px solid var(--border-color);
+    background: var(--section-bg);
+  }
+  
+  .modal-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+  }
+  
+  .modal-icon {
+    font-size: 1.5rem;
+    animation: bounce 2s infinite;
+  }
+  
+  .modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: var(--spacing-sm);
+    border-radius: var(--border-radius);
+    transition: all 0.2s ease;
+    line-height: 1;
+  }
+  
+  .modal-close:hover {
+    background: var(--danger-color);
+    color: white;
+    transform: scale(1.1);
+  }
+  
+  .modal-close:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+  }
+  
+  /* ========================================
+     MODAL CONTENT
+     ======================================== */
+  
+  .modal-content {
+    padding: var(--spacing-lg);
+  }
+  
+  .modal-description {
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-xl);
+    line-height: 1.6;
+  }
+  
+  /* ========================================
+     FORM STYLES
+     ======================================== */
+  
+  .repo-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  .form-label {
+    font-weight: 600;
+    color: var(--text-color);
+    font-size: 0.9rem;
+  }
+  
+  .form-label.required::after {
+    content: ' *';
+    color: var(--danger-color);
+  }
+  
+  .optional-label {
+    font-weight: normal;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+  }
+  
+  .form-input,
+  .form-textarea,
+  .form-select {
+    padding: var(--input-padding);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background: var(--card-bg);
+    color: var(--text-color);
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    font-family: inherit;
+  }
+  
+  .form-input:focus,
+  .form-textarea:focus,
+  .form-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+  
+  .form-input.error,
+  .form-textarea.error {
+    border-color: var(--danger-color);
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+  }
+  
+  .form-textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+  
+  .form-select:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  /* ========================================
+     FORM FEEDBACK
+     ======================================== */
+  
+  .form-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 20px;
+  }
+  
+  .form-error {
+    color: var(--danger-color);
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+  
+  .form-info {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-style: italic;
+  }
+  
+  .char-counter {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+  
+  .char-counter.warning {
+    color: var(--warning-color);
+  }
+  
+  .char-counter.danger {
+    color: var(--danger-color);
+  }
+  
+  /* ========================================
+     FORM ACTIONS
+     ======================================== */
+  
+  .form-actions {
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: flex-end;
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--border-color);
+  }
+  
+  .btn {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .btn-loading {
+    display: none;
+  }
+  
+  .btn.loading .btn-text {
+    display: none;
+  }
+  
+  .btn.loading .btn-loading {
+    display: inline;
+  }
+  
+  .btn.loading {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  /* ========================================
+     PRICE IS RIGHT THEME ENHANCEMENTS
+     ======================================== */
+  
+  .price-is-right .modal-container {
+    border: 3px solid #ffd700;
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+  }
+  
+  .price-is-right .modal-header {
+    background: var(--nav-bg);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .price-is-right .modal-header::before {
+    content: '🎉';
+    position: absolute;
+    top: 50%;
+    right: 60px;
+    transform: translateY(-50%);
+    animation: sparkle 2s infinite;
+  }
+  
+  .price-is-right .modal-icon {
+    animation: bounce 1s infinite;
+  }
+  
+  .price-is-right .form-input:focus,
+  .price-is-right .form-textarea:focus {
+    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3);
+  }
+  
+  .price-is-right .btn-primary {
+    animation: pulse 2s infinite;
+  }
+  
+  /* ========================================
+     RESPONSIVE DESIGN
+     ======================================== */
+  
+  @media (max-width: 768px) {
+    .modal-backdrop {
+      padding: var(--spacing-sm);
+    }
+    
+    .modal-container {
+      max-height: 95vh;
+    }
+    
+    .modal-header {
+      padding: var(--spacing-md);
+    }
+    
+    .modal-content {
+      padding: var(--spacing-md);
+    }
+    
+    .form-actions {
+      flex-direction: column;
+    }
+    
+    .form-actions .btn {
+      width: 100%;
+    }
+  }
+  
+  /* ========================================
+     ACCESSIBILITY IMPROVEMENTS
+     ======================================== */
+  
+  @media (prefers-reduced-motion: reduce) {
+    .modal-icon,
+    .price-is-right .modal-icon,
+    .price-is-right .btn-primary {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  /**
+   * Repository Modal Interactive Functionality
+   * 
+   * Handles:
+   * - Modal open/close with proper focus management
+   * - Form validation with real-time feedback
+   * - Character counting and limits
+   * - Error handling and loading states
+   * - Accessibility features (keyboard navigation, ARIA)
+   * 
+   * Team Input Incorporated:
+   * - Tester-Reviewer: Comprehensive validation and error handling
+   * - Optimizer-Watchdog: Performance optimizations and debouncing
+   * - Technical Enablement: Type-safe event handling
+   * - Architect-Engineer: Clean, maintainable code structure
+   */
+  
+  class RepositoryModal {
+    constructor() {
+      this.modal = document.getElementById('repo-modal-backdrop');
+      this.form = document.getElementById('repo-creation-form');
+      this.nameInput = document.getElementById('repo-name');
+      this.descriptionInput = document.getElementById('repo-description');
+      this.createBtn = document.getElementById('create-btn');
+      this.cancelBtn = document.getElementById('cancel-btn');
+      this.closeBtn = document.getElementById('close-modal-btn');
+      
+      this.isOpen = false;
+      this.validationTimeouts = new Map();
+      
+      this.initializeEventListeners();
+      this.setupValidation();
+    }
+    
+    /**
+     * Initialize all event listeners
+     */
+    initializeEventListeners() {
+      // Modal controls
+      this.closeBtn?.addEventListener('click', () => this.close());
+      this.cancelBtn?.addEventListener('click', () => this.close());
+      
+      // Close on backdrop click
+      this.modal?.addEventListener('click', (e) => {
+        if (e.target === this.modal) {
+          this.close();
+        }
+      });
+      
+      // Escape key handling
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && this.isOpen) {
+          this.close();
+        }
+      });
+      
+      // Form submission
+      this.form?.addEventListener('submit', (e) => this.handleSubmit(e));
+      
+      // Character counting
+      this.nameInput?.addEventListener('input', () => this.updateCharCounter('name'));
+      this.descriptionInput?.addEventListener('input', () => this.updateCharCounter('description'));
+      
+      // Real-time validation
+      this.nameInput?.addEventListener('input', () => this.validateField('name'));
+      this.nameInput?.addEventListener('blur', () => this.validateField('name'));
+    }
+    
+    /**
+     * Setup form validation rules
+     */
+    setupValidation() {
+      this.validationRules = {
+        name: {
+          required: true,
+          minLength: 2,
+          maxLength: 50,
+          pattern: /^[a-zA-Z0-9\s\-_]+$/,
+          message: {
+            required: 'Repository name is required',
+            minLength: 'Name must be at least 2 characters',
+            maxLength: 'Name cannot exceed 50 characters',
+            pattern: 'Name can only contain letters, numbers, spaces, hyphens, and underscores'
+          }
+        }
+      };
+    }
+    
+    /**
+     * Open modal with proper focus management
+     */
+    open() {
+      if (this.modal) {
+        this.modal.classList.add('show');
+        this.modal.setAttribute('aria-hidden', 'false');
+        this.isOpen = true;
+        
+        // Focus management
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => {
+          this.nameInput?.focus();
+        }, 300);
+        
+        // Reset form
+        this.resetForm();
+      }
+    }
+    
+    /**
+     * Close modal with proper cleanup
+     */
+    close() {
+      if (this.modal) {
+        this.modal.classList.remove('show');
+        this.modal.setAttribute('aria-hidden', 'true');
+        this.isOpen = false;
+        
+        // Cleanup
+        document.body.style.overflow = '';
+        this.resetForm();
+        
+        // Return focus to trigger element
+        const createButton = document.getElementById('create-repo-btn');
+        createButton?.focus();
+      }
+    }
+    
+    /**
+     * Reset form to initial state
+     */
+    resetForm() {
+      this.form?.reset();
+      this.clearErrors();
+      this.updateCharCounter('name');
+      this.updateCharCounter('description');
+      this.setLoading(false);
+    }
+    
+    /**
+     * Update character counter for a field
+     */
+    updateCharCounter(fieldName) {
+      const input = fieldName === 'name' ? this.nameInput : this.descriptionInput;
+      const counter = document.getElementById(`${fieldName}-counter`);
+      const maxLength = fieldName === 'name' ? 50 : 200;
+      
+      if (input && counter) {
+        const currentLength = input.value.length;
+        counter.textContent = `${currentLength}/${maxLength}`;
+        
+        // Update counter styling based on usage
+        counter.classList.remove('warning', 'danger');
+        if (currentLength > maxLength * 0.8) {
+          counter.classList.add('warning');
+        }
+        if (currentLength > maxLength * 0.95) {
+          counter.classList.add('danger');
+        }
+      }
+    }
+    
+    /**
+     * Validate a specific field with debouncing
+     */
+    validateField(fieldName) {
+      // Clear existing timeout
+      if (this.validationTimeouts.has(fieldName)) {
+        clearTimeout(this.validationTimeouts.get(fieldName));
+      }
+      
+      // Debounce validation
+      const timeout = setTimeout(() => {
+        this.performFieldValidation(fieldName);
+      }, 300);
+      
+      this.validationTimeouts.set(fieldName, timeout);
+    }
+    
+    /**
+     * Perform actual field validation
+     */
+    performFieldValidation(fieldName) {
+      const input = document.getElementById(`repo-${fieldName}`);
+      const errorElement = document.getElementById(`${fieldName}-error`);
+      const rules = this.validationRules[fieldName];
+      
+      if (!input || !errorElement || !rules) return;
+      
+      const value = input.value.trim();
+      let isValid = true;
+      let errorMessage = '';
+      
+      // Required validation
+      if (rules.required && !value) {
+        isValid = false;
+        errorMessage = rules.message.required;
+      }
+      // Length validations
+      else if (value && rules.minLength && value.length < rules.minLength) {
+        isValid = false;
+        errorMessage = rules.message.minLength;
+      }
+      else if (value && rules.maxLength && value.length > rules.maxLength) {
+        isValid = false;
+        errorMessage = rules.message.maxLength;
+      }
+      // Pattern validation
+      else if (value && rules.pattern && !rules.pattern.test(value)) {
+        isValid = false;
+        errorMessage = rules.message.pattern;
+      }
+      
+      // Update UI
+      if (isValid) {
+        input.classList.remove('error');
+        errorElement.textContent = '';
+      } else {
+        input.classList.add('error');
+        errorElement.textContent = errorMessage;
+      }
+      
+      return isValid;
+    }
+    
+    /**
+     * Validate entire form
+     */
+    validateForm() {
+      let isValid = true;
+      
+      // Validate all fields
+      Object.keys(this.validationRules).forEach(fieldName => {
+        const fieldValid = this.performFieldValidation(fieldName);
+        if (!fieldValid) {
+          isValid = false;
+        }
+      });
+      
+      return isValid;
+    }
+    
+    /**
+     * Clear all form errors
+     */
+    clearErrors() {
+      const errorElements = this.form?.querySelectorAll('.form-error');
+      const inputElements = this.form?.querySelectorAll('.form-input, .form-textarea');
+      
+      errorElements?.forEach(element => {
+        element.textContent = '';
+      });
+      
+      inputElements?.forEach(element => {
+        element.classList.remove('error');
+      });
+    }
+    
+    /**
+     * Set loading state
+     */
+    setLoading(loading) {
+      if (this.createBtn) {
+        if (loading) {
+          this.createBtn.classList.add('loading');
+          this.createBtn.disabled = true;
+        } else {
+          this.createBtn.classList.remove('loading');
+          this.createBtn.disabled = false;
+        }
+      }
+    }
+    
+    /**
+     * Handle form submission
+     */
+    async handleSubmit(event) {
+      event.preventDefault();
+      
+      // Validate form
+      if (!this.validateForm()) {
+        return;
+      }
+      
+      // Set loading state
+      this.setLoading(true);
+      
+      try {
+        // Get form data
+        const formData = new FormData(this.form);
+        const repositoryData = {
+          name: formData.get('name'),
+          description: formData.get('description') || '',
+          template: formData.get('template') || ''
+        };
+        
+        // Simulate API call (replace with actual implementation)
+        await this.createRepository(repositoryData);
+        
+        // Success - close modal and refresh repository list
+        this.close();
+        this.showSuccessMessage(repositoryData.name);
+        
+        // Trigger repository list refresh
+        window.dispatchEvent(new CustomEvent('repositoryCreated', {
+          detail: repositoryData
+        }));
+        
+      } catch (error) {
+        console.error('Repository creation failed:', error);
+        this.showErrorMessage('Failed to create repository. Please try again.');
+      } finally {
+        this.setLoading(false);
+      }
+    }
+    
+    /**
+     * Create repository using data manager
+     */
+    async createRepository(data) {
+      // Simulate network delay for UX
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      // Import data manager functions dynamically
+      const { loadAppState, saveAppState, createRepository } = await import('../utils/dataManager.ts');
+      
+      try {
+        // Load current state
+        const currentState = loadAppState();
+        
+        // Create new repository
+        const newRepository = createRepository(data.name, data.description);
+        
+        // Add to state
+        const updatedState = {
+          ...currentState,
+          repositories: [...currentState.repositories, newRepository]
+        };
+        
+        // Save to localStorage
+        saveAppState(updatedState);
+        
+        return newRepository;
+      } catch (error) {
+        console.error('Repository creation failed:', error);
+        throw new Error('Failed to create repository. Please try again.');
+      }
+    }
+    
+    /**
+     * Show success message
+     */
+    showSuccessMessage(repoName) {
+      // This will be enhanced with proper notification system
+      const message = `🎉 Repository "${repoName}" created successfully!`;
+      
+      // Create temporary success notification
+      const notification = document.createElement('div');
+      notification.textContent = message;
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: var(--success-color);
+        color: white;
+        padding: var(--spacing-lg);
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-lg);
+        z-index: 1001;
+        animation: slideInNotification 0.5s ease-out;
+      `;
+      
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.animation = 'slideOutNotification 0.5s ease-in';
+        setTimeout(() => {
+          if (notification.parentNode) {
+            document.body.removeChild(notification);
+          }
+        }, 500);
+      }, 3000);
+    }
+    
+    /**
+     * Show error message
+     */
+    showErrorMessage(message) {
+      // Simple error alert for now (will be enhanced)
+      alert(`❌ ${message}`);
+    }
+  }
+  
+  // Initialize modal when DOM is ready
+  document.addEventListener('DOMContentLoaded', () => {
+    window.repositoryModal = new RepositoryModal();
+    
+    // Connect to create repository button
+    const createRepoBtn = document.getElementById('create-repo-btn');
+    createRepoBtn?.addEventListener('click', () => {
+      window.repositoryModal.open();
+    });
+  });
+</script>

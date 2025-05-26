@@ -1,0 +1,546 @@
+---
+/**
+ * Agent Profile Layout
+ * 
+ * Base layout for individual agent profile pages with:
+ * - Agent-specific styling and theming
+ * - Common profile structure and navigation
+ * - Personality-driven design elements
+ * - Theme-responsive adaptations
+ * 
+ * @props agentId - Unique agent identifier for styling
+ * @props agentName - Display name of the agent
+ * @props agentIcon - Emoji icon for the agent
+ * @props agentRole - Role description
+ * @props primaryColor - Agent's primary brand color
+ * @props accentColor - Agent's accent color
+ * 
+ * @author Aurorion Teams Collective
+ * @version 1.0.0
+ */
+
+import BaseLayout from './BaseLayout.astro';
+
+export interface Props {
+  agentId: string;
+  agentName: string;
+  agentIcon: string;
+  agentRole: string;
+  primaryColor: string;
+  accentColor: string;
+  title?: string;
+  description?: string;
+}
+
+const { 
+  agentId, 
+  agentName, 
+  agentIcon, 
+  agentRole, 
+  primaryColor, 
+  accentColor,
+  title = `${agentName} | Aurorion Teams`,
+  description = `Meet ${agentName}, the ${agentRole} of the Aurorion Teams system.`
+} = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <!-- Agent Profile Container -->
+  <div class={`agent-profile agent-${agentId}`}>
+    <!-- Profile Header -->
+    <header class="profile-header">
+      <div class="header-background"></div>
+      <div class="header-content">
+        <!-- Agent Avatar and Info -->
+        <div class="agent-avatar">
+          <span class="avatar-icon" aria-hidden="true">{agentIcon}</span>
+          <div class="avatar-status" aria-label="Agent status: Active"></div>
+        </div>
+        
+        <div class="agent-info">
+          <h1 class="agent-name">{agentName}</h1>
+          <p class="agent-role">{agentRole}</p>
+          <div class="agent-tags">
+            <span class="tag active">Active</span>
+            <span class="tag verified">Verified</span>
+            <span class="tag expert">Expert</span>
+          </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="profile-actions">
+          <button class="btn btn-primary" id="add-to-team-btn">
+            ➕ Add to Team
+          </button>
+          <button class="btn btn-outline" id="view-details-btn">
+            📊 View Details
+          </button>
+        </div>
+      </div>
+      
+      <!-- Navigation Breadcrumb -->
+      <nav class="profile-nav" aria-label="Profile navigation">
+        <a href="/" class="nav-link">🏠 Home</a>
+        <span class="nav-separator">›</span>
+        <a href="/agents" class="nav-link">👥 Team Profiles</a>
+        <span class="nav-separator">›</span>
+        <span class="nav-current">{agentName}</span>
+      </nav>
+    </header>
+
+    <!-- Profile Content -->
+    <main class="profile-content">
+      <slot />
+    </main>
+
+    <!-- Profile Footer -->
+    <footer class="profile-footer">
+      <div class="footer-content">
+        <p class="footer-text">
+          Part of the Aurorion Teams collective • Specialized in {agentRole}
+        </p>
+        <div class="footer-links">
+          <a href="/agents" class="footer-link">View All Agents</a>
+          <a href="/documentation" class="footer-link">Documentation</a>
+          <a href="/about" class="footer-link">About the Project</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+</BaseLayout>
+
+<style define:vars={{ primaryColor, accentColor }}>
+  /* ========================================
+     AGENT PROFILE BASE STYLES
+     ======================================== */
+  
+  .agent-profile {
+    min-height: 100vh;
+    background: var(--background);
+  }
+  
+  /* ========================================
+     PROFILE HEADER STYLES
+     ======================================== */
+  
+  .profile-header {
+    position: relative;
+    padding: var(--spacing-2xl) var(--spacing-lg);
+    background: linear-gradient(135deg, var(--primaryColor) 0%, var(--accentColor) 100%);
+    color: white;
+    overflow: hidden;
+  }
+  
+  .header-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.1;
+    background-size: 50px 50px;
+    background-repeat: repeat;
+  }
+  
+  .header-content {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: var(--spacing-xl);
+    align-items: center;
+  }
+  
+  /* ========================================
+     AGENT AVATAR STYLES
+     ======================================== */
+  
+  .agent-avatar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .avatar-icon {
+    font-size: 4rem;
+    padding: var(--spacing-lg);
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    backdrop-filter: blur(10px);
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .avatar-status {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    background: #10b981;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* ========================================
+     AGENT INFO STYLES
+     ======================================== */
+  
+  .agent-info {
+    text-align: left;
+  }
+  
+  .agent-name {
+    font-size: 3rem;
+    font-weight: 800;
+    margin: 0 0 var(--spacing-sm) 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    line-height: 1.1;
+  }
+  
+  .agent-role {
+    font-size: 1.5rem;
+    margin: 0 0 var(--spacing-lg) 0;
+    opacity: 0.9;
+    font-weight: 300;
+  }
+  
+  .agent-tags {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+  }
+  
+  .tag {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+  
+  .tag.active {
+    background: rgba(16, 185, 129, 0.3);
+  }
+  
+  .tag.verified {
+    background: rgba(59, 130, 246, 0.3);
+  }
+  
+  .tag.expert {
+    background: rgba(245, 158, 11, 0.3);
+  }
+  
+  /* ========================================
+     PROFILE ACTIONS STYLES
+     ======================================== */
+  
+  .profile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    align-items: flex-end;
+  }
+  
+  .profile-actions .btn {
+    min-width: 150px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    backdrop-filter: blur(10px);
+  }
+  
+  .profile-actions .btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+  }
+  
+  .profile-actions .btn-outline {
+    background: transparent;
+  }
+  
+  /* ========================================
+     PROFILE NAVIGATION STYLES
+     ======================================== */
+  
+  .profile-nav {
+    position: absolute;
+    bottom: var(--spacing-lg);
+    left: var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+  
+  .nav-link {
+    color: white;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
+  
+  .nav-link:hover {
+    opacity: 1;
+    text-decoration: underline;
+  }
+  
+  .nav-separator {
+    opacity: 0.6;
+  }
+  
+  .nav-current {
+    font-weight: 600;
+  }
+  
+  /* ========================================
+     PROFILE CONTENT STYLES
+     ======================================== */
+  
+  .profile-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--spacing-2xl) var(--spacing-lg);
+  }
+  
+  /* ========================================
+     PROFILE FOOTER STYLES
+     ======================================== */
+  
+  .profile-footer {
+    background: var(--section-bg);
+    border-top: 1px solid var(--border-color);
+    padding: var(--spacing-xl) var(--spacing-lg);
+    text-align: center;
+  }
+  
+  .footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .footer-text {
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-lg);
+    flex-wrap: wrap;
+  }
+  
+  .footer-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+  }
+  
+  .footer-link:hover {
+    color: var(--primary-color);
+  }
+  
+  /* ========================================
+     PRICE IS RIGHT THEME ENHANCEMENTS
+     ======================================== */
+  
+  .price-is-right .profile-header {
+    position: relative;
+    overflow: visible;
+  }
+  
+  .price-is-right .profile-header::after {
+    content: '🎉🎊🎈';
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 2rem;
+    animation: bounce 2s infinite;
+  }
+  
+  .price-is-right .avatar-icon {
+    animation: bounce 2s infinite, float 6s ease-in-out infinite;
+  }
+  
+  .price-is-right .tag {
+    animation: pulse 2s infinite;
+  }
+  
+  .price-is-right .profile-actions .btn {
+    animation: gentle-pulse 3s ease-in-out infinite;
+  }
+  
+  /* ========================================
+     ANIMATIONS
+     ======================================== */
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  @keyframes gentle-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+  }
+  
+  /* ========================================
+     RESPONSIVE DESIGN
+     ======================================== */
+  
+  @media (max-width: 1024px) {
+    .header-content {
+      grid-template-columns: 1fr;
+      gap: var(--spacing-lg);
+      text-align: center;
+    }
+    
+    .agent-info {
+      text-align: center;
+    }
+    
+    .profile-actions {
+      align-items: center;
+      flex-direction: row;
+      justify-content: center;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .profile-header {
+      padding: var(--spacing-xl) var(--spacing-md);
+    }
+    
+    .agent-name {
+      font-size: 2rem;
+    }
+    
+    .agent-role {
+      font-size: 1.2rem;
+    }
+    
+    .profile-actions {
+      flex-direction: column;
+      width: 100%;
+    }
+    
+    .profile-actions .btn {
+      width: 100%;
+      min-width: unset;
+    }
+    
+    .profile-nav {
+      position: static;
+      justify-content: center;
+      margin-top: var(--spacing-lg);
+      padding-top: var(--spacing-lg);
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .footer-links {
+      flex-direction: column;
+      gap: var(--spacing-md);
+    }
+  }
+  
+  /* ========================================
+     ACCESSIBILITY IMPROVEMENTS
+     ======================================== */
+  
+  @media (prefers-reduced-motion: reduce) {
+    .avatar-icon,
+    .price-is-right .avatar-icon,
+    .price-is-right .tag,
+    .price-is-right .profile-actions .btn {
+      animation: none;
+    }
+  }
+  
+  .profile-actions .btn:focus {
+    outline: 2px solid white;
+    outline-offset: 2px;
+  }
+</style>
+
+<script>
+  /**
+   * Agent Profile Interactive Functionality
+   * 
+   * Handles profile-specific interactions and integrations
+   */
+  
+  class AgentProfileManager {
+    constructor() {
+      this.initializeEventListeners();
+    }
+    
+    initializeEventListeners() {
+      // Add to team functionality
+      document.getElementById('add-to-team-btn')?.addEventListener('click', () => {
+        this.handleAddToTeam();
+      });
+      
+      // View details functionality
+      document.getElementById('view-details-btn')?.addEventListener('click', () => {
+        this.handleViewDetails();
+      });
+    }
+    
+    handleAddToTeam() {
+      // TODO: Integrate with team management system
+      this.showNotification('🎉 Agent added to team! (Feature coming soon)', 'success');
+    }
+    
+    handleViewDetails() {
+      // Scroll to details section
+      const detailsSection = document.querySelector('.did-you-know');
+      if (detailsSection) {
+        detailsSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+    
+    showNotification(message, type = 'info') {
+      const notification = document.createElement('div');
+      notification.textContent = message;
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: var(--${type === 'success' ? 'success' : 'primary'}-color);
+        color: white;
+        padding: var(--spacing-lg);
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-lg);
+        z-index: 1002;
+        animation: slideInNotification 0.5s ease-out;
+        max-width: 300px;
+      `;
+      
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.animation = 'slideOutNotification 0.5s ease-in';
+        setTimeout(() => {
+          if (notification.parentNode) {
+            document.body.removeChild(notification);
+          }
+        }, 500);
+      }, 3000);
+    }
+  }
+  
+  // Initialize when DOM is ready
+  document.addEventListener('DOMContentLoaded', () => {
+    window.agentProfileManager = new AgentProfileManager();
+  });
+</script>
