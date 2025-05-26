@@ -1,9 +1,43 @@
-// Re-export existing agent roles with utility functions
-import { defaultAgentRoles } from '../data/agentRoles';
+// Updated to use MDX content collections
+import { getCollection } from 'astro:content';
 import type { AgentRole } from '../types';
+
+// Legacy compatibility - will be replaced by content collections
+import { defaultAgentRoles } from '../data/agentRoles';
 
 export const agentRoles = defaultAgentRoles;
 export type { AgentRole };
+
+// New content collection functions
+export async function getAgentRolesFromContent() {
+  try {
+    const roles = await getCollection('agent-roles');
+    return roles.map(role => ({
+      id: role.id,
+      name: role.data.name,
+      icon: role.data.icon,
+      description: role.data.description,
+      ...role.data
+    }));
+  } catch (error) {
+    console.warn('Content collections not available, using legacy data');
+    return defaultAgentRoles;
+  }
+}
+
+export async function getTeamMembersFromContent() {
+  try {
+    const members = await getCollection('team-members');
+    return members.map(member => ({
+      id: member.id,
+      ...member.data,
+      content: member.body
+    }));
+  } catch (error) {
+    console.warn('Content collections not available');
+    return [];
+  }
+}
 
 export function getAgentRole(id: string): AgentRole | undefined {
   return agentRoles.find(role => role.id === id);

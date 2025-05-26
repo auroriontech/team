@@ -1,0 +1,965 @@
+---
+/**
+ * Dynamic Project Detail Page
+ * 
+ * Renders individual project pages from MDX content collections
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project }
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await project.render();
+
+// Get related projects
+const allProjects = await getCollection('projects');
+const relatedProjects = allProjects
+  .filter(p => p.id !== project.id && p.data.status === 'active')
+  .slice(0, 3);
+
+const statusColors = {
+  active: '#16a34a',
+  completed: '#2563eb', 
+  paused: '#f59e0b',
+  archived: '#6b7280',
+  planning: '#7c3aed'
+};
+
+const priorityColors = {
+  critical: '#dc2626',
+  high: '#f59e0b',
+  medium: '#2563eb', 
+  low: '#6b7280'
+};
+---
+
+<BaseLayout title={`${project.data.name} | Projects`}>
+  <main class="project-detail-page">
+    <nav class="project-breadcrumb">
+      <a href="/projects" class="breadcrumb-link">Projects</a>
+      <span class="breadcrumb-separator">›</span>
+      <span class="breadcrumb-current">{project.data.name}</span>
+    </nav>
+
+    <header class="project-header">
+      <div class="project-title-section">
+        <div class="project-title-row">
+          <h1 class="project-title">{project.data.name}</h1>
+          <div class="project-badges">
+            <span 
+              class="project-badge status" 
+              style={`background: ${statusColors[project.data.status]}20; color: ${statusColors[project.data.status]}`}
+            >
+              {project.data.status}
+            </span>
+            <span 
+              class="project-badge priority"
+              style={`background: ${priorityColors[project.data.priority]}20; color: ${priorityColors[project.data.priority]}`}
+            >
+              {project.data.priority}
+            </span>
+            {project.data.featured && (
+              <span class="project-badge featured">⭐ Featured</span>
+            )}
+          </div>
+        </div>
+        
+        <p class="project-description">{project.data.description}</p>
+      </div>
+
+      {/* Project Stats Dashboard */}
+      <div class="project-stats">
+        <div class="stats-grid">
+          {project.data.progress && (
+            <div class="stat-item">
+              <div class="stat-label">Progress</div>
+              <div class="stat-value">{project.data.progress.completion}%</div>
+              <div class="progress-bar">
+                <div 
+                  class="progress-fill" 
+                  style={`width: ${project.data.progress.completion}%`}
+                ></div>
+              </div>
+            </div>
+          )}
+          
+          {project.data.team?.agents && (
+            <div class="stat-item">
+              <div class="stat-label">AI Agents</div>
+              <div class="stat-value">{project.data.team.agents.length}</div>
+            </div>
+          )}
+          
+          {project.data.metadata && (
+            <div class="stat-item">
+              <div class="stat-label">Tech Stack</div>
+              <div class="stat-value">{project.data.metadata.stack.length}</div>
+            </div>
+          )}
+          
+          {project.data.progress?.milestones && (
+            <div class="stat-item">
+              <div class="stat-label">Milestones</div>
+              <div class="stat-value">
+                {project.data.progress.milestones.filter(m => m.status === 'completed').length}
+                /{project.data.progress.milestones.length}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Repository Information */}
+      {project.data.repository && (
+        <div class="repository-section">
+          <h3 class="section-title">Repository</h3>
+          <div class="repository-card">
+            <div class="repo-header">
+              <a href={project.data.repository.url} target="_blank" class="repo-link">
+                <span class="repo-icon">📦</span>
+                <span class="repo-name">{project.data.repository.url.split('/').pop()}</span>
+                <span class="external-icon">↗</span>
+              </a>
+              <div class="repo-meta">
+                <span class="repo-provider">{project.data.repository.provider}</span>
+                <span class="repo-branch">Branch: {project.data.repository.branch}</span>
+                {project.data.repository.language && (
+                  <span class="repo-language">{project.data.repository.language}</span>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Team Information */}
+      {project.data.team && (
+        <div class="team-section">
+          <h3 class="section-title">Team</h3>
+          <div class="team-grid">
+            {project.data.team.founder && (
+              <div class="team-card founder-card">
+                <div class="team-role">Technical Founder</div>
+                <div class="team-member">{project.data.team.founder}</div>
+              </div>
+            )}
+            
+            {project.data.team.agents.length > 0 && (
+              <div class="team-card agents-card">
+                <div class="team-role">AI Agents ({project.data.team.agents.length})</div>
+                <div class="agents-list">
+                  {project.data.team.agents.map(agent => (
+                    <a href={`/agents/${agent}`} class="agent-link" key={agent}>
+                      {agent.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </header>
+
+    {/* Milestones Timeline */}
+    {project.data.progress?.milestones && project.data.progress.milestones.length > 0 && (
+      <section class="milestones-section">
+        <h3 class="section-title">Project Timeline</h3>
+        <div class="timeline">
+          {project.data.progress.milestones.map((milestone, index) => (
+            <div class="timeline-item" data-status={milestone.status} key={index}>
+              <div class="timeline-marker"></div>
+              <div class="timeline-content">
+                <div class="milestone-header">
+                  <h4 class="milestone-name">{milestone.name}</h4>
+                  <div class="milestone-meta">
+                    <span class="milestone-status" data-status={milestone.status}>
+                      {milestone.status}
+                    </span>
+                    <span class="milestone-date">
+                      {new Date(milestone.dueDate).toLocaleDateString()}
+                    </span>
+                  </div>
+                </div>
+                <p class="milestone-description">{milestone.description}</p>
+                {milestone.assignee && (
+                  <div class="milestone-assignee">
+                    Assigned to: {milestone.assignee.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {/* Tech Stack */}
+    {project.data.metadata && (
+      <section class="tech-section">
+        <h3 class="section-title">Technology Stack</h3>
+        <div class="tech-categories">
+          {project.data.metadata.stack.length > 0 && (
+            <div class="tech-category">
+              <h4 class="tech-category-title">Core Technologies</h4>
+              <div class="tech-tags">
+                {project.data.metadata.stack.map(tech => (
+                  <span class="tech-tag" key={tech}>{tech}</span>
+                ))}
+              </div>
+            </div>
+          )}
+          
+          {project.data.metadata.frameworks.length > 0 && (
+            <div class="tech-category">
+              <h4 class="tech-category-title">Frameworks</h4>
+              <div class="tech-tags">
+                {project.data.metadata.frameworks.map(framework => (
+                  <span class="tech-tag framework" key={framework}>{framework}</span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+    )}
+
+    {/* Environments */}
+    {project.data.environments && project.data.environments.length > 0 && (
+      <section class="environments-section">
+        <h3 class="section-title">Environments</h3>
+        <div class="environments-grid">
+          {project.data.environments.map((env, index) => (
+            <div class="environment-card" key={index}>
+              <div class="env-header">
+                <h4 class="env-name">{env.name}</h4>
+                <span class="env-status" data-status={env.status}>
+                  {env.status}
+                </span>
+              </div>
+              {env.url && (
+                <a href={env.url} target="_blank" class="env-url">
+                  {env.url} ↗
+                </a>
+              )}
+              <div class="env-meta">
+                {env.version && <span>v{env.version}</span>}
+                {env.lastDeployment && (
+                  <span>Last: {new Date(env.lastDeployment).toLocaleDateString()}</span>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {/* Project Content */}
+    <section class="project-content">
+      <Content />
+    </section>
+
+    {/* Related Projects */}
+    {relatedProjects.length > 0 && (
+      <aside class="related-projects">
+        <h3 class="section-title">Related Projects</h3>
+        <div class="related-grid">
+          {relatedProjects.map((relatedProject) => (
+            <a href={`/projects/${relatedProject.id}`} class="related-card" key={relatedProject.id}>
+              <h4 class="related-title">{relatedProject.data.name}</h4>
+              <p class="related-description">{relatedProject.data.description}</p>
+              <div class="related-meta">
+                <span class="related-status" data-status={relatedProject.data.status}>
+                  {relatedProject.data.status}
+                </span>
+                {relatedProject.data.progress && (
+                  <span class="related-progress">{relatedProject.data.progress.completion}%</span>
+                )}
+              </div>
+            </a>
+          ))}
+        </div>
+      </aside>
+    )}
+
+    <nav class="project-navigation">
+      <a href="/projects" class="nav-button back">
+        <span class="nav-icon">←</span>
+        Back to Projects
+      </a>
+    </nav>
+  </main>
+</BaseLayout>
+
+<style>
+  .project-detail-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .project-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    font-size: 0.875rem;
+  }
+
+  .breadcrumb-link {
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+
+  .breadcrumb-link:hover {
+    text-decoration: underline;
+  }
+
+  .breadcrumb-separator {
+    color: var(--color-text-secondary);
+  }
+
+  .breadcrumb-current {
+    color: var(--color-text-secondary);
+  }
+
+  .project-header {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .project-title-section {
+    margin-bottom: 2rem;
+  }
+
+  .project-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .project-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--color-text);
+    margin: 0;
+    flex: 1;
+  }
+
+  .project-badges {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .project-badge {
+    font-size: 0.75rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.375rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .project-badge.featured {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: white;
+  }
+
+  .project-description {
+    font-size: 1.125rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .project-stats {
+    margin-bottom: 2rem;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+
+  .stat-item {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    text-align: center;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--color-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .progress-bar {
+    width: 100%;
+    height: 4px;
+    background: var(--color-border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light, var(--color-primary)));
+    transition: width 0.3s ease;
+  }
+
+  .section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0 0 1rem 0;
+  }
+
+  .repository-section,
+  .team-section {
+    margin-bottom: 2rem;
+  }
+
+  .repository-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+  }
+
+  .repo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .repo-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .repo-link:hover {
+    text-decoration: underline;
+  }
+
+  .repo-icon {
+    font-size: 1.125rem;
+  }
+
+  .external-icon {
+    font-size: 0.875rem;
+    opacity: 0.7;
+  }
+
+  .repo-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+  }
+
+  .repo-provider,
+  .repo-branch,
+  .repo-language {
+    background: var(--color-background);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    border: 1px solid var(--color-border);
+  }
+
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+
+  .team-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+  }
+
+  .founder-card {
+    border-color: var(--color-primary);
+    background: linear-gradient(135deg, var(--color-surface) 0%, rgba(37, 99, 235, 0.02) 100%);
+  }
+
+  .team-role {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+
+  .team-member {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .agents-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .agent-link {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    padding: 0.25rem 0;
+    border-bottom: 1px solid transparent;
+  }
+
+  .agent-link:hover {
+    border-bottom-color: var(--color-primary);
+  }
+
+  .milestones-section {
+    margin-bottom: 3rem;
+  }
+
+  .timeline {
+    position: relative;
+    padding-left: 2rem;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0.5rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--color-border);
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 2rem;
+  }
+
+  .timeline-marker {
+    position: absolute;
+    left: -1.5rem;
+    top: 0.5rem;
+    width: 12px;
+    height: 12px;
+    background: var(--color-border);
+    border-radius: 50%;
+    border: 2px solid var(--color-background);
+  }
+
+  .timeline-item[data-status="completed"] .timeline-marker {
+    background: var(--color-primary);
+  }
+
+  .timeline-item[data-status="in-progress"] .timeline-marker {
+    background: #f59e0b;
+  }
+
+  .timeline-content {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+  }
+
+  .milestone-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .milestone-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0;
+    flex: 1;
+  }
+
+  .milestone-meta {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .milestone-status {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .milestone-status[data-status="completed"] {
+    background: rgba(34, 197, 94, 0.1);
+    color: #16a34a;
+  }
+
+  .milestone-status[data-status="in-progress"] {
+    background: rgba(251, 191, 36, 0.1);
+    color: #f59e0b;
+  }
+
+  .milestone-status[data-status="pending"] {
+    background: rgba(107, 114, 128, 0.1);
+    color: #6b7280;
+  }
+
+  .milestone-date {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+  }
+
+  .milestone-description {
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin: 0 0 0.5rem 0;
+  }
+
+  .milestone-assignee {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    font-style: italic;
+  }
+
+  .tech-section,
+  .environments-section {
+    margin-bottom: 3rem;
+  }
+
+  .tech-categories {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .tech-category {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+  }
+
+  .tech-category-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0 0 0.75rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tech-tag {
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.375rem;
+    font-size: 0.75rem;
+    color: var(--color-text);
+    font-weight: 500;
+  }
+
+  .tech-tag.framework {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light, var(--color-primary)));
+    color: white;
+    border-color: var(--color-primary);
+  }
+
+  .environments-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+
+  .environment-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+  }
+
+  .env-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .env-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .env-status {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .env-status[data-status="healthy"] {
+    background: rgba(34, 197, 94, 0.1);
+    color: #16a34a;
+  }
+
+  .env-status[data-status="warning"] {
+    background: rgba(251, 191, 36, 0.1);
+    color: #f59e0b;
+  }
+
+  .env-status[data-status="error"] {
+    background: rgba(239, 68, 68, 0.1);
+    color: #dc2626;
+  }
+
+  .env-url {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .env-url:hover {
+    text-decoration: underline;
+  }
+
+  .env-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+  }
+
+  .project-content {
+    margin-bottom: 3rem;
+  }
+
+  /* Enhanced MDX content styling */
+  .project-content :global(h1) {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--color-text);
+    margin: 2rem 0 1rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--color-border);
+  }
+
+  .project-content :global(h2) {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 1.5rem 0 0.75rem 0;
+  }
+
+  .project-content :global(h3) {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 1.25rem 0 0.5rem 0;
+  }
+
+  .project-content :global(p) {
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin: 0 0 1rem 0;
+  }
+
+  .project-content :global(ul),
+  .project-content :global(ol) {
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0 0 1rem 0;
+    padding-left: 1.5rem;
+  }
+
+  .project-content :global(li) {
+    margin-bottom: 0.5rem;
+  }
+
+  .project-content :global(strong) {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+
+  .related-projects {
+    margin-bottom: 3rem;
+    padding: 2rem;
+    background: var(--color-surface);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--color-border);
+  }
+
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+
+  .related-card {
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    text-decoration: none;
+    color: var(--color-text);
+    transition: all 0.2s ease;
+  }
+
+  .related-card:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+  }
+
+  .related-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+    color: var(--color-text);
+  }
+
+  .related-description {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    line-height: 1.4;
+    margin: 0 0 0.75rem 0;
+  }
+
+  .related-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.625rem;
+  }
+
+  .related-status {
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .related-status[data-status="active"] {
+    background: rgba(34, 197, 94, 0.1);
+    color: #16a34a;
+  }
+
+  .related-progress {
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .project-navigation {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+
+  .nav-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--color-primary);
+    color: white;
+    text-decoration: none;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+
+  .nav-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .nav-icon {
+    font-size: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    .project-detail-page {
+      padding: 1rem;
+    }
+
+    .project-title {
+      font-size: 2rem;
+    }
+
+    .project-title-row {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .team-grid,
+    .environments-grid,
+    .related-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .repo-header {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .milestone-header {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+</style>

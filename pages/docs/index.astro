@@ -1,0 +1,521 @@
+---
+/**
+ * Documentation Hub Page
+ * 
+ * Centralized documentation for Aurorion Teams system
+ * Replaces the old ai_docs directory with unified MDX content
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const docs = await getCollection('docs');
+const agentRoles = await getCollection('agent-roles');
+const teamMembers = await getCollection('team-members');
+
+// Organize docs by category
+const docsByCategory = docs.reduce((acc, doc) => {
+  const category = doc.data.category;
+  if (!acc[category]) acc[category] = [];
+  acc[category].push(doc);
+  return acc;
+}, {} as Record<string, typeof docs>);
+
+// Sort docs by priority and date
+Object.keys(docsByCategory).forEach(category => {
+  docsByCategory[category].sort((a, b) => {
+    const priorityOrder = { critical: 4, high: 3, medium: 2, low: 1 };
+    const priorityDiff = priorityOrder[b.data.priority] - priorityOrder[a.data.priority];
+    if (priorityDiff !== 0) return priorityDiff;
+    return new Date(b.data.lastUpdated).getTime() - new Date(a.data.lastUpdated).getTime();
+  });
+});
+
+const categoryInfo = {
+  planning: { icon: '📋', title: 'Planning & Strategy', description: 'Project roadmaps, backlogs, and strategic planning documents' },
+  architecture: { icon: '🏗️', title: 'Architecture & Design', description: 'System architecture, technical design, and infrastructure documentation' },
+  implementation: { icon: '⚙️', title: 'Implementation', description: 'Development guides, deployment procedures, and technical implementation' },
+  guides: { icon: '📚', title: 'User Guides', description: 'How-to guides, tutorials, and user documentation' },
+  reference: { icon: '📖', title: 'Reference', description: 'API documentation, specifications, and reference materials' }
+};
+---
+
+<BaseLayout title="Documentation | Aurorion Teams">
+  <main class="docs-page">
+    <div class="page-header">
+      <h1 class="page-title">
+        <span class="title-icon">📚</span>
+        Documentation Hub
+      </h1>
+      <p class="page-subtitle">
+        Complete documentation for Aurorion Teams multi-agent system
+      </p>
+    </div>
+
+    <div class="docs-overview">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">{docs.length}</div>
+          <div class="stat-label">Documentation Pages</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">{agentRoles.length}</div>
+          <div class="stat-label">Agent Roles</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">{teamMembers.length}</div>
+          <div class="stat-label">Team Members</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">{Object.keys(docsByCategory).length}</div>
+          <div class="stat-label">Categories</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-access">
+      <h2 class="section-title">Quick Access</h2>
+      <div class="quick-links">
+        <a href="/team-members" class="quick-link">
+          <span class="link-icon">👥</span>
+          <div class="link-content">
+            <h3>Team Members</h3>
+            <p>Manage team member profiles and assignments</p>
+          </div>
+        </a>
+        <a href="/team-builder" class="quick-link">
+          <span class="link-icon">🏗️</span>
+          <div class="link-content">
+            <h3>Team Builder</h3>
+            <p>Configure and deploy AI agent teams</p>
+          </div>
+        </a>
+        <a href="/agents" class="quick-link">
+          <span class="link-icon">🤖</span>
+          <div class="link-content">
+            <h3>Agent Profiles</h3>
+            <p>Detailed agent role specifications and capabilities</p>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="docs-content">
+      {Object.entries(docsByCategory).map(([category, categoryDocs]) => {
+        const info = categoryInfo[category];
+        return (
+          <div class="docs-section" key={category}>
+            <div class="section-header">
+              <h2 class="section-title">
+                <span class="section-icon">{info.icon}</span>
+                {info.title}
+              </h2>
+              <p class="section-description">{info.description}</p>
+            </div>
+            
+            <div class="docs-grid">
+              {categoryDocs.map((doc) => (
+                <a href={`/docs/${doc.id}`} class="doc-card" key={doc.id}>
+                  <div class="doc-header">
+                    <h3 class="doc-title">{doc.data.title}</h3>
+                    <div class="doc-meta">
+                      <span class="doc-priority" data-priority={doc.data.priority}>
+                        {doc.data.priority}
+                      </span>
+                      <span class="doc-status" data-status={doc.data.status}>
+                        {doc.data.status}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <p class="doc-description">{doc.data.description}</p>
+                  
+                  {doc.data.tags.length > 0 && (
+                    <div class="doc-tags">
+                      {doc.data.tags.slice(0, 3).map(tag => (
+                        <span class="doc-tag" key={tag}>{tag}</span>
+                      ))}
+                      {doc.data.tags.length > 3 && (
+                        <span class="doc-tag more">+{doc.data.tags.length - 3}</span>
+                      )}
+                    </div>
+                  )}
+                  
+                  <div class="doc-footer">
+                    <span class="doc-date">
+                      Updated {new Date(doc.data.lastUpdated).toLocaleDateString()}
+                    </span>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+
+    {/* Agent Roles Section */}
+    <div class="docs-section">
+      <div class="section-header">
+        <h2 class="section-title">
+          <span class="section-icon">🤖</span>
+          Agent Role Specifications
+        </h2>
+        <p class="section-description">Detailed specifications for each AI agent role including responsibilities, workflows, and decision authority</p>
+      </div>
+      
+      <div class="docs-grid">
+        {agentRoles.map((role) => (
+          <a href={`/agents/${role.id}`} class="doc-card agent-card" key={role.id}>
+            <div class="doc-header">
+              <h3 class="doc-title">
+                <span class="role-icon">{role.data.icon}</span>
+                {role.data.name}
+              </h3>
+              <div class="doc-meta">
+                <span class="doc-category">{role.data.category}</span>
+              </div>
+            </div>
+            
+            <p class="doc-description">{role.data.description}</p>
+            
+            <div class="role-responsibilities">
+              <div class="responsibility-item">
+                <strong>Primary:</strong> {role.data.responsibilities.primary.length} responsibilities
+              </div>
+              <div class="responsibility-item">
+                <strong>Secondary:</strong> {role.data.responsibilities.secondary.length} responsibilities
+              </div>
+            </div>
+            
+            <div class="doc-tags">
+              {role.data.frameworks.slice(0, 3).map(framework => (
+                <span class="doc-tag" key={framework}>{framework}</span>
+              ))}
+              {role.data.frameworks.length > 3 && (
+                <span class="doc-tag more">+{role.data.frameworks.length - 3}</span>
+              )}
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .docs-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .page-title {
+    font-size: 3rem;
+    font-weight: bold;
+    color: var(--color-text);
+    margin: 0 0 1rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .title-icon {
+    font-size: 2.5rem;
+  }
+
+  .page-subtitle {
+    color: var(--color-text-secondary);
+    font-size: 1.25rem;
+    margin: 0;
+  }
+
+  .docs-overview {
+    margin-bottom: 3rem;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .stat-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .stat-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--color-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-label {
+    color: var(--color-text-secondary);
+    font-size: 1rem;
+  }
+
+  .quick-access {
+    margin-bottom: 3rem;
+  }
+
+  .section-title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0 0 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .section-icon {
+    font-size: 1.5rem;
+  }
+
+  .quick-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .quick-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    color: var(--color-text);
+    transition: all 0.2s ease;
+  }
+
+  .quick-link:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .link-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+  }
+
+  .link-content h3 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+
+  .link-content p {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+  }
+
+  .docs-section {
+    margin-bottom: 4rem;
+  }
+
+  .section-header {
+    margin-bottom: 2rem;
+  }
+
+  .section-description {
+    color: var(--color-text-secondary);
+    font-size: 1rem;
+    margin: 0.5rem 0 0 0;
+  }
+
+  .docs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .doc-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    text-decoration: none;
+    color: var(--color-text);
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .doc-card:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .doc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+  }
+
+  .doc-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--color-text);
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .role-icon {
+    font-size: 1rem;
+  }
+
+  .doc-meta {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .doc-priority,
+  .doc-status,
+  .doc-category {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .doc-priority[data-priority="critical"] {
+    background: rgba(239, 68, 68, 0.1);
+    color: #dc2626;
+  }
+
+  .doc-priority[data-priority="high"] {
+    background: rgba(251, 191, 36, 0.1);
+    color: #f59e0b;
+  }
+
+  .doc-priority[data-priority="medium"] {
+    background: rgba(59, 130, 246, 0.1);
+    color: #2563eb;
+  }
+
+  .doc-priority[data-priority="low"] {
+    background: rgba(107, 114, 128, 0.1);
+    color: #6b7280;
+  }
+
+  .doc-status[data-status="active"] {
+    background: rgba(34, 197, 94, 0.1);
+    color: #16a34a;
+  }
+
+  .doc-status[data-status="draft"] {
+    background: rgba(251, 191, 36, 0.1);
+    color: #f59e0b;
+  }
+
+  .doc-status[data-status="archived"] {
+    background: rgba(107, 114, 128, 0.1);
+    color: #6b7280;
+  }
+
+  .doc-category {
+    background: rgba(139, 92, 246, 0.1);
+    color: #7c3aed;
+  }
+
+  .doc-description {
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin: 0 0 1rem 0;
+    flex: 1;
+  }
+
+  .doc-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .doc-tag {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+  }
+
+  .doc-tag.more {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+  }
+
+  .doc-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .doc-date {
+    color: var(--color-text-secondary);
+    font-size: 0.75rem;
+  }
+
+  .role-responsibilities {
+    margin-bottom: 1rem;
+  }
+
+  .responsibility-item {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.25rem;
+  }
+
+  .responsibility-item strong {
+    color: var(--color-text);
+  }
+
+  @media (max-width: 768px) {
+    .docs-page {
+      padding: 1rem;
+    }
+
+    .page-title {
+      font-size: 2rem;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .docs-grid,
+    .quick-links {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
