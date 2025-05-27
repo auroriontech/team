@@ -1,0 +1,1048 @@
+---
+/**
+ * Team Builder Page
+ * 
+ * Complete team building workflow combining:
+ * - Repository management
+ * - Agent role selection  
+ * - Team member customization
+ * - Team composition preview
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AgentRoleSelector from '../components/AgentRoleSelector.astro';
+import TeamMemberCustomization from '../components/TeamMemberCustomization.astro';
+import { agentRoles, getAgentThemeColors, type AgentRole } from '../utils/agentRoles';
+---
+
+<BaseLayout title="Team Builder | Aurorion Teams">
+  <main class="team-builder-page">
+    <div class="page-header">
+      <h1 class="page-title">
+        <span class="title-icon">🏗️</span>
+        Team Builder
+      </h1>
+      <p class="page-subtitle">
+        Configure your AI agent team with role selection and member customization
+      </p>
+    </div>
+
+    <div class="workflow-container">
+      <!-- Step Indicator -->
+      <div class="workflow-steps">
+        <div class="step active" data-step="1">
+          <div class="step-number">1</div>
+          <div class="step-label">Select Roles</div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step" data-step="2">
+          <div class="step-number">2</div>
+          <div class="step-label">Customize Members</div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step" data-step="3">
+          <div class="step-number">3</div>
+          <div class="step-label">Review & Deploy</div>
+        </div>
+      </div>
+
+      <!-- Step 1: Role Selection -->
+      <div class="workflow-step" id="step1" data-step="1">
+        <div class="step-content">
+          <h2 class="step-title">
+            <span class="step-icon">👥</span>
+            Select Agent Roles
+          </h2>
+          <p class="step-description">
+            Choose the AI agents you want on your team. Each role has specific capabilities and responsibilities.
+          </p>
+          
+          <div class="component-wrapper">
+            <AgentRoleSelector />
+          </div>
+          
+          <div class="step-actions">
+            <button class="btn btn-primary" id="continueToCustomization" disabled>
+              <span class="btn-icon">⚙️</span>
+              Continue to Customization
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Member Customization -->
+      <div class="workflow-step hidden" id="step2" data-step="2">
+        <div class="step-content">
+          <h2 class="step-title">
+            <span class="step-icon">⚙️</span>
+            Customize Team Members
+          </h2>
+          <p class="step-description">
+            Configure individual agent behaviors, personalities, and parameters for your selected roles.
+          </p>
+          
+          <div class="component-wrapper">
+            <TeamMemberCustomization />
+          </div>
+          
+          <div class="step-actions">
+            <button class="btn btn-secondary" id="backToRoles">
+              <span class="btn-icon">←</span>
+              Back to Role Selection
+            </button>
+            <button class="btn btn-primary" id="continueToReview" disabled>
+              <span class="btn-icon">👀</span>
+              Review Team Configuration
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Review & Deploy -->
+      <div class="workflow-step hidden" id="step3" data-step="3">
+        <div class="step-content">
+          <h2 class="step-title">
+            <span class="step-icon">🚀</span>
+            Review & Deploy Team
+          </h2>
+          <p class="step-description">
+            Review your team configuration and deploy your AI agents.
+          </p>
+          
+          <div class="team-review-container">
+            <div class="team-summary" id="teamSummary">
+              <!-- Team summary will be populated by JavaScript -->
+            </div>
+            
+            <div class="deployment-options">
+              <h3>Deployment Options</h3>
+              <div class="deployment-form">
+                <div class="form-group">
+                  <label for="teamName">Team Name</label>
+                  <input type="text" id="teamName" class="form-input" placeholder="Enter a name for your team">
+                </div>
+                
+                <div class="form-group">
+                  <label for="deploymentEnvironment">Environment</label>
+                  <select id="deploymentEnvironment" class="form-select">
+                    <option value="development">Development</option>
+                    <option value="staging">Staging</option>
+                    <option value="production">Production</option>
+                  </select>
+                </div>
+                
+                <div class="form-group">
+                  <label class="checkbox-label">
+                    <input type="checkbox" id="autoStart" checked>
+                    <span class="checkmark"></span>
+                    Auto-start team after deployment
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="step-actions">
+            <button class="btn btn-secondary" id="backToCustomization">
+              <span class="btn-icon">←</span>
+              Back to Customization
+            </button>
+            <button class="btn btn-success" id="deployTeam">
+              <span class="btn-icon">🚀</span>
+              Deploy Team
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal hidden" id="successModal">
+      <div class="modal-backdrop"></div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>🎉 Team Deployed Successfully!</h3>
+        </div>
+        <div class="modal-body">
+          <p>Your AI agent team has been deployed and is ready to work.</p>
+          <div class="deployment-details" id="deploymentDetails">
+            <!-- Deployment details will be populated -->
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-primary" id="viewTeamDashboard">
+            <span class="btn-icon">📊</span>
+            View Team Dashboard
+          </button>
+          <button class="btn btn-secondary" id="createAnotherTeam">
+            <span class="btn-icon">➕</span>
+            Create Another Team
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .team-builder-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .title-icon {
+    font-size: 3rem;
+  }
+
+  .page-subtitle {
+    font-size: 1.125rem;
+    color: var(--color-text-secondary);
+    margin: 0;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .workflow-container {
+    background: var(--color-surface);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+  }
+
+  .workflow-steps {
+    display: flex;
+    align-items: center;
+    padding: 2rem;
+    background: var(--color-surface-variant);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    position: relative;
+  }
+
+  .step-number {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--color-border);
+    color: var(--color-text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .step.active .step-number {
+    background: var(--color-primary);
+    color: white;
+  }
+
+  .step.completed .step-number {
+    background: var(--color-success);
+    color: white;
+  }
+
+  .step-label {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+  }
+
+  .step.active .step-label {
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .step-connector {
+    height: 2px;
+    background: var(--color-border);
+    flex: 1;
+    margin: 0 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .workflow-step {
+    padding: 2rem;
+  }
+
+  .workflow-step.hidden {
+    display: none;
+  }
+
+  .component-wrapper {
+    margin: 1.5rem 0;
+  }
+
+  /* Remove extra borders from nested components */
+  .component-wrapper :global(.agent-role-selector),
+  .component-wrapper :global(.team-customization) {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    background: transparent;
+    margin: 0;
+  }
+
+  .component-wrapper :global(.selector-container),
+  .component-wrapper :global(.team-customization) {
+    padding: 0;
+  }
+
+  /* Ensure proper styling in workflow context */
+  .component-wrapper :global(.role-card),
+  .component-wrapper :global(.member-customization-card) {
+    margin-bottom: 1rem;
+  }
+
+  .component-wrapper :global(.selector-header),
+  .component-wrapper :global(.customization-header) {
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+  }
+
+  .step-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .step-title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .step-icon {
+    font-size: 2rem;
+  }
+
+  .step-description {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+
+  .step-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .btn-primary {
+    background: var(--color-primary);
+    color: white;
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background: var(--color-primary-dark);
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    background: var(--color-surface);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+  }
+
+  .btn-secondary:hover {
+    background: var(--color-surface-variant);
+  }
+
+  .btn-success {
+    background: var(--color-success);
+    color: white;
+  }
+
+  .btn-success:hover {
+    background: var(--color-success-dark);
+    transform: translateY(-1px);
+  }
+
+  .team-review-container {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 2rem;
+    margin: 2rem 0;
+  }
+
+  .team-summary {
+    background: var(--color-surface-variant);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+  }
+
+  .deployment-options {
+    background: var(--color-surface-variant);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+  }
+
+  .deployment-options h3 {
+    color: var(--color-text);
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .form-group:last-child {
+    margin-bottom: 0;
+  }
+
+  .form-group label {
+    display: block;
+    color: var(--color-text);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  .form-input,
+  .form-select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-size: 0.875rem;
+  }
+
+  .form-input:focus,
+  .form-select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px var(--color-primary-light);
+  }
+
+  .checkbox-label {
+    display: flex !important;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+  }
+
+  .checkmark {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--color-border);
+    border-radius: var(--border-radius-xs);
+    position: relative;
+    transition: all 0.2s ease;
+  }
+
+  input[type="checkbox"]:checked + .checkmark {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+
+  input[type="checkbox"]:checked + .checkmark::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: bold;
+  }
+
+  input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal.hidden {
+    display: none;
+  }
+
+  .modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+  }
+
+  .modal-content {
+    position: relative;
+    background: var(--color-surface);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-xl);
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  .modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+    text-align: center;
+  }
+
+  .modal-header h3 {
+    color: var(--color-text);
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .modal-body {
+    padding: 1.5rem;
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 1rem;
+    padding: 1.5rem;
+    border-top: 1px solid var(--color-border);
+    justify-content: center;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .team-builder-page {
+      padding: 1rem;
+    }
+
+    .page-title {
+      font-size: 2rem;
+    }
+
+    .workflow-steps {
+      padding: 1rem;
+    }
+
+    .workflow-step {
+      padding: 2rem 1rem;
+    }
+
+    .step-actions {
+      flex-direction: column;
+    }
+
+    .team-review-container {
+      grid-template-columns: 1fr;
+    }
+
+    .modal-content {
+      margin: 1rem;
+      width: calc(100% - 2rem);
+    }
+  }
+
+  /* Price is Right Theme */
+  [data-theme="price-is-right"] .step.active .step-number {
+    background: linear-gradient(135deg, #FF6B35, #F7931E);
+  }
+
+  [data-theme="price-is-right"] .btn-primary {
+    background: linear-gradient(135deg, #FF6B35, #F7931E);
+  }
+
+  [data-theme="price-is-right"] .btn-primary:hover:not(:disabled) {
+    background: linear-gradient(135deg, #E55A2B, #E8841C);
+  }
+
+  [data-theme="price-is-right"] .btn-success {
+    background: linear-gradient(135deg, #10b981, #059669);
+  }
+</style>
+
+<script define:vars={{ agentRoles, getAgentThemeColors }}>
+  /**
+   * Team Builder Workflow Manager
+   * Handles the multi-step team building process
+   */
+  class TeamBuilderWorkflow {
+    constructor() {
+      this.currentStep = 1;
+      this.selectedRoles = [];
+      this.teamConfiguration = null;
+      this.teamName = '';
+
+      this.init();
+    }
+
+    init() {
+      this.bindEvents();
+      this.loadSavedState();
+    }
+
+    bindEvents() {
+      // Step navigation buttons
+      document.getElementById('continueToCustomization')?.addEventListener('click', () => {
+        this.goToStep(2);
+      });
+
+      document.getElementById('backToRoles')?.addEventListener('click', () => {
+        this.goToStep(1);
+      });
+
+      document.getElementById('continueToReview')?.addEventListener('click', () => {
+        this.goToStep(3);
+      });
+
+      document.getElementById('backToCustomization')?.addEventListener('click', () => {
+        this.goToStep(2);
+      });
+
+      document.getElementById('deployTeam')?.addEventListener('click', () => {
+        this.deployTeam();
+      });
+
+      // Modal actions
+      document.getElementById('viewTeamDashboard')?.addEventListener('click', () => {
+        window.location.href = '/dashboard';
+      });
+
+      document.getElementById('createAnotherTeam')?.addEventListener('click', () => {
+        this.resetWorkflow();
+      });
+
+      // Listen for agent role selection changes
+      window.addEventListener('agentRolesSelected', (event) => {
+        this.selectedRoles = event.detail.selectedRoles;
+        this.updateStepNavigation();
+      });
+
+      // Listen for team customization changes
+      window.addEventListener('teamConfigurationSaved', (event) => {
+        this.teamConfiguration = event.detail.teamConfig;
+        this.updateStepNavigation();
+      });
+    }
+
+    goToStep(stepNumber) {
+      // Hide current step
+      document.querySelector(`#step${this.currentStep}`)?.classList.add('hidden');
+      
+      // Show new step
+      document.querySelector(`#step${stepNumber}`)?.classList.remove('hidden');
+      
+      // Update step indicators
+      this.updateStepIndicators(stepNumber);
+      
+      // Update current step
+      this.currentStep = stepNumber;
+      
+      // Handle step-specific logic
+      this.handleStepChange(stepNumber);
+      
+      // Save state
+      this.saveState();
+    }
+
+    updateStepIndicators(activeStep) {
+      document.querySelectorAll('.step').forEach((step, index) => {
+        const stepNumber = index + 1;
+        
+        step.classList.remove('active', 'completed');
+        
+        if (stepNumber === activeStep) {
+          step.classList.add('active');
+        } else if (stepNumber < activeStep) {
+          step.classList.add('completed');
+        }
+      });
+    }
+
+    handleStepChange(stepNumber) {
+      switch (stepNumber) {
+        case 2:
+          // Load team data for customization
+          this.loadTeamDataForCustomization();
+          break;
+        case 3:
+          // Generate team review
+          this.generateTeamReview();
+          break;
+      }
+    }
+
+    loadTeamDataForCustomization() {
+      // Convert selected roles to team member data
+      const teamMembers = this.selectedRoles.map(roleId => {
+        return this.getAgentRoleData(roleId);
+      });
+      
+      // Make team data available to customization component
+      window.teamConfigurationData = teamMembers;
+      
+      // Trigger customization component refresh
+      if (window.teamMemberCustomizationManager) {
+        window.teamMemberCustomizationManager.loadTeamData();
+      } else {
+        // Wait for component to initialize
+        setTimeout(() => {
+          if (window.teamMemberCustomizationManager) {
+            window.teamMemberCustomizationManager.loadTeamData();
+          }
+        }, 100);
+      }
+    }
+
+    generateTeamReview() {
+      const summaryContainer = document.getElementById('teamSummary');
+      if (!summaryContainer) return;
+
+      const teamData = this.teamConfiguration || { roles: this.selectedRoles, members: {} };
+      
+      let reviewHTML = `
+        <h3>Team Overview</h3>
+        <div class="team-overview">
+          <div class="team-stat">
+            <strong>${teamData.roles.length}</strong>
+            <span>Agents Selected</span>
+          </div>
+          <div class="team-stat">
+            <strong>${Object.keys(teamData.members).length}</strong>
+            <span>Configured</span>
+          </div>
+        </div>
+        
+        <h4>Selected Agents</h4>
+        <div class="agent-list">
+      `;
+
+      teamData.roles.forEach(roleId => {
+        const agentData = this.getAgentRoleData(roleId);
+        const memberConfig = teamData.members[roleId];
+        const customName = memberConfig?.customName || agentData.name;
+        
+        reviewHTML += `
+          <div class="agent-item">
+            <span class="agent-icon">${agentData.icon}</span>
+            <div class="agent-details">
+              <strong>${customName}</strong>
+              <small>${agentData.title}</small>
+            </div>
+            <span class="config-status ${memberConfig ? 'configured' : 'default'}">
+              ${memberConfig ? '✅' : '⚙️'}
+            </span>
+          </div>
+        `;
+      });
+
+      reviewHTML += '</div>';
+      summaryContainer.innerHTML = reviewHTML;
+    }
+
+    updateStepNavigation() {
+      // Enable/disable navigation buttons based on current state
+      const continueToCustomization = document.getElementById('continueToCustomization');
+      const continueToReview = document.getElementById('continueToReview');
+
+      if (continueToCustomization) {
+        continueToCustomization.disabled = this.selectedRoles.length === 0;
+      }
+
+      if (continueToReview) {
+        // Enable if at least some customization is done
+        continueToReview.disabled = !this.teamConfiguration;
+      }
+    }
+
+    deployTeam() {
+      const teamNameInput = document.getElementById('teamName');
+      const environmentSelect = document.getElementById('deploymentEnvironment');
+      const autoStartCheckbox = document.getElementById('autoStart');
+
+      this.teamName = teamNameInput?.value.trim() || 'Untitled Team';
+      const environment = environmentSelect?.value || 'development';
+      const autoStart = autoStartCheckbox?.checked || false;
+
+      // Simulate deployment process
+      this.showDeploymentProgress().then(() => {
+        this.showSuccessModal({
+          teamName: this.teamName,
+          environment,
+          autoStart,
+          agentCount: this.selectedRoles.length
+        });
+      });
+    }
+
+    async showDeploymentProgress() {
+      // This would show a deployment progress indicator
+      // For now, just simulate with a delay
+      return new Promise(resolve => {
+        setTimeout(resolve, 2000);
+      });
+    }
+
+    showSuccessModal(deploymentInfo) {
+      const modal = document.getElementById('successModal');
+      const detailsContainer = document.getElementById('deploymentDetails');
+
+      if (detailsContainer) {
+        detailsContainer.innerHTML = `
+          <div class="deployment-info">
+            <div class="info-item">
+              <strong>Team Name:</strong> ${deploymentInfo.teamName}
+            </div>
+            <div class="info-item">
+              <strong>Environment:</strong> ${deploymentInfo.environment}
+            </div>
+            <div class="info-item">
+              <strong>Agents Deployed:</strong> ${deploymentInfo.agentCount}
+            </div>
+            <div class="info-item">
+              <strong>Status:</strong> ${deploymentInfo.autoStart ? 'Running' : 'Deployed (Stopped)'}
+            </div>
+          </div>
+        `;
+      }
+
+      modal?.classList.remove('hidden');
+    }
+
+    resetWorkflow() {
+      // Reset all state
+      this.currentStep = 1;
+      this.selectedRoles = [];
+      this.teamConfiguration = null;
+      this.teamName = '';
+
+      // Reset UI
+      this.goToStep(1);
+      this.updateStepNavigation();
+
+      // Clear saved state
+      localStorage.removeItem('team-builder-state');
+
+      // Hide modal
+      document.getElementById('successModal')?.classList.add('hidden');
+
+      // Reset forms
+      document.getElementById('teamName').value = '';
+      document.getElementById('deploymentEnvironment').value = 'development';
+      document.getElementById('autoStart').checked = true;
+    }
+
+    saveState() {
+      const state = {
+        currentStep: this.currentStep,
+        selectedRoles: this.selectedRoles,
+        teamConfiguration: this.teamConfiguration,
+        teamName: this.teamName
+      };
+
+      localStorage.setItem('team-builder-state', JSON.stringify(state));
+    }
+
+    loadSavedState() {
+      try {
+        const saved = localStorage.getItem('team-builder-state');
+        if (!saved) return;
+
+        const state = JSON.parse(saved);
+        
+        this.currentStep = state.currentStep || 1;
+        this.selectedRoles = state.selectedRoles || [];
+        this.teamConfiguration = state.teamConfiguration || null;
+        this.teamName = state.teamName || '';
+
+        // Restore UI state
+        if (this.currentStep !== 1) {
+          this.goToStep(this.currentStep);
+        }
+        
+        this.updateStepNavigation();
+      } catch (error) {
+        console.warn('Failed to load saved workflow state:', error);
+      }
+    }
+
+    getAgentRoleData(roleId) {
+      const role = agentRoles.find(r => r.id === roleId);
+      if (!role) {
+        return { 
+          id: roleId, 
+          name: roleId, 
+          title: 'Unknown Role', 
+          icon: '❓',
+          primaryColor: '#6c757d'
+        };
+      }
+
+      return {
+        id: role.id,
+        name: role.name,
+        title: role.description,
+        icon: role.icon,
+        primaryColor: getAgentThemeColors(role.id, 'professional')
+      };
+    }
+  }
+
+  // Initialize workflow when DOM is ready
+  document.addEventListener('DOMContentLoaded', () => {
+    window.teamBuilderWorkflow = new TeamBuilderWorkflow();
+  });
+</script>
+
+<style>
+  /* Additional styles for team review */
+  .team-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .team-stat {
+    text-align: center;
+    padding: 1rem;
+    background: var(--color-surface);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--color-border);
+  }
+
+  .team-stat strong {
+    display: block;
+    font-size: 1.5rem;
+    color: var(--color-primary);
+    margin-bottom: 0.25rem;
+  }
+
+  .team-stat span {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+  }
+
+  .agent-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .agent-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+  }
+
+  .agent-icon {
+    font-size: 1.25rem;
+  }
+
+  .agent-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .agent-details strong {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+
+  .agent-details small {
+    color: var(--color-text-secondary);
+    font-size: 0.75rem;
+  }
+
+  .config-status {
+    font-size: 1.25rem;
+  }
+
+  .config-status.configured {
+    color: var(--color-success);
+  }
+
+  .config-status.default {
+    color: var(--color-warning);
+  }
+
+  .deployment-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .info-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .info-item:last-child {
+    border-bottom: none;
+  }
+</style>

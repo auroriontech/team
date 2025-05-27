@@ -1,0 +1,209 @@
+---
+title: "aurorion-landing - Contributing Guidelines"
+description: "Development guidelines and contribution process for aurorion-landing"
+category: "guides"
+priority: "medium"
+lastUpdated: 2025-05-27
+status: "active"
+tags: ["project", "aurorion-landing", "contributing", "development"]
+authors: ["Aurorion Teams"]
+---
+
+# aurorion-landing - Contributing Guidelines
+
+## Overview
+
+Thank you for your interest in contributing to aurorion-landing! This document provides guidelines for development and contribution.
+
+## Development Setup
+
+### Prerequisites
+
+*List required software versions*
+
+- Node.js: v18+
+- npm: v8+
+- Git: v2.30+
+
+### Getting Started
+
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd aurorion-landing
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Start development server:
+```bash
+npm run dev
+```
+
+## Code Standards
+
+### Code Style
+
+*Document coding standards and style guidelines*
+
+- Use TypeScript for type safety
+- Follow ESLint configuration
+- Use Prettier for code formatting
+
+### File Organization
+
+*Document file structure conventions*
+
+```
+src/
+├── components/     # Reusable UI components
+├── pages/         # Application pages
+├── utils/         # Utility functions
+├── types/         # TypeScript type definitions
+└── styles/        # Global styles
+```
+
+### Naming Conventions
+
+*Document naming conventions*
+
+- **Files**: kebab-case (`user-profile.tsx`)
+- **Components**: PascalCase (`UserProfile`)
+- **Functions**: camelCase (`getUserProfile`)
+- **Constants**: UPPER_SNAKE_CASE (`API_BASE_URL`)
+
+## Git Workflow
+
+### Branch Naming
+
+*Document branch naming conventions*
+
+- **Features**: `feature/description`
+- **Bug fixes**: `fix/description`
+- **Documentation**: `docs/description`
+
+### Commit Messages
+
+*Document commit message format*
+
+```
+type(scope): description
+
+- feat: new feature
+- fix: bug fix
+- docs: documentation
+- style: formatting
+- refactor: code refactoring
+- test: adding tests
+- chore: maintenance
+```
+
+### Pull Request Process
+
+1. Create feature branch from `main`
+2. Make changes following code standards
+3. Add tests for new functionality
+4. Update documentation if needed
+5. Submit pull request with clear description
+6. Address review feedback
+7. Merge after approval
+
+## Testing
+
+### Running Tests
+
+```bash
+# Run all tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run tests with coverage
+npm run test:coverage
+```
+
+### Writing Tests
+
+*Document testing guidelines*
+
+- Write unit tests for utility functions
+- Write integration tests for API endpoints
+- Write component tests for UI components
+
+## Documentation
+
+### Code Documentation
+
+*Document inline documentation standards*
+
+- Use JSDoc for function documentation
+- Include type information
+- Provide usage examples
+
+### README Updates
+
+*Document when to update README*
+
+- New features
+- Changed installation process
+- Updated requirements
+
+## Review Process
+
+### Code Review Checklist
+
+*Document what reviewers should check*
+
+- [ ] Code follows style guidelines
+- [ ] Tests are included and passing
+- [ ] Documentation is updated
+- [ ] No security vulnerabilities
+- [ ] Performance considerations addressed
+
+### Review Timeline
+
+*Document expected review timeline*
+
+- Initial review: 24-48 hours
+- Follow-up reviews: 12-24 hours
+
+## Release Process
+
+### Version Numbering
+
+*Document versioning strategy*
+
+- Major: Breaking changes
+- Minor: New features
+- Patch: Bug fixes
+
+### Release Notes
+
+*Document release note requirements*
+
+- Summary of changes
+- Breaking changes
+- Migration guide if needed
+
+## Getting Help
+
+### Development Questions
+
+*Document where to get help*
+
+- Project discussions
+- Development chat
+- Issue tracker
+
+### Bug Reports
+
+*Document bug reporting process*
+
+1. Check existing issues
+2. Create detailed bug report
+3. Include reproduction steps
+4. Provide environment details

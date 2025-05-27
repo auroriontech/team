@@ -1,0 +1,701 @@
+---
+/**
+ * Agents Directory Page
+ * 
+ * Overview page showcasing all available AI agents with quick access to their profiles.
+ * Features agent cards with personality previews and direct navigation.
+ * 
+ * @author Aurorion Teams Collective
+ * @version 1.0.0
+ */
+
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { defaultAgentRoles } from '../../data/agentRoles';
+import { Icon } from 'astro-icon/components';
+
+// Agent profile URLs mapping
+const agentUrls = {
+  'architect-engineer': '/agents/architect-engineer',
+  'tester-reviewer': '/agents/tester-reviewer',
+  'optimizer-watchdog': '/agents/optimizer-watchdog',
+  'scrum-knowledge': '/agents/scrum-knowledge',
+  'morale-catalyst': '/agents/morale-catalyst',
+  'technical-enablement': '/agents/technical-enablement',
+  'standup-facilitator': '/agents/standup-facilitator'
+};
+
+// Available profile pages (we'll build these progressively)
+const availableProfiles = ['architect-engineer', 'morale-catalyst'];
+---
+
+<BaseLayout 
+  title="AI Agent Profiles | Aurorion Teams"
+  description="Meet the specialized AI agents that make up the Aurorion Teams system"
+>
+  <!-- Hero Section -->
+  <section class="agents-hero">
+    <div class="hero-content">
+      <h1 class="hero-title">Meet the Team</h1>
+      <p class="hero-description">
+        Get to know each AI agent's unique personality, expertise, and working style. 
+        Each agent brings specialized skills and perspectives to your projects.
+      </p>
+    </div>
+  </section>
+
+  <!-- Agents Grid -->
+  <section class="agents-section">
+    <div class="section-header">
+      <h2 class="section-title">Our AI Agents</h2>
+      <p class="section-subtitle">7 specialized roles, infinite possibilities</p>
+    </div>
+    
+    <div class="agents-grid">
+      {defaultAgentRoles.map((agent) => {
+        const isAvailable = availableProfiles.includes(agent.id);
+        const profileUrl = isAvailable ? agentUrls[agent.id] : '#';
+        
+        return (
+          <div class={`agent-card ${agent.id.replace('-', '_')} ${!isAvailable ? 'coming-soon' : ''}`}>
+            <div class="card-header">
+              <div class="agent-avatar">
+                <span class="avatar-icon">{agent.icon}</span>
+                {isAvailable && <div class="availability-badge available">Ready</div>}
+                {!isAvailable && <div class="availability-badge coming-soon">Soon</div>}
+              </div>
+              <div class="agent-info">
+                <h3 class="agent-name">{agent.name}</h3>
+                <p class="agent-role">{agent.description}</p>
+              </div>
+            </div>
+            
+            <div class="card-content">
+              <div class="primary-skills">
+                <h4>Primary Focus:</h4>
+                <ul class="skills-list">
+                  {agent.primaryResponsibilities.slice(0, 2).map(responsibility => (
+                    <li>{responsibility.split(':')[0]}</li>
+                  ))}
+                </ul>
+              </div>
+              
+              <div class="frameworks-preview">
+                <h4>Expertise:</h4>
+                <div class="framework-tags">
+                  {agent.frameworks.slice(0, 3).map(framework => (
+                    <span class="framework-tag">{framework}</span>
+                  ))}
+                  {agent.frameworks.length > 3 && (
+                    <span class="framework-tag more">+{agent.frameworks.length - 3}</span>
+                  )}
+                </div>
+              </div>
+            </div>
+            
+            <div class="card-actions">
+              {isAvailable ? (
+                <a href={profileUrl} class="btn btn-primary profile-btn">
+                  👁️ View Profile
+                </a>
+              ) : (
+                <button class="btn btn-outline" disabled>
+                  🚧 Coming Soon
+                </button>
+              )}
+              <button class="btn btn-secondary add-btn" data-agent-id={agent.id}>
+                ➕ Add to Team
+              </button>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </section>
+
+  <!-- Quick Stats -->
+  <section class="stats-section">
+    <div class="section-header">
+      <h2 class="section-title">Team Capabilities</h2>
+      <p class="section-subtitle">What our collective can accomplish</p>
+    </div>
+    
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">🛠️</div>
+        <div class="stat-value">7</div>
+        <div class="stat-label">Specialized Roles</div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon">🎯</div>
+        <div class="stat-value">25+</div>
+        <div class="stat-label">Core Competencies</div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon">📚</div>
+        <div class="stat-value">15+</div>
+        <div class="stat-label">Industry Frameworks</div>
+      </div>
+      
+      <div class="stat-card">
+        <div class="stat-icon">🤝</div>
+        <div class="stat-value">∞</div>
+        <div class="stat-label">Team Combinations</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Getting Started -->
+  <section class="getting-started">
+    <div class="section-header">
+      <h2 class="section-title">Getting Started</h2>
+      <p class="section-subtitle">How to work with our AI agents</p>
+    </div>
+    
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <h3>Explore Profiles</h3>
+        <p>Learn about each agent's personality, skills, and working style</p>
+      </div>
+      
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <h3>Build Your Team</h3>
+        <p>Select agents that complement your project needs and goals</p>
+      </div>
+      
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <h3>Configure & Deploy</h3>
+        <p>Customize agent behavior and deploy to your repositories</p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ========================================
+     AGENTS HERO STYLES
+     ======================================== */
+  
+  .agents-hero {
+    text-align: center;
+    padding: var(--spacing-2xl) 0;
+    background: linear-gradient(135deg, var(--section-bg) 0%, var(--card-bg) 100%);
+    margin-bottom: var(--spacing-2xl);
+  }
+  
+  .hero-title {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--text-color);
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .hero-description {
+    font-size: 1.25rem;
+    color: var(--text-muted);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+  
+  /* ========================================
+     SECTION STYLES
+     ======================================== */
+  
+  .section-header {
+    text-align: center;
+    margin-bottom: var(--spacing-2xl);
+  }
+  
+  .section-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--text-color);
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .section-subtitle {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+  
+  .agents-section,
+  .stats-section,
+  .getting-started {
+    margin-bottom: var(--spacing-2xl);
+  }
+  
+  /* ========================================
+     AGENTS GRID STYLES
+     ======================================== */
+  
+  .agents-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: var(--spacing-xl);
+  }
+  
+  .agent-card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-md);
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .agent-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .agent-card:not(.coming-soon):hover {
+    border-color: var(--primary-color);
+  }
+  
+  .agent-card.coming-soon {
+    opacity: 0.7;
+  }
+  
+  /* Agent-specific colors */
+  .agent-card.architect_engineer:hover { border-color: #e74c3c; }
+  .agent-card.tester_reviewer:hover { border-color: #3498db; }
+  .agent-card.optimizer_watchdog:hover { border-color: #f39c12; }
+  .agent-card.scrum_knowledge:hover { border-color: #2ecc71; }
+  .agent-card.morale_catalyst:hover { border-color: #9b59b6; }
+  .agent-card.technical_enablement:hover { border-color: #1abc9c; }
+  .agent-card.standup_facilitator:hover { border-color: #34495e; }
+  
+  /* ========================================
+     CARD HEADER STYLES
+     ======================================== */
+  
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 2px solid var(--border-color);
+  }
+  
+  .agent-avatar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .avatar-icon {
+    font-size: 3rem;
+    padding: var(--spacing-md);
+    background: var(--section-bg);
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+  }
+  
+  .agent-card:hover .avatar-icon {
+    transform: scale(1.1);
+  }
+  
+  .availability-badge {
+    position: absolute;
+    bottom: -5px;
+    right: -5px;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .availability-badge.available {
+    background: #10b981;
+    color: white;
+  }
+  
+  .availability-badge.coming-soon {
+    background: #f59e0b;
+    color: white;
+  }
+  
+  .agent-info {
+    flex: 1;
+  }
+  
+  .agent-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .agent-role {
+    color: var(--text-muted);
+    line-height: 1.5;
+    font-size: 1rem;
+  }
+  
+  /* ========================================
+     CARD CONTENT STYLES
+     ======================================== */
+  
+  .card-content {
+    flex: 1;
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .primary-skills,
+  .frameworks-preview {
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .primary-skills h4,
+  .frameworks-preview h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .skills-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .skills-list li {
+    padding: var(--spacing-xs) 0;
+    color: var(--text-muted);
+    position: relative;
+    padding-left: 20px;
+  }
+  
+  .skills-list li::before {
+    content: "▸";
+    position: absolute;
+    left: 0;
+    color: var(--primary-color);
+    font-weight: bold;
+  }
+  
+  .framework-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+  }
+  
+  .framework-tag {
+    background: var(--section-bg);
+    color: var(--text-color);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    border: 1px solid var(--border-color);
+  }
+  
+  .framework-tag.more {
+    background: var(--text-muted);
+    color: white;
+  }
+  
+  /* ========================================
+     CARD ACTIONS STYLES
+     ======================================== */
+  
+  .card-actions {
+    display: flex;
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
+  }
+  
+  .card-actions .btn {
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+    justify-content: center;
+  }
+  
+  .profile-btn {
+    background: var(--primary-color);
+  }
+  
+  .add-btn {
+    background: var(--secondary-color);
+    color: white;
+  }
+  
+  .card-actions .btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  /* ========================================
+     STATS SECTION STYLES
+     ======================================== */
+  
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-xl);
+  }
+  
+  .stat-card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-xl);
+    text-align: center;
+    box-shadow: var(--shadow-md);
+    border-top: 4px solid var(--primary-color);
+    transition: transform 0.3s ease;
+  }
+  
+  .stat-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .stat-icon {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .stat-value {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .stat-label {
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.9rem;
+  }
+  
+  /* ========================================
+     GETTING STARTED STYLES
+     ======================================== */
+  
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-xl);
+  }
+  
+  .step-card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-xl);
+    text-align: center;
+    box-shadow: var(--shadow-md);
+    transition: transform 0.3s ease;
+  }
+  
+  .step-card:hover {
+    transform: translateY(-3px);
+  }
+  
+  .step-number {
+    width: 60px;
+    height: 60px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 auto var(--spacing-lg);
+  }
+  
+  .step-card h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .step-card p {
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  
+  /* ========================================
+     PRICE IS RIGHT THEME ENHANCEMENTS
+     ======================================== */
+  
+  .price-is-right .agents-hero {
+    background: var(--nav-bg);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .price-is-right .agents-hero::before {
+    content: '';
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23f59e0b"><circle cx="12" cy="12" r="3"/></svg>');
+    background-size: 1rem;
+    background-repeat: no-repeat;
+    width: 1rem;
+    height: 1rem;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 2rem;
+    animation: bounce 2s infinite;
+  }
+  
+  .price-is-right .agent-card {
+    transform: rotate(-0.5deg);
+    border: 2px solid #ffd700;
+  }
+  
+  .price-is-right .agent-card:nth-child(even) {
+    transform: rotate(0.5deg);
+  }
+  
+  .price-is-right .agent-card:hover {
+    transform: rotate(0deg) translateY(-5px);
+  }
+  
+  .price-is-right .avatar-icon {
+    animation: bounce 3s infinite;
+  }
+  
+  .price-is-right .stat-card {
+    animation: pulse 4s infinite;
+  }
+  
+  .price-is-right .step-number {
+    animation: bounce 2s infinite;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+  }
+  
+  /* ========================================
+     RESPONSIVE DESIGN
+     ======================================== */
+  
+  @media (max-width: 768px) {
+    .hero-title {
+      font-size: 2rem;
+    }
+    
+    .section-title {
+      font-size: 2rem;
+    }
+    
+    .agents-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .card-header {
+      flex-direction: column;
+      text-align: center;
+    }
+    
+    .card-actions {
+      flex-direction: column;
+    }
+    
+    .card-actions .btn {
+      min-width: unset;
+    }
+    
+    .stats-grid,
+    .steps-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  /* ========================================
+     ACCESSIBILITY IMPROVEMENTS
+     ======================================== */
+  
+  @media (prefers-reduced-motion: reduce) {
+    .price-is-right .avatar-icon,
+    .price-is-right .stat-card,
+    .price-is-right .step-number {
+      animation: none;
+    }
+  }
+  
+  .card-actions .btn:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+  }
+</style>
+
+<script>
+  /**
+   * Agents Directory Interactive Functionality
+   * 
+   * Handles agent card interactions and team building
+   */
+  
+  class AgentsDirectoryManager {
+    constructor() {
+      this.initializeEventListeners();
+    }
+    
+    initializeEventListeners() {
+      // Add to team buttons
+      document.querySelectorAll('.add-btn').forEach(button => {
+        button.addEventListener('click', (e) => {
+          const agentId = e.target.getAttribute('data-agent-id');
+          this.handleAddToTeam(agentId);
+        });
+      });
+    }
+    
+    handleAddToTeam(agentId) {
+      // TODO: Integrate with team management system
+      this.showNotification(`🎉 ${agentId} added to team! (Feature coming soon)`, 'success');
+    }
+    
+    showNotification(message, type = 'info') {
+      const notification = document.createElement('div');
+      notification.textContent = message;
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: var(--${type === 'success' ? 'success' : 'primary'}-color);
+        color: white;
+        padding: var(--spacing-lg);
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-lg);
+        z-index: 1002;
+        animation: slideInNotification 0.5s ease-out;
+        max-width: 300px;
+      `;
+      
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.animation = 'slideOutNotification 0.5s ease-in';
+        setTimeout(() => {
+          if (notification.parentNode) {
+            document.body.removeChild(notification);
+          }
+        }, 500);
+      }, 3000);
+    }
+  }
+  
+  // Initialize when DOM is ready
+  document.addEventListener('DOMContentLoaded', () => {
+    window.agentsDirectoryManager = new AgentsDirectoryManager();
+  });
+</script>

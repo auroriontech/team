@@ -1,0 +1,1148 @@
+---
+/**
+ * Team Member Customization Component
+ * 
+ * Provides detailed configuration options for individual team members including:
+ * - Custom names and descriptions
+ * - Behavior parameters and preferences
+ * - Role-specific settings
+ * - Authority levels and escalation paths
+ * 
+ * @component TeamMemberCustomization
+ */
+
+import { 
+  behaviorParameters, 
+  toolPreferences, 
+  authorityLevels, 
+  defaultMemberConfiguration,
+  createMemberConfiguration,
+  validateMemberConfiguration
+} from '../utils/memberCustomization';
+
+export interface Props {
+  teamMembers: any[];
+  onUpdate?: (updatedMembers: any[]) => void;
+  theme?: 'professional' | 'price-is-right';
+}
+
+const { teamMembers = [], onUpdate, theme = 'professional' } = Astro.props;
+---
+
+<div class="team-customization" data-theme={theme}>
+  <div class="customization-header">
+    <h3>
+      <span class="icon">⚙️</span>
+      Customize Your Team
+    </h3>
+    <p class="subtitle">Configure each team member's behavior and preferences</p>
+  </div>
+
+  <div class="team-members-list" id="teamMembersList">
+    <!-- Team members will be populated by JavaScript -->
+  </div>
+
+  <div class="customization-actions">
+    <button class="action-btn save-btn" id="saveCustomization">
+      <span class="icon">💾</span>
+      Save Configuration
+    </button>
+    <button class="action-btn reset-btn" id="resetCustomization">
+      <span class="icon">🔄</span>
+      Reset to Defaults
+    </button>
+  </div>
+</div>
+
+<template id="memberCustomizationTemplate">
+  <div class="member-customization-card" data-member-id="">
+    <div class="member-header">
+      <div class="member-info">
+        <div class="member-avatar">
+          <span class="member-icon"></span>
+        </div>
+        <div class="member-details">
+          <h4 class="member-name"></h4>
+          <span class="member-role"></span>
+        </div>
+      </div>
+      <button class="expand-toggle" aria-label="Expand customization options">
+        <span class="expand-icon">▼</span>
+      </button>
+    </div>
+
+    <div class="member-customization-content">
+      <div class="customization-sections">
+        <!-- Basic Information -->
+        <div class="customization-section">
+          <h5>Basic Information</h5>
+          <div class="form-group">
+            <label for="memberName">Custom Name</label>
+            <input type="text" class="member-name-input" placeholder="Enter custom name">
+            <small class="form-help">Leave blank to use default name</small>
+          </div>
+          <div class="form-group">
+            <label for="memberDescription">Description</label>
+            <textarea class="member-description-input" rows="3" placeholder="Describe this team member's role and responsibilities"></textarea>
+          </div>
+        </div>
+
+        <!-- Behavior Settings -->
+        <div class="customization-section">
+          <h5>Behavior Settings</h5>
+          <div class="behavior-controls">
+            <div class="slider-group">
+              <label>Decision Speed</label>
+              <div class="slider-container">
+                <input type="range" class="behavior-slider" data-setting="decisionSpeed" min="1" max="10" value="5">
+                <div class="slider-labels">
+                  <span>Deliberate</span>
+                  <span>Quick</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="slider-group">
+              <label>Communication Style</label>
+              <div class="slider-container">
+                <input type="range" class="behavior-slider" data-setting="communicationStyle" min="1" max="10" value="5">
+                <div class="slider-labels">
+                  <span>Formal</span>
+                  <span>Casual</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="slider-group">
+              <label>Risk Tolerance</label>
+              <div class="slider-container">
+                <input type="range" class="behavior-slider" data-setting="riskTolerance" min="1" max="10" value="5">
+                <div class="slider-labels">
+                  <span>Conservative</span>
+                  <span>Aggressive</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="slider-group">
+              <label>Detail Level</label>
+              <div class="slider-container">
+                <input type="range" class="behavior-slider" data-setting="detailLevel" min="1" max="10" value="5">
+                <div class="slider-labels">
+                  <span>High-level</span>
+                  <span>Detailed</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Authority & Escalation -->
+        <div class="customization-section">
+          <h5>Authority & Escalation</h5>
+          <div class="authority-settings">
+            <div class="checkbox-group">
+              <label class="checkbox-label">
+                <input type="checkbox" class="authority-checkbox" data-authority="canMakeDecisions">
+                <span class="checkmark"></span>
+                Can make autonomous decisions
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" class="authority-checkbox" data-authority="canEscalate">
+                <span class="checkmark"></span>
+                Can escalate to leadership
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" class="authority-checkbox" data-authority="canDelegate">
+                <span class="checkmark"></span>
+                Can delegate tasks
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" class="authority-checkbox" data-authority="requiresApproval">
+                <span class="checkmark"></span>
+                Requires approval for major decisions
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Integration Preferences -->
+        <div class="customization-section">
+          <h5>Integration Preferences</h5>
+          <div class="integration-settings">
+            <div class="form-group">
+              <label>Preferred Tools</label>
+              <div class="tag-input-container">
+                <input type="text" class="tag-input" placeholder="Add tool preferences (press Enter)">
+                <div class="tags-display"></div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Workflow Priority</label>
+              <select class="workflow-priority-select">
+                <option value="speed">Speed</option>
+                <option value="quality" selected>Quality</option>
+                <option value="collaboration">Collaboration</option>
+                <option value="innovation">Innovation</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style>
+.team-customization {
+  background: var(--surface-color);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--border-color);
+}
+
+.customization-header {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.customization-header h3 {
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-sm) 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.team-members-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
+}
+
+.member-customization-card {
+  background: var(--card-background);
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+  transition: all var(--transition-normal);
+}
+
+.member-customization-card:hover {
+  border-color: var(--primary-color);
+  box-shadow: var(--shadow-md);
+}
+
+.member-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md);
+  background: var(--background-subtle);
+  cursor: pointer;
+  user-select: none;
+}
+
+.member-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.member-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--border-radius-full);
+  background: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.member-details h4 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.member-role {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.expand-toggle {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.expand-toggle:hover {
+  background: var(--background-hover);
+  color: var(--text-primary);
+}
+
+.expand-icon {
+  font-size: 1.2rem;
+  transition: transform var(--transition-normal);
+}
+
+.member-customization-card.expanded .expand-icon {
+  transform: rotate(180deg);
+}
+
+.member-customization-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--transition-normal);
+}
+
+.member-customization-card.expanded .member-customization-content {
+  max-height: 1000px;
+}
+
+.customization-sections {
+  padding: var(--spacing-md);
+  border-top: 1px solid var(--border-color);
+}
+
+.customization-section {
+  margin-bottom: var(--spacing-lg);
+}
+
+.customization-section:last-child {
+  margin-bottom: 0;
+}
+
+.customization-section h5 {
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-md) 0;
+  font-size: 1rem;
+  font-weight: 600;
+  padding-bottom: var(--spacing-xs);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.form-group {
+  margin-bottom: var(--spacing-md);
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+.form-group label {
+  display: block;
+  color: var(--text-primary);
+  font-weight: 500;
+  margin-bottom: var(--spacing-xs);
+  font-size: 0.9rem;
+}
+
+.member-name-input,
+.member-description-input,
+.tag-input,
+.workflow-priority-select {
+  width: 100%;
+  padding: var(--spacing-sm);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  background: var(--input-background);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  transition: all var(--transition-fast);
+}
+
+.member-name-input:focus,
+.member-description-input:focus,
+.tag-input:focus,
+.workflow-priority-select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px var(--primary-color-alpha);
+}
+
+.form-help {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  margin-top: var(--spacing-xs);
+  display: block;
+}
+
+.behavior-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.slider-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.slider-group label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.slider-container {
+  position: relative;
+}
+
+.behavior-slider {
+  width: 100%;
+  height: 6px;
+  border-radius: var(--border-radius-sm);
+  background: var(--background-subtle);
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+}
+
+.behavior-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+}
+
+.behavior-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: var(--shadow-md);
+}
+
+.behavior-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  cursor: pointer;
+  border: none;
+  box-shadow: var(--shadow-sm);
+}
+
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--spacing-xs);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  padding: var(--spacing-xs);
+  border-radius: var(--border-radius-sm);
+  transition: background-color var(--transition-fast);
+}
+
+.checkbox-label:hover {
+  background: var(--background-hover);
+}
+
+.authority-checkbox {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.checkmark {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius-xs);
+  position: relative;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.authority-checkbox:checked + .checkmark {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.authority-checkbox:checked + .checkmark::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.tag-input-container {
+  position: relative;
+}
+
+.tags-display {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-xs);
+  min-height: 24px;
+}
+
+.tag {
+  background: var(--primary-color-alpha);
+  color: var(--primary-color);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-full);
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.tag-remove {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.customization-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--border-color);
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border: none;
+  border-radius: var(--border-radius-md);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.save-btn {
+  background: var(--success-color);
+  color: white;
+}
+
+.save-btn:hover {
+  background: var(--success-color-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.reset-btn {
+  background: var(--background-subtle);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.reset-btn:hover {
+  background: var(--background-hover);
+  border-color: var(--text-secondary);
+}
+
+/* Price is Right Theme Enhancements */
+[data-theme="price-is-right"] .member-customization-card {
+  border-color: var(--accent-color);
+}
+
+[data-theme="price-is-right"] .member-customization-card:hover {
+  border-color: var(--primary-color);
+  box-shadow: 0 4px 20px var(--primary-color-alpha);
+}
+
+[data-theme="price-is-right"] .behavior-slider::-webkit-slider-thumb {
+  background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+}
+
+[data-theme="price-is-right"] .save-btn {
+  background: linear-gradient(135deg, var(--success-color), var(--success-color-dark));
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .team-customization {
+    padding: var(--spacing-md);
+  }
+  
+  .customization-actions {
+    flex-direction: column;
+  }
+  
+  .action-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .member-info {
+    gap: var(--spacing-sm);
+  }
+  
+  .member-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+}
+</style>
+
+<script define:vars={{ behaviorParameters, toolPreferences, authorityLevels, defaultMemberConfiguration }}>
+/**
+ * Team Member Customization Manager
+ * Handles individual team member configuration and behavior settings
+ */
+class TeamMemberCustomizationManager {
+  constructor() {
+    this.teamMembers = [];
+    this.memberSettings = new Map();
+    this.isInitialized = false;
+    
+    this.init();
+  }
+
+  /**
+   * Initialize the customization manager
+   */
+  init() {
+    if (this.isInitialized) return;
+    
+    this.bindEvents();
+    this.loadTeamData();
+    this.isInitialized = true;
+  }
+
+  /**
+   * Bind event listeners
+   */
+  bindEvents() {
+    const container = document.querySelector('.team-customization');
+    if (!container) return;
+
+    // Expand/collapse member cards
+    container.addEventListener('click', (e) => {
+      const header = e.target.closest('.member-header');
+      if (header) {
+        this.toggleMemberExpansion(header);
+      }
+    });
+
+    // Behavior slider changes
+    container.addEventListener('input', (e) => {
+      if (e.target.classList.contains('behavior-slider')) {
+        this.updateBehaviorSetting(e.target);
+      }
+      
+      if (e.target.classList.contains('member-name-input')) {
+        this.updateMemberName(e.target);
+      }
+      
+      if (e.target.classList.contains('member-description-input')) {
+        this.updateMemberDescription(e.target);
+      }
+    });
+
+    // Authority checkbox changes
+    container.addEventListener('change', (e) => {
+      if (e.target.classList.contains('authority-checkbox')) {
+        this.updateAuthoritySettings(e.target);
+      }
+      
+      if (e.target.classList.contains('workflow-priority-select')) {
+        this.updateWorkflowPriority(e.target);
+      }
+    });
+
+    // Tag input handling
+    container.addEventListener('keydown', (e) => {
+      if (e.target.classList.contains('tag-input') && e.key === 'Enter') {
+        e.preventDefault();
+        this.addTag(e.target);
+      }
+    });
+
+    // Action buttons
+    const saveBtn = document.getElementById('saveCustomization');
+    const resetBtn = document.getElementById('resetCustomization');
+    
+    if (saveBtn) {
+      saveBtn.addEventListener('click', () => this.saveConfiguration());
+    }
+    
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => this.resetToDefaults());
+    }
+  }
+
+  /**
+   * Load team data and render member cards
+   */
+  loadTeamData() {
+    // Get team data from parent component or global state
+    const teamData = window.teamConfigurationData || [];
+    this.teamMembers = teamData;
+    
+    this.renderMemberCards();
+    this.loadSavedSettings();
+  }
+
+  /**
+   * Render member customization cards
+   */
+  renderMemberCards() {
+    const container = document.getElementById('teamMembersList');
+    const template = document.getElementById('memberCustomizationTemplate');
+    
+    if (!container || !template) return;
+
+    container.innerHTML = '';
+
+    this.teamMembers.forEach((member) => {
+      const card = template.content.cloneNode(true);
+      
+      // Set basic member info
+      card.querySelector('.member-customization-card').setAttribute('data-member-id', member.id);
+      card.querySelector('.member-icon').textContent = member.icon;
+      card.querySelector('.member-name').textContent = member.name;
+      card.querySelector('.member-role').textContent = member.role;
+      
+      // Set avatar color based on role
+      const avatar = card.querySelector('.member-avatar');
+      avatar.style.background = member.primaryColor || 'var(--primary-color)';
+      
+      // Set initial form values
+      const nameInput = card.querySelector('.member-name-input');
+      const descInput = card.querySelector('.member-description-input');
+      
+      nameInput.placeholder = member.name;
+      descInput.placeholder = `Configure ${member.name}'s behavior and responsibilities`;
+      
+      // Initialize behavior sliders with defaults
+      const sliders = card.querySelectorAll('.behavior-slider');
+      sliders.forEach(slider => {
+        slider.setAttribute('data-member-id', member.id);
+      });
+      
+      // Initialize authority checkboxes
+      const checkboxes = card.querySelectorAll('.authority-checkbox');
+      checkboxes.forEach(checkbox => {
+        checkbox.setAttribute('data-member-id', member.id);
+      });
+      
+      // Initialize other inputs
+      const tagInput = card.querySelector('.tag-input');
+      const prioritySelect = card.querySelector('.workflow-priority-select');
+      
+      tagInput.setAttribute('data-member-id', member.id);
+      prioritySelect.setAttribute('data-member-id', member.id);
+      
+      container.appendChild(card);
+    });
+  }
+
+  /**
+   * Toggle member card expansion
+   */
+  toggleMemberExpansion(header) {
+    const card = header.closest('.member-customization-card');
+    if (!card) return;
+
+    const isExpanded = card.classList.contains('expanded');
+    
+    // Close all other cards
+    document.querySelectorAll('.member-customization-card.expanded').forEach(otherCard => {
+      if (otherCard !== card) {
+        otherCard.classList.remove('expanded');
+      }
+    });
+    
+    // Toggle current card
+    card.classList.toggle('expanded', !isExpanded);
+  }
+
+  /**
+   * Update behavior setting
+   */
+  updateBehaviorSetting(slider) {
+    const memberId = slider.getAttribute('data-member-id');
+    const setting = slider.getAttribute('data-setting');
+    const value = parseInt(slider.value);
+    
+    if (!this.memberSettings.has(memberId)) {
+      this.memberSettings.set(memberId, { behaviors: {}, authorities: {}, preferences: {} });
+    }
+    
+    const memberConfig = this.memberSettings.get(memberId);
+    memberConfig.behaviors[setting] = value;
+    
+    this.onSettingsChange();
+  }
+
+  /**
+   * Update member name
+   */
+  updateMemberName(input) {
+    const memberId = input.closest('.member-customization-card').getAttribute('data-member-id');
+    const customName = input.value.trim();
+    
+    if (!this.memberSettings.has(memberId)) {
+      this.memberSettings.set(memberId, { behaviors: {}, authorities: {}, preferences: {} });
+    }
+    
+    const memberConfig = this.memberSettings.get(memberId);
+    memberConfig.customName = customName || null;
+    
+    this.onSettingsChange();
+  }
+
+  /**
+   * Update member description
+   */
+  updateMemberDescription(textarea) {
+    const memberId = textarea.closest('.member-customization-card').getAttribute('data-member-id');
+    const description = textarea.value.trim();
+    
+    if (!this.memberSettings.has(memberId)) {
+      this.memberSettings.set(memberId, { behaviors: {}, authorities: {}, preferences: {} });
+    }
+    
+    const memberConfig = this.memberSettings.get(memberId);
+    memberConfig.description = description || null;
+    
+    this.onSettingsChange();
+  }
+
+  /**
+   * Update authority settings
+   */
+  updateAuthoritySettings(checkbox) {
+    const memberId = checkbox.getAttribute('data-member-id');
+    const authority = checkbox.getAttribute('data-authority');
+    const enabled = checkbox.checked;
+    
+    if (!this.memberSettings.has(memberId)) {
+      this.memberSettings.set(memberId, { behaviors: {}, authorities: {}, preferences: {} });
+    }
+    
+    const memberConfig = this.memberSettings.get(memberId);
+    memberConfig.authorities[authority] = enabled;
+    
+    this.onSettingsChange();
+  }
+
+  /**
+   * Update workflow priority
+   */
+  updateWorkflowPriority(select) {
+    const memberId = select.getAttribute('data-member-id');
+    const priority = select.value;
+    
+    if (!this.memberSettings.has(memberId)) {
+      this.memberSettings.set(memberId, { behaviors: {}, authorities: {}, preferences: {} });
+    }
+    
+    const memberConfig = this.memberSettings.get(memberId);
+    memberConfig.preferences.workflowPriority = priority;
+    
+    this.onSettingsChange();
+  }
+
+  /**
+   * Add a tool preference tag
+   */
+  addTag(input) {
+    const memberId = input.getAttribute('data-member-id');
+    const tagValue = input.value.trim();
+    
+    if (!tagValue) return;
+    
+    const tagsContainer = input.parentElement.querySelector('.tags-display');
+    
+    // Create tag element
+    const tag = document.createElement('span');
+    tag.className = 'tag';
+    tag.innerHTML = `
+      ${tagValue}
+      <button class="tag-remove" onclick="this.parentElement.remove()">×</button>
+    `;
+    
+    tagsContainer.appendChild(tag);
+    input.value = '';
+    
+    // Update settings
+    if (!this.memberSettings.has(memberId)) {
+      this.memberSettings.set(memberId, { behaviors: {}, authorities: {}, preferences: {} });
+    }
+    
+    const memberConfig = this.memberSettings.get(memberId);
+    if (!memberConfig.preferences.tools) {
+      memberConfig.preferences.tools = [];
+    }
+    memberConfig.preferences.tools.push(tagValue);
+    
+    this.onSettingsChange();
+  }
+
+  /**
+   * Save configuration to storage
+   */
+  saveConfiguration() {
+    try {
+      const configData = {
+        teamMembers: this.teamMembers,
+        memberSettings: Object.fromEntries(this.memberSettings),
+        timestamp: new Date().toISOString()
+      };
+      
+      localStorage.setItem('team-member-customization', JSON.stringify(configData));
+      
+      this.showNotification('Configuration saved successfully!', 'success');
+      
+      // Dispatch event for team builder workflow
+      window.dispatchEvent(new CustomEvent('teamConfigurationSaved', {
+        detail: { teamConfig: configData }
+      }));
+      
+      // Notify parent component (backward compatibility)
+      if (window.onTeamCustomizationUpdate) {
+        window.onTeamCustomizationUpdate(configData);
+      }
+    } catch (error) {
+      console.error('Error saving configuration:', error);
+      this.showNotification('Failed to save configuration', 'error');
+    }
+  }
+
+  /**
+   * Reset to default settings
+   */
+  resetToDefaults() {
+    if (!confirm('Reset all customizations to defaults? This cannot be undone.')) {
+      return;
+    }
+    
+    this.memberSettings.clear();
+    localStorage.removeItem('team-member-customization');
+    
+    // Reset form inputs
+    document.querySelectorAll('.member-name-input, .member-description-input').forEach(input => {
+      input.value = '';
+    });
+    
+    document.querySelectorAll('.behavior-slider').forEach(slider => {
+      slider.value = 5;
+    });
+    
+    document.querySelectorAll('.authority-checkbox').forEach(checkbox => {
+      checkbox.checked = false;
+    });
+    
+    document.querySelectorAll('.workflow-priority-select').forEach(select => {
+      select.value = 'quality';
+    });
+    
+    document.querySelectorAll('.tags-display').forEach(container => {
+      container.innerHTML = '';
+    });
+    
+    this.showNotification('Settings reset to defaults', 'info');
+    this.onSettingsChange();
+  }
+
+  /**
+   * Load saved settings from storage
+   */
+  loadSavedSettings() {
+    try {
+      const saved = localStorage.getItem('team-member-customization');
+      if (!saved) return;
+      
+      const configData = JSON.parse(saved);
+      
+      if (configData.memberSettings) {
+        this.memberSettings = new Map(Object.entries(configData.memberSettings));
+        this.applyLoadedSettings();
+      }
+    } catch (error) {
+      console.error('Error loading saved settings:', error);
+    }
+  }
+
+  /**
+   * Apply loaded settings to form inputs
+   */
+  applyLoadedSettings() {
+    this.memberSettings.forEach((config, memberId) => {
+      const card = document.querySelector(`[data-member-id="${memberId}"]`);
+      if (!card) return;
+      
+      // Apply custom name
+      if (config.customName) {
+        const nameInput = card.querySelector('.member-name-input');
+        if (nameInput) nameInput.value = config.customName;
+      }
+      
+      // Apply description
+      if (config.description) {
+        const descInput = card.querySelector('.member-description-input');
+        if (descInput) descInput.value = config.description;
+      }
+      
+      // Apply behavior settings
+      if (config.behaviors) {
+        Object.entries(config.behaviors).forEach(([setting, value]) => {
+          const slider = card.querySelector(`[data-setting="${setting}"]`);
+          if (slider) slider.value = value;
+        });
+      }
+      
+      // Apply authority settings
+      if (config.authorities) {
+        Object.entries(config.authorities).forEach(([authority, enabled]) => {
+          const checkbox = card.querySelector(`[data-authority="${authority}"]`);
+          if (checkbox) checkbox.checked = enabled;
+        });
+      }
+      
+      // Apply preferences
+      if (config.preferences) {
+        if (config.preferences.workflowPriority) {
+          const select = card.querySelector('.workflow-priority-select');
+          if (select) select.value = config.preferences.workflowPriority;
+        }
+        
+        if (config.preferences.tools) {
+          const tagsContainer = card.querySelector('.tags-display');
+          if (tagsContainer) {
+            tagsContainer.innerHTML = '';
+            config.preferences.tools.forEach(tool => {
+              const tag = document.createElement('span');
+              tag.className = 'tag';
+              tag.innerHTML = `
+                ${tool}
+                <button class="tag-remove" onclick="this.parentElement.remove()">×</button>
+              `;
+              tagsContainer.appendChild(tag);
+            });
+          }
+        }
+      }
+    });
+  }
+
+  /**
+   * Handle settings change events
+   */
+  onSettingsChange() {
+    // Notify parent component of changes
+    if (window.onTeamCustomizationChange) {
+      window.onTeamCustomizationChange({
+        teamMembers: this.teamMembers,
+        memberSettings: Object.fromEntries(this.memberSettings)
+      });
+    }
+  }
+
+  /**
+   * Show notification to user
+   */
+  showNotification(message, type = 'info') {
+    // Create or update notification element
+    let notification = document.getElementById('customization-notification');
+    
+    if (!notification) {
+      notification = document.createElement('div');
+      notification.id = 'customization-notification';
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 12px 20px;
+        border-radius: 6px;
+        color: white;
+        font-weight: 500;
+        z-index: 1000;
+        opacity: 0;
+        transition: all 0.3s ease;
+        pointer-events: none;
+      `;
+      document.body.appendChild(notification);
+    }
+    
+    // Set notification style based on type
+    const colors = {
+      success: '#10b981',
+      error: '#ef4444',
+      info: '#3b82f6'
+    };
+    
+    notification.style.background = colors[type] || colors.info;
+    notification.textContent = message;
+    notification.style.opacity = '1';
+    notification.style.transform = 'translateY(0)';
+    
+    // Auto-hide after 3 seconds
+    setTimeout(() => {
+      notification.style.opacity = '0';
+      notification.style.transform = 'translateY(-10px)';
+    }, 3000);
+  }
+
+  /**
+   * Get current configuration data
+   */
+  getConfigurationData() {
+    return {
+      teamMembers: this.teamMembers,
+      memberSettings: Object.fromEntries(this.memberSettings),
+      timestamp: new Date().toISOString()
+    };
+  }
+}
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  window.teamMemberCustomizationManager = new TeamMemberCustomizationManager();
+});
+
+// Expose manager for external access
+window.TeamMemberCustomizationManager = TeamMemberCustomizationManager;
+</script>

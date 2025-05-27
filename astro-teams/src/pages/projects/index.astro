@@ -1,0 +1,883 @@
+---
+/**
+ * Projects Hub Page
+ * 
+ * Displays all projects with repository information and documentation
+ * Provides project management interface for adding/editing projects
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { statusColors, priorityColors, getStatusBadgeClass, getPriorityBadgeClass } from '../../utils/statusColors';
+// TODO: Re-enable when astro-icon is properly configured
+// import { Icon } from 'astro-icon/components';
+
+const projects = await getCollection('projects');
+
+// Filter and organize projects
+const activeProjects = projects.filter(p => p.data.status === 'active' && !p.data.archived);
+const completedProjects = projects.filter(p => p.data.status === 'completed');
+const pausedProjects = projects.filter(p => p.data.status === 'paused');
+const featuredProjects = projects.filter(p => p.data.featured);
+
+// Project statistics
+const totalProjects = projects.length;
+const totalActive = activeProjects.length;
+const avgCompletion = projects.reduce((sum, p) => sum + (p.data.progress?.completion || 0), 0) / totalProjects;
+
+// Using centralized color utility with design tokens
+---
+
+<BaseLayout title="Projects | Aurorion Teams">
+  <main class="projects-page">
+    <div class="page-header">
+      <h1 class="page-title">
+        📁
+        Projects Hub
+      </h1>
+      <p class="page-subtitle">
+        Manage repositories, documentation, and project resources
+      </p>
+      <div class="header-actions">
+        <button class="btn btn-primary" id="addProjectBtn">
+          ➕
+          Add Project
+        </button>
+      </div>
+    </div>
+
+    <div class="projects-overview">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">{totalProjects}</div>
+          <div class="stat-label">Total Projects</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">{totalActive}</div>
+          <div class="stat-label">Active Projects</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">{Math.round(avgCompletion)}%</div>
+          <div class="stat-label">Avg Completion</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">{featuredProjects.length}</div>
+          <div class="stat-label">Featured</div>
+        </div>
+      </div>
+    </div>
+
+    {/* Featured Projects */}
+    {featuredProjects.length > 0 && (
+      <section class="projects-section featured-section">
+        <h2 class="section-title">
+          ⭐
+          Featured Projects
+        </h2>
+        <div class="projects-grid featured-grid">
+          {featuredProjects.map((project) => (
+            <div class="project-card featured-card" key={project.id}>
+              <div class="project-header">
+                <div class="project-title-row">
+                  <h3 class="project-name">{project.data.name}</h3>
+                  <div class="project-badges">
+                    <span class={getStatusBadgeClass(project.data.status)}>
+                      {project.data.status}
+                    </span>
+                    <span class={getPriorityBadgeClass(project.data.priority)}>
+                      {project.data.priority}
+                    </span>
+                  </div>
+                </div>
+                <p class="project-description">{project.data.description}</p>
+              </div>
+
+              {project.data.repository && (
+                <div class="project-repo">
+                  <div class="repo-info">
+                    <a href={project.data.repository.url} target="_blank" class="repo-link">
+                      📦
+                      <span class="repo-name">{project.data.repository.url.split('/').pop()}</span>
+                      ↗️
+                    </a>
+                    {project.data.repository.language && (
+                      <span class="repo-language">{project.data.repository.language}</span>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {project.data.progress && (
+                <div class="project-progress">
+                  <div class="progress-header">
+                    <span class="progress-label">Progress</span>
+                    <span class="progress-percent">{project.data.progress.completion}%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div 
+                      class="progress-fill" 
+                      style={`width: ${project.data.progress.completion}%`}
+                    ></div>
+                  </div>
+                  {project.data.progress.currentPhase && (
+                    <div class="current-phase">
+                      Current: {project.data.progress.currentPhase}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {project.data.metadata && (
+                <div class="project-tech">
+                  <div class="tech-stack">
+                    {project.data.metadata.stack.slice(0, 3).map(tech => (
+                      <span class="tech-tag" key={tech}>{tech}</span>
+                    ))}
+                    {project.data.metadata.stack.length > 3 && (
+                      <span class="tech-tag more">+{project.data.metadata.stack.length - 3}</span>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              <div class="project-actions">
+                <a href={`/projects/${project.id}`} class="action-btn view-btn">
+                  👁️
+                  View Details
+                </a>
+                <button class="action-btn edit-btn" data-project-id={project.id}>
+                  ✏️
+                  Edit
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {/* Active Projects */}
+    {activeProjects.length > 0 && (
+      <section class="projects-section">
+        <h2 class="section-title">
+          🚀
+          Active Projects ({activeProjects.length})
+        </h2>
+        <div class="projects-grid">
+          {activeProjects.filter(p => !p.data.featured).map((project) => (
+            <div class="project-card" key={project.id}>
+              <div class="project-header">
+                <div class="project-title-row">
+                  <h3 class="project-name">{project.data.name}</h3>
+                  <div class="project-badges">
+                    <span 
+                      class="project-badge priority"
+                      style={`background: ${priorityColors[project.data.priority]}20; color: ${priorityColors[project.data.priority]}`}
+                    >
+                      {project.data.priority}
+                    </span>
+                  </div>
+                </div>
+                <p class="project-description">{project.data.description}</p>
+              </div>
+
+              {project.data.repository && (
+                <div class="project-repo">
+                  <a href={project.data.repository.url} target="_blank" class="repo-link">
+                    <span class="repo-icon">📦</span>
+                    <span class="repo-name">{project.data.repository.url.split('/').pop()}</span>
+                  </a>
+                </div>
+              )}
+
+              {project.data.progress && (
+                <div class="project-progress compact">
+                  <div class="progress-header">
+                    <span class="progress-percent">{project.data.progress.completion}%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div 
+                      class="progress-fill" 
+                      style={`width: ${project.data.progress.completion}%`}
+                    ></div>
+                  </div>
+                </div>
+              )}
+
+              <div class="project-actions">
+                <a href={`/projects/${project.id}`} class="action-btn view-btn">View</a>
+                <button class="action-btn edit-btn" data-project-id={project.id}>Edit</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {/* Completed Projects */}
+    {completedProjects.length > 0 && (
+      <section class="projects-section">
+        <h2 class="section-title">
+          ✅
+          Completed Projects ({completedProjects.length})
+        </h2>
+        <div class="projects-grid compact-grid">
+          {completedProjects.map((project) => (
+            <div class="project-card compact-card" key={project.id}>
+              <div class="project-header">
+                <h3 class="project-name">{project.data.name}</h3>
+                <span class="completion-badge">100%</span>
+              </div>
+              <p class="project-description">{project.data.description}</p>
+              {project.data.repository && (
+                <a href={project.data.repository.url} target="_blank" class="repo-link small">
+                  📦 {project.data.repository.url.split('/').pop()}
+                </a>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {/* Paused Projects */}
+    {pausedProjects.length > 0 && (
+      <section class="projects-section">
+        <h2 class="section-title">
+          ⏸️
+          Paused Projects ({pausedProjects.length})
+        </h2>
+        <div class="projects-grid compact-grid">
+          {pausedProjects.map((project) => (
+            <div class="project-card compact-card paused" key={project.id}>
+              <div class="project-header">
+                <h3 class="project-name">{project.data.name}</h3>
+                <span class="status-badge paused">Paused</span>
+              </div>
+              <p class="project-description">{project.data.description}</p>
+              <div class="project-actions">
+                <button class="action-btn resume-btn" data-project-id={project.id}>Resume</button>
+                <a href={`/projects/${project.id}`} class="action-btn view-btn">View</a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Add Project Modal -->
+    <div class="modal hidden" id="projectModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="modalTitle">Add New Project</h3>
+          <button class="modal-close" id="modalClose">×</button>
+        </div>
+        <div class="modal-body">
+          <form id="projectForm">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="projectName">Project Name</label>
+                <input type="text" id="projectName" required>
+              </div>
+              <div class="form-group">
+                <label for="projectStatus">Status</label>
+                <select id="projectStatus">
+                  <option value="planning">Planning</option>
+                  <option value="active" selected>Active</option>
+                  <option value="paused">Paused</option>
+                  <option value="completed">Completed</option>
+                </select>
+              </div>
+              <div class="form-group full-width">
+                <label for="projectDescription">Description</label>
+                <textarea id="projectDescription" rows="3"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="repositoryUrl">Repository URL</label>
+                <input type="url" id="repositoryUrl">
+              </div>
+              <div class="form-group">
+                <label for="projectCategory">Category</label>
+                <select id="projectCategory">
+                  <option value="web-app">Web Application</option>
+                  <option value="mobile-app">Mobile App</option>
+                  <option value="api">API</option>
+                  <option value="library">Library</option>
+                  <option value="tool">Tool</option>
+                  <option value="documentation">Documentation</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+              <button type="submit" class="btn btn-primary" id="saveBtn">Save Project</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .projects-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .page-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--color-text);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .title-icon {
+    font-size: 2rem;
+  }
+
+  .page-subtitle {
+    color: var(--color-text-secondary);
+    font-size: 1.1rem;
+    margin: 0.5rem 0 0 0;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .projects-overview {
+    margin-bottom: 3rem;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .stat-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .stat-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--color-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-label {
+    color: var(--color-text-secondary);
+    font-size: 1rem;
+  }
+
+  .projects-section {
+    margin-bottom: 3rem;
+  }
+
+  .featured-section {
+    margin-bottom: 4rem;
+  }
+
+  .section-title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0 0 1.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .section-icon {
+    font-size: 1.5rem;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .featured-grid {
+    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+  }
+
+  .compact-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+
+  .project-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .project-card:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .featured-card {
+    border-color: var(--color-primary);
+    background: linear-gradient(135deg, var(--color-surface) 0%, rgba(37, 99, 235, 0.02) 100%);
+  }
+
+  .project-header {
+    margin-bottom: 1rem;
+  }
+
+  .project-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .project-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0;
+    flex: 1;
+  }
+
+  .project-badges {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .project-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .project-description {
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .project-repo {
+    margin: 1rem 0;
+    padding: 0.75rem;
+    background: var(--color-background);
+    border-radius: 0.375rem;
+    border: 1px solid var(--color-border);
+  }
+
+  .repo-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .repo-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-primary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .repo-link.small {
+    font-size: 0.75rem;
+    margin-top: 0.5rem;
+    display: inline-flex;
+  }
+
+  .repo-link:hover {
+    text-decoration: underline;
+  }
+
+  .repo-icon {
+    font-size: 1rem;
+  }
+
+  .external-icon {
+    font-size: 0.75rem;
+    opacity: 0.7;
+  }
+
+  .repo-language {
+    font-size: 0.75rem;
+    background: var(--color-surface);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border);
+  }
+
+  .project-progress {
+    margin: 1rem 0;
+  }
+
+  .project-progress.compact {
+    margin: 0.75rem 0;
+  }
+
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .progress-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .progress-percent {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-primary);
+  }
+
+  .progress-bar {
+    width: 100%;
+    height: 6px;
+    background: var(--color-border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light, var(--color-primary)));
+    transition: width 0.3s ease;
+  }
+
+  .current-phase {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    margin-top: 0.5rem;
+    font-style: italic;
+  }
+
+  .project-tech {
+    margin: 1rem 0;
+  }
+
+  .tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .tech-tag {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+  }
+
+  .tech-tag.more {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+  }
+
+  .project-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .action-btn {
+    flex: 1;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text);
+    text-decoration: none;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    text-align: center;
+  }
+
+  .action-btn:hover {
+    border-color: var(--color-primary);
+    background: var(--color-surface-hover);
+  }
+
+  .action-btn.view-btn {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+  }
+
+  .action-btn.view-btn:hover {
+    background: var(--color-primary-dark, var(--color-primary));
+  }
+
+  .compact-card {
+    padding: 1rem;
+  }
+
+  .compact-card .project-name {
+    font-size: 1rem;
+  }
+
+  .compact-card .project-description {
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .completion-badge,
+  .status-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-weight: 600;
+  }
+
+  .completion-badge {
+    background-color: var(--color-success-100);
+    color: var(--color-success-800);
+  }
+
+  .status-badge.paused {
+    background-color: var(--color-warning-100);
+    color: var(--color-warning-800);
+  }
+
+  .compact-card.paused {
+    opacity: 0.8;
+  }
+
+  /* Modal Styles */
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+
+  .modal.hidden {
+    display: none;
+  }
+
+  .modal-content {
+    background: var(--color-background);
+    border-radius: var(--border-radius);
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .modal-header h3 {
+    margin: 0;
+    color: var(--color-text);
+  }
+
+  .modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--color-text-secondary);
+  }
+
+  .modal-body {
+    padding: 1.5rem;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .form-group.full-width {
+    grid-column: 1 / -1;
+  }
+
+  .form-group label {
+    font-weight: 600;
+    color: var(--color-text);
+    font-size: 0.875rem;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-size: 0.875rem;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  @media (max-width: 768px) {
+    .projects-page {
+      padding: 1rem;
+    }
+
+    .page-header {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .projects-grid,
+    .featured-grid,
+    .compact-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .project-title-row {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+</style>
+
+<script>
+  // Project management functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const addProjectBtn = document.getElementById('addProjectBtn');
+    const projectModal = document.getElementById('projectModal');
+    const modalClose = document.getElementById('modalClose');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const projectForm = document.getElementById('projectForm');
+
+    // Modal controls
+    addProjectBtn?.addEventListener('click', () => {
+      projectModal?.classList.remove('hidden');
+      document.getElementById('modalTitle').textContent = 'Add New Project';
+    });
+
+    modalClose?.addEventListener('click', () => {
+      projectModal?.classList.add('hidden');
+    });
+
+    cancelBtn?.addEventListener('click', () => {
+      projectModal?.classList.add('hidden');
+    });
+
+    // Edit project buttons
+    document.querySelectorAll('.edit-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const projectId = e.target.closest('.edit-btn').getAttribute('data-project-id');
+        // TODO: Load project data and populate form
+        projectModal?.classList.remove('hidden');
+        document.getElementById('modalTitle').textContent = 'Edit Project';
+      });
+    });
+
+    // Resume project buttons
+    document.querySelectorAll('.resume-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const projectId = e.target.closest('.resume-btn').getAttribute('data-project-id');
+        // TODO: Update project status to active
+        console.log('Resume project:', projectId);
+      });
+    });
+
+    // Form submission
+    projectForm?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      // TODO: Handle form submission
+      console.log('Form submitted');
+      projectModal?.classList.add('hidden');
+    });
+
+    // Close modal on backdrop click
+    projectModal?.addEventListener('click', (e) => {
+      if (e.target === projectModal) {
+        projectModal.classList.add('hidden');
+      }
+    });
+  });
+</script>

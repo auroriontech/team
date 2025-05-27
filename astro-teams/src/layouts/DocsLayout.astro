@@ -1,0 +1,505 @@
+---
+/**
+ * Smart Documentation Layout with Sidebar Navigation
+ * Features: Auto-generated TOC, search, mobile responsive
+ */
+import BaseLayout from './BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  title: string;
+  currentSlug?: string;
+  editUrl?: string;
+  lastModified?: Date;
+  contributors?: string[];
+}
+
+const { title, currentSlug, editUrl, lastModified, contributors } = Astro.props;
+
+// Get all docs and organize by category
+const allDocs = await getCollection('docs');
+const docsByCategory = allDocs.reduce((acc, doc) => {
+  const category = doc.data.category || 'General';
+  if (!acc[category]) acc[category] = [];
+  acc[category].push(doc);
+  return acc;
+}, {} as Record<string, typeof allDocs>);
+
+// Sort categories and docs within each category
+const sortedCategories = Object.keys(docsByCategory).sort();
+sortedCategories.forEach(category => {
+  docsByCategory[category].sort((a, b) => {
+    // Sort by priority first, then title
+    const priorityOrder = { 'critical': 0, 'high': 1, 'medium': 2, 'low': 3 };
+    const aPriority = priorityOrder[a.data.priority] ?? 4;
+    const bPriority = priorityOrder[b.data.priority] ?? 4;
+    
+    if (aPriority !== bPriority) return aPriority - bPriority;
+    return a.data.title.localeCompare(b.data.title);
+  });
+});
+---
+
+<BaseLayout title={title}>
+  <div class="docs-container">
+    <!-- Sidebar Navigation -->
+    <aside class="docs-sidebar">
+      <div class="sidebar-header">
+        <Icon name="lucide:book-open" size={24} />
+        <h2>Documentation</h2>
+      </div>
+      
+      <!-- Search Box -->
+      <div class="docs-search">
+        <Icon name="lucide:search" size={18} />
+        <input type="text" placeholder="Search docs..." id="docs-search" />
+      </div>
+      
+      <!-- Navigation Tree -->
+      <nav class="docs-nav">
+        {sortedCategories.map(category => (
+          <div class="nav-category">
+            <h3 class="category-title">
+              <Icon name="lucide:folder" size={16} />
+              {category}
+            </h3>
+            <ul class="category-docs">
+              {docsByCategory[category].map(doc => (
+                <li class="nav-item">
+                  <a 
+                    href={`/docs/${doc.slug}`}
+                    class={`nav-link ${currentSlug === doc.slug ? 'active' : ''}`}
+                  >
+                    <Icon name="lucide:file-text" size={14} />
+                    {doc.data.title}
+                    {doc.data.priority === 'critical' && (
+                      <Icon name="lucide:alert-circle" size={12} class="priority-icon critical" />
+                    )}
+                    {doc.data.priority === 'high' && (
+                      <Icon name="lucide:alert-triangle" size={12} class="priority-icon high" />
+                    )}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </nav>
+      
+      <!-- Quick Actions -->
+      <div class="sidebar-footer">
+        <a href="/docs" class="footer-link">
+          <Icon name="lucide:home" size={16} />
+          All Docs
+        </a>
+        <a href="/team-builder" class="footer-link">
+          <Icon name="lucide:users" size={16} />
+          Team Builder
+        </a>
+      </div>
+    </aside>
+    
+    <!-- Main Content Area -->
+    <main class="docs-main">
+      <div class="docs-content">
+        <slot />
+        
+        <!-- Edit Section -->
+        <div class="docs-edit-section">
+          <div class="edit-actions">
+            {editUrl && (
+              <a href={editUrl} class="edit-button primary" target="_blank" rel="noopener">
+                <Icon name="lucide:edit-3" size={16} />
+                Edit this page
+              </a>
+            )}
+            <a href={`mailto:team@aurorion.com?subject=Feedback on ${title}&body=I have feedback about this documentation page: ${Astro.url}`} class="edit-button secondary">
+              <Icon name="lucide:message-circle" size={16} />
+              Suggest changes
+            </a>
+            <button class="edit-button secondary" onclick="navigator.share ? navigator.share({title: document.title, url: window.location.href}) : navigator.clipboard.writeText(window.location.href)">
+              <Icon name="lucide:share-2" size={16} />
+              Share
+            </button>
+          </div>
+          
+          {(lastModified || contributors) && (
+            <div class="edit-metadata">
+              {lastModified && (
+                <div class="metadata-item">
+                  <Icon name="lucide:calendar" size={14} />
+                  <span>Last updated: {lastModified.toLocaleDateString()}</span>
+                </div>
+              )}
+              {contributors && contributors.length > 0 && (
+                <div class="metadata-item">
+                  <Icon name="lucide:users" size={14} />
+                  <span>Contributors: {contributors.join(', ')}</span>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </main>
+    
+    <!-- Table of Contents (Right Sidebar) -->
+    <aside class="docs-toc">
+      <div class="toc-header">
+        <Icon name="lucide:list" size={18} />
+        <h3>On This Page</h3>
+      </div>
+      <div id="toc-content">
+        <!-- TOC will be generated by JavaScript -->
+      </div>
+    </aside>
+  </div>
+</BaseLayout>
+
+<style>
+  .docs-container {
+    display: grid;
+    grid-template-columns: 280px 1fr 240px;
+    min-height: calc(100vh - 120px);
+    gap: 0;
+  }
+  
+  /* Sidebar Styles */
+  .docs-sidebar {
+    background: var(--color-surface);
+    border-right: 1px solid var(--color-border);
+    padding: var(--spacing-lg);
+    overflow-y: auto;
+    position: sticky;
+    top: 80px;
+    height: calc(100vh - 120px);
+  }
+  
+  .sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--color-border);
+  }
+  
+  .sidebar-header h2 {
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
+    color: var(--color-text);
+    margin: 0;
+  }
+  
+  .docs-search {
+    position: relative;
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .docs-search input {
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-sm) var(--spacing-sm) 40px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    font-size: var(--text-sm);
+    background: var(--color-background);
+  }
+  
+  .docs-search svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-muted);
+  }
+  
+  .docs-nav {
+    flex: 1;
+  }
+  
+  .nav-category {
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .category-title {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 var(--spacing-sm) 0;
+  }
+  
+  .category-docs {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .nav-item {
+    margin-bottom: 2px;
+  }
+  
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    color: var(--color-text-secondary);
+    font-size: var(--text-sm);
+    transition: all 0.2s ease;
+  }
+  
+  .nav-link:hover {
+    background: var(--color-surface-hover);
+    color: var(--color-text);
+  }
+  
+  .nav-link.active {
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+    font-weight: var(--font-medium);
+  }
+  
+  .priority-icon {
+    margin-left: auto;
+  }
+  
+  .priority-icon.critical {
+    color: var(--color-error);
+  }
+  
+  .priority-icon.high {
+    color: var(--color-warning);
+  }
+  
+  .sidebar-footer {
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+  }
+  
+  .footer-link {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    margin-bottom: 4px;
+    transition: all 0.2s ease;
+  }
+  
+  .footer-link:hover {
+    background: var(--color-surface-hover);
+    color: var(--color-text);
+  }
+  
+  /* Main Content */
+  .docs-main {
+    padding: var(--spacing-xl);
+    overflow-y: auto;
+  }
+  
+  .docs-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  /* Table of Contents */
+  .docs-toc {
+    background: var(--color-surface);
+    border-left: 1px solid var(--color-border);
+    padding: var(--spacing-lg);
+    overflow-y: auto;
+    position: sticky;
+    top: 80px;
+    height: calc(100vh - 120px);
+  }
+  
+  .toc-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--color-border);
+  }
+  
+  .toc-header h3 {
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+  
+  /* Edit Section */
+  .docs-edit-section {
+    margin-top: var(--spacing-2xl);
+    padding-top: var(--spacing-xl);
+    border-top: 2px solid var(--color-border);
+  }
+  
+  .edit-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+    flex-wrap: wrap;
+  }
+  
+  .edit-button {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    transition: all 0.2s ease;
+    border: 1px solid var(--color-border);
+    cursor: pointer;
+  }
+  
+  .edit-button.primary {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+  }
+  
+  .edit-button.primary:hover {
+    background: var(--color-primary-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  .edit-button.secondary {
+    background: var(--color-surface);
+    color: var(--color-text-secondary);
+  }
+  
+  .edit-button.secondary:hover {
+    background: var(--color-surface-hover);
+    color: var(--color-text);
+    border-color: var(--color-primary);
+  }
+  
+  .edit-metadata {
+    display: flex;
+    gap: var(--spacing-lg);
+    flex-wrap: wrap;
+    padding: var(--spacing-md);
+    background: var(--color-surface);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--color-border);
+  }
+  
+  .metadata-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+  }
+
+  /* Mobile Responsive */
+  @media (max-width: 1024px) {
+    .docs-container {
+      grid-template-columns: 260px 1fr;
+    }
+    
+    .docs-toc {
+      display: none;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .docs-container {
+      grid-template-columns: 1fr;
+    }
+    
+    .docs-sidebar {
+      display: none;
+    }
+    
+    .docs-main {
+      padding: var(--spacing-md);
+    }
+  }
+</style>
+
+<script>
+  // Generate Table of Contents
+  function generateTOC() {
+    const content = document.querySelector('.docs-content');
+    const tocContainer = document.getElementById('toc-content');
+    
+    if (!content || !tocContainer) return;
+    
+    const headings = content.querySelectorAll('h1, h2, h3, h4, h5, h6');
+    
+    if (headings.length === 0) {
+      tocContainer.innerHTML = '<p class="no-headings">No headings found</p>';
+      return;
+    }
+    
+    const tocList = document.createElement('ul');
+    tocList.className = 'toc-list';
+    
+    headings.forEach((heading, index) => {
+      const id = heading.id || `heading-${index}`;
+      if (!heading.id) heading.id = id;
+      
+      const li = document.createElement('li');
+      li.className = `toc-item toc-${heading.tagName.toLowerCase()}`;
+      
+      const link = document.createElement('a');
+      link.href = `#${id}`;
+      link.textContent = heading.textContent;
+      link.className = 'toc-link';
+      
+      li.appendChild(link);
+      tocList.appendChild(li);
+    });
+    
+    tocContainer.appendChild(tocList);
+  }
+  
+  // Search functionality
+  function initSearch() {
+    const searchInput = document.getElementById('docs-search');
+    const navLinks = document.querySelectorAll('.nav-link');
+    
+    if (!searchInput) return;
+    
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase();
+      
+      navLinks.forEach(link => {
+        const text = link.textContent.toLowerCase();
+        const item = link.closest('.nav-item');
+        
+        if (text.includes(query) || query === '') {
+          item.style.display = '';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    });
+  }
+  
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    generateTOC();
+    initSearch();
+  });
+</script>
+</BaseLayout>
