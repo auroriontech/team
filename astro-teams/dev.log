@@ -1,0 +1,65 @@
+
+> astro-teams@0.0.1 dev
+> astro dev --host 0.0.0.0
+
+01:44:33 [types] Generated 0ms
+01:44:34 [content] Syncing content
+01:44:34 [content] Synced content
+01:44:34 [vite] Port 4321 is in use, trying another one...
+01:44:34 [vite] Port 4322 is in use, trying another one...
+01:44:34 [vite] Port 4323 is in use, trying another one...
+
+ astro  v5.8.0 ready in 358 ms
+
+┃ Local    http://localhost:4324/
+┃ Network  http://10.0.0.5:4324/
+           http://100.64.0.5:4324/
+           http://10.0.0.136:4324/
+
+01:44:34 watching for file changes...
+01:51:08 Configuration file updated. Restarting...
+Local icons changed, reloading
+01:51:08 [content] Syncing content
+01:51:08 [content] Synced content
+01:51:08 [types] Generated 238ms
+01:51:08 [vite] Port 4321 is in use, trying another one...
+01:51:08 [vite] Port 4322 is in use, trying another one...
+01:51:08 [vite] Port 4323 is in use, trying another one...
+01:54:56 Configuration file updated. Restarting...
+Local icons changed, reloading
+1:54:57 AM [vite] (ssr) Error when evaluating SSR module /Users/calebcoverdale/code/aurorion/teams/astro-teams/astro.config.mjs: Identifier '__vite_ssr_export_default__' has already been declared
+      at new AsyncFunction (<anonymous>)
+      at ESModulesEvaluator.runInlinedModule (file:///Users/calebcoverdale/code/aurorion/teams/astro-teams/node_modules/vite/dist/node/module-runner.js:1062:11)
+      at SSRCompatModuleRunner.directRequest (file:///Users/calebcoverdale/code/aurorion/teams/astro-teams/node_modules/vite/dist/node/module-runner.js:1284:82)
+      at SSRCompatModuleRunner.directRequest (file:///Users/calebcoverdale/code/aurorion/teams/astro-teams/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:25274:35)
+      at SSRCompatModuleRunner.cachedRequest (file:///Users/calebcoverdale/code/aurorion/teams/astro-teams/node_modules/vite/dist/node/module-runner.js:1179:28)
+      at SSRCompatModuleRunner.import (file:///Users/calebcoverdale/code/aurorion/teams/astro-teams/node_modules/vite/dist/node/module-runner.js:1117:23)
+      at async instantiateModule (file:///Users/calebcoverdale/code/aurorion/teams/astro-teams/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:25231:12)
+      at async loadConfigWithVite (file:///Users/calebcoverdale/code/aurorion/teams/astro-teams/node_modules/astro/dist/core/config/vite-load.js:36:17)
+      at async loadConfig (file:///Users/calebcoverdale/code/aurorion/teams/astro-teams/node_modules/astro/dist/core/config/config.js:59:12)
+      at async resolveConfig (file:///Users/calebcoverdale/code/aurorion/teams/astro-teams/node_modules/astro/dist/core/config/config.js:88:22)
+[astro] Unable to load your Astro config
+
+01:54:57 [ERROR] [config] Identifier '__vite_ssr_export_default__' has already been declared
+  Stack trace:
+    at new AsyncFunction (<anonymous>)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+
+01:54:57 [ERROR] Continuing with previous valid configuration
+
+01:55:02 Configuration file updated. Restarting...
+Local icons changed, reloading
+01:55:03 [content] Syncing content
+01:55:03 [content] Synced content
+01:55:03 [types] Generated 117ms
+01:55:03 [vite] Port 4321 is in use, trying another one...
+01:55:03 [vite] Port 4322 is in use, trying another one...
+01:55:03 [vite] Port 4323 is in use, trying another one...
+01:55:03 [vite] Port 4324 is in use, trying another one...
+01:55:03 [vite] Port 4325 is in use, trying another one...
+01:55:03 [vite] Port 4326 is in use, trying another one...
+01:55:11 [200] /test 6ms
+01:55:11 [ERROR] Cannot find module 'virtual:astro-icon' imported from '/Users/calebcoverdale/code/aurorion/teams/astro-teams/node_modules/astro-icon/components/Icon.astro'
+  Stack trace:
+    at fetchModule (file:///Users/calebcoverdale/code/aurorion/teams/astro-teams/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:46813:19)
+    [...] See full stack trace in the browser, or rerun with --verbose.

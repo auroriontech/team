@@ -1,0 +1,26 @@
+{
+  "name": "astro-teams",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev --host 0.0.0.0",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "lint": "eslint . --ext .js,.ts,.astro",
+    "lint:fix": "eslint . --ext .js,.ts,.astro --fix",
+    "lint:css": "stylelint \"**/*.{css,astro}\"",
+    "lint:css:fix": "stylelint \"**/*.{css,astro}\" --fix",
+    "lint:all": "npm run lint && npm run lint:css",
+    "audit:colors": "rg \"#[0-9a-fA-F]{3,6}\" --type-add 'astro:*.astro' --type-add 'styles:*.css' -t astro -t styles -t ts --no-heading --line-number",
+    "audit:tokens": "rg \"var\\(--\" --type-add 'astro:*.astro' --type-add 'styles:*.css' -t astro -t styles -t ts --no-heading --line-number",
+    "project:docs": "node scripts/generate-project-docs.js",
+    "project:new": "echo 'Usage: npm run project:docs <project-slug>' && echo 'This creates documentation for an existing project in src/content/projects/'"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^4.3.0",
+    "@iconify-json/lucide": "^1.2.44",
+    "astro": "^5.8.0",
+    "astro-icon": "^1.1.5"
+  }
+}

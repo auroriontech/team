@@ -1,0 +1,26 @@
+# Development overrides for Docker Compose
+# This file is automatically loaded by docker compose
+
+services:
+  team:
+    # Additional environment variables for development
+    environment:
+      - ASTRO_TELEMETRY_DISABLED=1
+      - NODE_ENV=development
+      - HOST=0.0.0.0
+      - PORT=4321
+      - FORCE_COLOR=1
+    # Enable TTY for better logging
+    tty: true
+    # Keep container running for debugging
+    stdin_open: true
+    # Additional labels for development
+    labels:
+      - "dev.docker.compose.project=aurorion-teams"
+      - "dev.docker.compose.service=team"
+
+  proxy:
+    # Additional labels for development  
+    labels:
+      - "dev.docker.compose.project=aurorion-teams"
+      - "dev.docker.compose.service=caddy-proxy"
