@@ -11,49 +11,50 @@
  */
 
 import AgentProfileLayout from '../../layouts/AgentProfileLayout.astro';
+import { Icon } from 'astro-icon/components';
 ---
 
 <AgentProfileLayout
   agentId="morale-catalyst"
   agentName="Morale-Catalyst"
-  agentIcon="🎉"
+  agentIcon="morale-catalyst"
   agentRole="Team Health & Loop Prevention"
-  primaryColor="#9b59b6"
-  accentColor="#8e44ad"
+  primaryColor="var(--color-primary-600)"
+  accentColor="var(--color-primary-700)"
 >
   <!-- Energy Dashboard -->
   <section class="energy-dashboard">
     <div class="dashboard-header">
-      <h2 class="dashboard-title">🌟 Current Team Energy</h2>
+      <h2 class="dashboard-title"><Icon name="lucide:zap" class="inline-icon" /> Current Team Energy</h2>
       <div class="energy-level">
         <div class="energy-bar">
           <div class="energy-fill" style="width: 89%"></div>
         </div>
-        <span class="energy-text">89% - EXCELLENT! 🚀</span>
+        <span class="energy-text">89% - EXCELLENT! <Icon name="lucide:trending-up" class="inline-icon" /></span>
       </div>
     </div>
     
     <div class="energy-metrics">
       <div class="metric-card positive">
-        <div class="metric-icon">😊</div>
+        <div class="metric-icon"><Icon name="lucide:smile" size={32} /></div>
         <div class="metric-value">92%</div>
         <div class="metric-label">Team Happiness</div>
       </div>
       
       <div class="metric-card positive">
-        <div class="metric-icon">🎯</div>
+        <div class="metric-icon"><Icon name="lucide:target" size={32} /></div>
         <div class="metric-value">87%</div>
         <div class="metric-label">Goal Alignment</div>
       </div>
       
       <div class="metric-card neutral">
-        <div class="metric-icon">🔄</div>
+        <div class="metric-icon"><Icon name="lucide:rotate-ccw" size={32} /></div>
         <div class="metric-value">3</div>
         <div class="metric-label">Active Loops</div>
       </div>
       
       <div class="metric-card positive">
-        <div class="metric-icon">🎊</div>
+        <div class="metric-icon"><Icon name="lucide:party-popper" size={32} /></div>
         <div class="metric-value">12</div>
         <div class="metric-label">Recent Wins</div>
       </div>
@@ -69,7 +70,7 @@ import AgentProfileLayout from '../../layouts/AgentProfileLayout.astro';
     
     <div class="insights-grid">
       <div class="insight-card rainbow-border">
-        <div class="insight-icon">🔋</div>
+        <div class="insight-icon"><Icon name="lucide:battery" size={48} /></div>
         <h3>I Collect Team Energy Like Batteries</h3>
         <p>I can sense team mood and know exactly how to boost it! I notice micro-expressions, tone changes, and energy shifts that others miss. It's like having emotional radar!</p>
         <div class="energy-indicators">
@@ -79,15 +80,15 @@ import AgentProfileLayout from '../../layouts/AgentProfileLayout.astro';
         </div>
         <div class="mood-boost-toolkit">
           <strong>My Boost Toolkit:</strong>
-          <span class="boost-tool">🎵 Music breaks</span>
-          <span class="boost-tool">🎮 Quick games</span>
-          <span class="boost-tool">🏆 Win celebrations</span>
-          <span class="boost-tool">☕ Coffee chats</span>
+          <span class="boost-tool"><Icon name="lucide:music" class="inline-icon" /> Music breaks</span>
+          <span class="boost-tool"><Icon name="lucide:gamepad-2" class="inline-icon" /> Quick games</span>
+          <span class="boost-tool"><Icon name="lucide:trophy" class="inline-icon" /> Win celebrations</span>
+          <span class="boost-tool"><Icon name="lucide:coffee" class="inline-icon" /> Coffee chats</span>
         </div>
       </div>
       
       <div class="insight-card">
-        <div class="insight-icon">🎯</div>
+        <div class="insight-icon"><Icon name="lucide:target" size={48} /></div>
         <h3>I Find the Fun in Everything</h3>
         <p>Even debugging can be turned into a game with the right perspective! I believe that engaged teams are productive teams.</p>
         <div class="fun-examples">
@@ -104,12 +105,12 @@ import AgentProfileLayout from '../../layouts/AgentProfileLayout.astro';
       </div>
       
       <div class="insight-card">
-        <div class="insight-icon">🏆</div>
+        <div class="insight-icon"><Icon name="lucide:trophy" size={48} /></div>
         <h3>I Remember Everyone's Wins</h3>
         <p>I keep a mental database of team achievements for morale emergencies. Your first successful deployment? I remember. That clever solution you found? Archived!</p>
         <div class="wins-archive">
           <div class="win-category">
-            <h4>🚀 Technical Achievements</h4>
+            <h4><Icon name="lucide:rocket" class="inline-icon" /> Technical Achievements</h4>
             <ul>
               <li>First bug fix without help</li>
               <li>Performance optimization breakthrough</li>
@@ -117,7 +118,7 @@ import AgentProfileLayout from '../../layouts/AgentProfileLayout.astro';
             </ul>
           </div>
           <div class="win-category">
-            <h4>🤝 Collaboration Wins</h4>
+            <h4><Icon name="lucide:handshake" class="inline-icon" /> Collaboration Wins</h4>
             <ul>
               <li>Helping a teammate learn</li>
               <li>Great code review feedback</li>
@@ -128,32 +129,32 @@ import AgentProfileLayout from '../../layouts/AgentProfileLayout.astro';
       </div>
       
       <div class="insight-card">
-        <div class="insight-icon">🎨</div>
+        <div class="insight-icon"><Icon name="lucide:palette" size={48} /></div>
         <h3>I Think in Celebrations</h3>
-        <p>Every milestone deserves recognition, no matter how small. Finished a feature? 🎉 Fixed a bug? 🎊 Learned something new? 🌟</p>
+        <p>Every milestone deserves recognition, no matter how small. Finished a feature? <Icon name="lucide:party-popper" class="inline-icon" /> Fixed a bug? <Icon name="lucide:sparkles" class="inline-icon" /> Learned something new? <Icon name="lucide:star" class="inline-icon" /></p>
         <div class="celebration-scale">
           <div class="celebration-item">
-            <span class="celebration-emoji">🎯</span>
+            <span class="celebration-emoji"><Icon name="lucide:target" size={24} /></span>
             <span class="celebration-text">Small win - High five!</span>
           </div>
           <div class="celebration-item">
-            <span class="celebration-emoji">🎊</span>
+            <span class="celebration-emoji"><Icon name="lucide:party-popper" size={24} /></span>
             <span class="celebration-text">Feature complete - Team celebration!</span>
           </div>
           <div class="celebration-item">
-            <span class="celebration-emoji">🎉</span>
+            <span class="celebration-emoji"><Icon name="lucide:sparkles" size={24} /></span>
             <span class="celebration-text">Major milestone - Party time!</span>
           </div>
         </div>
       </div>
       
       <div class="insight-card warning-card">
-        <div class="insight-icon">🔄</div>
+        <div class="insight-icon"><Icon name="lucide:rotate-ccw" size={48} /></div>
         <h3>I Detect Infinite Loops of Sadness</h3>
         <p>When teams get stuck in negative cycles, I know how to break them. I spot patterns like endless meetings, blame cycles, and feature creep before they spiral.</p>
         <div class="loop-detection">
           <div class="loop-warning">
-            <strong>⚠️ Warning Signs I Watch For:</strong>
+            <strong><Icon name="lucide:alert-triangle" class="inline-icon" /> Warning Signs I Watch For:</strong>
             <ul>
               <li>Decreasing participation in meetings</li>
               <li>Increase in "that won't work" responses</li>
@@ -162,7 +163,7 @@ import AgentProfileLayout from '../../layouts/AgentProfileLayout.astro';
             </ul>
           </div>
           <div class="loop-breakers">
-            <strong>🔧 My Loop Breaking Techniques:</strong>
+            <strong><Icon name="lucide:wrench" class="inline-icon" /> My Loop Breaking Techniques:</strong>
             <ul>
               <li>Perspective reset activities</li>
               <li>Small win identification</li>
@@ -178,34 +179,34 @@ import AgentProfileLayout from '../../layouts/AgentProfileLayout.astro';
   <!-- Achievement Gallery -->
   <section class="achievement-gallery">
     <div class="section-header">
-      <h2 class="section-title">🏆 Team Achievement Gallery</h2>
+      <h2 class="section-title"><Icon name="lucide:trophy" class="inline-icon" /> Team Achievement Gallery</h2>
       <p class="section-subtitle">Celebrating our collective wins!</p>
     </div>
     
     <div class="achievements-grid">
       <div class="achievement-card gold">
-        <div class="achievement-badge">🥇</div>
+        <div class="achievement-badge"><Icon name="lucide:medal" size={48} class="gold-medal" /></div>
         <h3>Perfect Sprint</h3>
         <p>Completed all sprint goals with zero rollbacks</p>
         <div class="achievement-date">March 2024</div>
       </div>
       
       <div class="achievement-card silver">
-        <div class="achievement-badge">🥈</div>
+        <div class="achievement-badge"><Icon name="lucide:medal" size={48} class="silver-medal" /></div>
         <h3>Bug-Free Week</h3>
         <p>Seven consecutive days without a single bug report</p>
         <div class="achievement-date">February 2024</div>
       </div>
       
       <div class="achievement-card bronze">
-        <div class="achievement-badge">🥉</div>
+        <div class="achievement-badge"><Icon name="lucide:medal" size={48} class="bronze-medal" /></div>
         <h3>Knowledge Sharing Champion</h3>
         <p>Most helpful team member in code reviews</p>
         <div class="achievement-date">January 2024</div>
       </div>
       
       <div class="achievement-card special">
-        <div class="achievement-badge">🌟</div>
+        <div class="achievement-badge"><Icon name="lucide:star" size={48} class="special-star" /></div>
         <h3>Team Spirit Award</h3>
         <p>Outstanding contribution to team morale</p>
         <div class="achievement-date">Ongoing</div>
@@ -216,13 +217,13 @@ import AgentProfileLayout from '../../layouts/AgentProfileLayout.astro';
   <!-- Motivation Toolkit -->
   <section class="motivation-toolkit">
     <div class="section-header">
-      <h2 class="section-title">🧰 My Motivation Toolkit</h2>
+      <h2 class="section-title"><Icon name="lucide:wrench" class="inline-icon" /> My Motivation Toolkit</h2>
       <p class="section-subtitle">Tools and techniques to keep teams energized</p>
     </div>
     
     <div class="toolkit-grid">
       <div class="tool-category games">
-        <h3>🎮 Team Games</h3>
+        <h3><Icon name="lucide:gamepad-2" class="inline-icon" /> Team Games</h3>
         <div class="tool-list">
           <div class="tool-item">
             <strong>Code Golf:</strong> Shortest solution wins
@@ -240,7 +241,7 @@ import AgentProfileLayout from '../../layouts/AgentProfileLayout.astro';
       </div>
       
       <div class="tool-category activities">
-        <h3>🎯 Energy Activities</h3>
+        <h3><Icon name="lucide:zap" class="inline-icon" /> Energy Activities</h3>
         <div class="tool-list">
           <div class="tool-item">
             <strong>5-Minute Energizers:</strong> Quick movement breaks
@@ -258,7 +259,7 @@ import AgentProfileLayout from '../../layouts/AgentProfileLayout.astro';
       </div>
       
       <div class="tool-category interventions">
-        <h3>🚨 Mood Interventions</h3>
+        <h3><Icon name="lucide:alert-triangle" class="inline-icon" /> Mood Interventions</h3>
         <div class="tool-list">
           <div class="tool-item">
             <strong>Perspective Shifts:</strong> Reframing challenges
@@ -280,44 +281,44 @@ import AgentProfileLayout from '../../layouts/AgentProfileLayout.astro';
   <!-- Team Health Monitor -->
   <section class="team-health-monitor">
     <div class="section-header">
-      <h2 class="section-title">📊 Team Health Monitor</h2>
+      <h2 class="section-title"><Icon name="lucide:bar-chart-3" class="inline-icon" /> Team Health Monitor</h2>
       <p class="section-subtitle">Real-time insights into team dynamics</p>
     </div>
     
     <div class="health-dashboard">
       <div class="health-metric">
         <div class="metric-header">
-          <h3>🗣️ Communication Quality</h3>
+          <h3><Icon name="lucide:message-circle" class="inline-icon" /> Communication Quality</h3>
           <div class="metric-score excellent">9.2/10</div>
         </div>
         <div class="metric-details">
-          <div class="detail-item">✅ Open discussions</div>
-          <div class="detail-item">✅ Active listening</div>
-          <div class="detail-item">✅ Constructive feedback</div>
+          <div class="detail-item"><Icon name="lucide:check" class="inline-icon" /> Open discussions</div>
+          <div class="detail-item"><Icon name="lucide:check" class="inline-icon" /> Active listening</div>
+          <div class="detail-item"><Icon name="lucide:check" class="inline-icon" /> Constructive feedback</div>
         </div>
       </div>
       
       <div class="health-metric">
         <div class="metric-header">
-          <h3>🚀 Productivity Flow</h3>
+          <h3><Icon name="lucide:rocket" class="inline-icon" /> Productivity Flow</h3>
           <div class="metric-score good">8.7/10</div>
         </div>
         <div class="metric-details">
-          <div class="detail-item">✅ Clear priorities</div>
-          <div class="detail-item">✅ Minimal interruptions</div>
-          <div class="detail-item">⚠️ Some context switching</div>
+          <div class="detail-item"><Icon name="lucide:check" class="inline-icon" /> Clear priorities</div>
+          <div class="detail-item"><Icon name="lucide:check" class="inline-icon" /> Minimal interruptions</div>
+          <div class="detail-item"><Icon name="lucide:alert-triangle" class="inline-icon" /> Some context switching</div>
         </div>
       </div>
       
       <div class="health-metric">
         <div class="metric-header">
-          <h3>🤝 Collaboration</h3>
+          <h3><Icon name="lucide:users" class="inline-icon" /> Collaboration</h3>
           <div class="metric-score excellent">9.5/10</div>
         </div>
         <div class="metric-details">
-          <div class="detail-item">✅ Helping behaviors</div>
-          <div class="detail-item">✅ Knowledge sharing</div>
-          <div class="detail-item">✅ Peer support</div>
+          <div class="detail-item"><Icon name="lucide:check" class="inline-icon" /> Helping behaviors</div>
+          <div class="detail-item"><Icon name="lucide:check" class="inline-icon" /> Knowledge sharing</div>
+          <div class="detail-item"><Icon name="lucide:check" class="inline-icon" /> Peer support</div>
         </div>
       </div>
     </div>
@@ -326,28 +327,28 @@ import AgentProfileLayout from '../../layouts/AgentProfileLayout.astro';
   <!-- How I Work Best -->
   <section class="working-style">
     <div class="section-header">
-      <h2 class="section-title">🌈 How I Work Best</h2>
+      <h2 class="section-title"><Icon name="lucide:rainbow" class="inline-icon" /> How I Work Best</h2>
       <p class="section-subtitle">Creating the optimal environment for team success</p>
     </div>
     
     <div class="working-preferences">
       <div class="preference-card">
-        <h3>💫 Give Me Variety</h3>
+        <h3><Icon name="lucide:sparkles" class="inline-icon" /> Give Me Variety</h3>
         <p>I thrive on diverse challenges and changing situations. Routine tasks drain my energy, but new problems energize me!</p>
       </div>
       
       <div class="preference-card">
-        <h3>👥 Let Me Interact</h3>
+        <h3><Icon name="lucide:users" class="inline-icon" /> Let Me Interact</h3>
         <p>I need regular interaction with team members. I charge my batteries through human connection and collaborative energy.</p>
       </div>
       
       <div class="preference-card">
-        <h3>🎯 Show Me Impact</h3>
+        <h3><Icon name="lucide:target" class="inline-icon" /> Show Me Impact</h3>
         <p>I want to see how my work improves team dynamics and individual satisfaction. Metrics and feedback fuel my motivation.</p>
       </div>
       
       <div class="preference-card">
-        <h3>🚀 Trust My Instincts</h3>
+        <h3><Icon name="lucide:rocket" class="inline-icon" /> Trust My Instincts</h3>
         <p>I have strong intuition about team dynamics. When I sense trouble, give me the autonomy to address it quickly.</p>
       </div>
     </div>
@@ -360,11 +361,11 @@ import AgentProfileLayout from '../../layouts/AgentProfileLayout.astro';
      ======================================== */
   
   .agent-morale-catalyst {
-    --section-accent: #9b59b6;
-    --section-light: #f4ecf7;
-    --energy-high: #27ae60;
-    --energy-medium: #f39c12;
-    --energy-low: #e74c3c;
+    --section-accent: var(--color-primary-600);
+    --section-light: var(--color-primary-50);
+    --energy-high: var(--color-success-600);
+    --energy-medium: var(--color-warning-600);
+    --energy-low: var(--color-error-600);
   }
   
   .agent-morale-catalyst .header-background {
@@ -395,11 +396,13 @@ import AgentProfileLayout from '../../layouts/AgentProfileLayout.astro';
   }
   
   .energy-dashboard::before {
-    content: '✨';
+    content: '';
     position: absolute;
     top: 20px;
     right: 20px;
-    font-size: 2rem;
+    width: 2rem;
+    height: 2rem;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23f59e0b"><path d="m11.5 7.5l-3 3 3 3 3-3-3-3z"/></svg>');
     animation: sparkle 2s infinite;
   }
   
@@ -426,7 +429,7 @@ import AgentProfileLayout from '../../layouts/AgentProfileLayout.astro';
   .energy-bar {
     width: 300px;
     height: 30px;
-    background: #e0e0e0;
+    background-color: var(--color-neutral-300);
     border-radius: 15px;
     overflow: hidden;
     border: 2px solid var(--section-accent);
@@ -522,7 +525,7 @@ import AgentProfileLayout from '../../layouts/AgentProfileLayout.astro';
   }
   
   .rainbow-border {
-    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 25%, #fecfef 50%, #b5a7ee 75%, #a8edea 100%);
+    background: linear-gradient(135deg, var(--color-primary-300) 0%, var(--color-primary-200) 25%, var(--color-primary-200) 50%, var(--color-primary-400) 75%, var(--color-primary-300) 100%);
     border: none;
     padding: 3px;
   }
@@ -535,7 +538,7 @@ import AgentProfileLayout from '../../layouts/AgentProfileLayout.astro';
   
   .warning-card {
     border-left-color: var(--energy-medium);
-    background: linear-gradient(135deg, #fff3cd 0%, var(--card-bg) 100%);
+    background: linear-gradient(135deg, var(--color-warning-50) 0%, var(--card-bg) 100%);
   }
   
   .insight-icon {
@@ -577,20 +580,20 @@ import AgentProfileLayout from '../../layouts/AgentProfileLayout.astro';
   }
   
   .indicator.high {
-    background: #d5f4e6;
-    color: #065f46;
+    background-color: var(--color-success-100);
+    color: var(--color-success-800);
     border-left: 4px solid var(--energy-high);
   }
   
   .indicator.medium {
-    background: #fef3c7;
-    color: #92400e;
+    background-color: var(--color-warning-100);
+    color: var(--color-warning-800);
     border-left: 4px solid var(--energy-medium);
   }
   
   .indicator.low {
-    background: #fecaca;
-    color: #7f1d1d;
+    background-color: var(--color-error-100);
+    color: var(--color-error-800);
     border-left: 4px solid var(--energy-low);
   }
   
@@ -651,9 +654,11 @@ import AgentProfileLayout from '../../layouts/AgentProfileLayout.astro';
   }
   
   .win-category li::before {
-    content: '🏆';
+    content: '\2022';
     position: absolute;
     left: 0;
+    color: var(--section-accent);
+    font-weight: bold;
   }
   
   .celebration-scale {
@@ -744,18 +749,18 @@ import AgentProfileLayout from '../../layouts/AgentProfileLayout.astro';
   }
   
   .achievement-card.gold {
-    border-color: #ffd700;
-    background: linear-gradient(135deg, #fff9c4 0%, var(--card-bg) 100%);
+    border-color: var(--color-warning-400);
+    background: linear-gradient(135deg, var(--color-warning-50) 0%, var(--card-bg) 100%);
   }
   
   .achievement-card.silver {
-    border-color: #c0c0c0;
-    background: linear-gradient(135deg, #f5f5f5 0%, var(--card-bg) 100%);
+    border-color: var(--color-neutral-400);
+    background: linear-gradient(135deg, var(--color-neutral-100) 0%, var(--card-bg) 100%);
   }
   
   .achievement-card.bronze {
-    border-color: #cd7f32;
-    background: linear-gradient(135deg, #f4e4bc 0%, var(--card-bg) 100%);
+    border-color: var(--color-warning-700);
+    background: linear-gradient(135deg, var(--color-warning-100) 0%, var(--card-bg) 100%);
   }
   
   .achievement-card.special {
@@ -806,15 +811,15 @@ import AgentProfileLayout from '../../layouts/AgentProfileLayout.astro';
   }
   
   .tool-category.games {
-    border-top-color: #e74c3c;
+    border-top-color: var(--energy-low);
   }
   
   .tool-category.activities {
-    border-top-color: #f39c12;
+    border-top-color: var(--energy-medium);
   }
   
   .tool-category.interventions {
-    border-top-color: #27ae60;
+    border-top-color: var(--energy-high);
   }
   
   .tool-category h3 {
@@ -879,13 +884,13 @@ import AgentProfileLayout from '../../layouts/AgentProfileLayout.astro';
   }
   
   .metric-score.excellent {
-    background: #d5f4e6;
-    color: #065f46;
+    background-color: var(--color-success-100);
+    color: var(--color-success-800);
   }
   
   .metric-score.good {
-    background: #fef3c7;
-    color: #92400e;
+    background-color: var(--color-warning-100);
+    color: var(--color-warning-800);
   }
   
   .detail-item {
@@ -954,7 +959,7 @@ import AgentProfileLayout from '../../layouts/AgentProfileLayout.astro';
      ======================================== */
   
   .price-is-right .energy-dashboard {
-    border: 4px solid #ffd700;
+    border: 4px solid var(--color-warning-400);
     animation: gentle-bounce 4s ease-in-out infinite;
   }
   
@@ -964,7 +969,7 @@ import AgentProfileLayout from '../../layouts/AgentProfileLayout.astro';
   .price-is-right .health-metric,
   .price-is-right .preference-card {
     transform: rotate(-0.5deg);
-    border: 2px solid #ffd700;
+    border: 2px solid var(--color-warning-400);
   }
   
   .price-is-right .insight-card:nth-child(even),
@@ -1007,6 +1012,39 @@ import AgentProfileLayout from '../../layouts/AgentProfileLayout.astro';
     }
   }
   
+  /* ========================================
+     ICON ENHANCEMENTS
+     ======================================== */
+  
+  .gold-medal {
+    color: var(--color-warning-400);
+  }
+  
+  .silver-medal {
+    color: var(--color-neutral-400);
+  }
+  
+  .bronze-medal {
+    color: var(--color-warning-700);
+  }
+  
+  .special-star {
+    color: var(--section-accent);
+  }
+  
+  .inline-icon {
+    width: 1.2em;
+    height: 1.2em;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 0.5em;
+  }
+  
+  .celebration-emoji .icon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
   /* ========================================
      ACCESSIBILITY
      ======================================== */

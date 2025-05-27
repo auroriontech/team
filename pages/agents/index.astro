@@ -11,6 +11,7 @@
 
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { defaultAgentRoles } from '../../data/agentRoles';
+import { Icon } from 'astro-icon/components';
 
 // Agent profile URLs mapping
 const agentUrls = {
@@ -543,7 +544,12 @@ const availableProfiles = ['architect-engineer', 'morale-catalyst'];
   }
   
   .price-is-right .agents-hero::before {
-    content: '🎪🎭🎨';
+    content: '';
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23f59e0b"><circle cx="12" cy="12" r="3"/></svg>');
+    background-size: 1rem;
+    background-repeat: no-repeat;
+    width: 1rem;
+    height: 1rem;
     position: absolute;
     top: 20px;
     right: 20px;

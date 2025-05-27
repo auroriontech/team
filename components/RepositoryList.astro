@@ -2,6 +2,8 @@
 /**
  * Repository List Component
  * 
+ * Uses Astro Icon integration for consistent, scalable icons
+ * 
  * Displays a dynamic list of repositories with:
  * - Search and filtering capabilities
  * - Loading states and error handling
@@ -22,6 +24,9 @@
 
 // This component will be populated dynamically via JavaScript
 // No server-side props needed as we're loading from localStorage
+
+// TODO: Re-enable when astro-icon is properly configured
+// import { Icon } from 'astro-icon/components';
 ---
 
 <!-- Repository List Container -->
@@ -303,13 +308,15 @@
     overflow: hidden;
   }
   
-  .price-is-right .list-controls::before {
-    content: '🎯';
+  .price-is-right .list-controls::after {
+    content: '';
     position: absolute;
     top: 50%;
     right: 20px;
     transform: translateY(-50%);
-    font-size: 2rem;
+    width: 2rem;
+    height: 2rem;
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23f59e0b"><circle cx="12" cy="12" r="3"/></svg>');
     animation: bounce 2s infinite;
   }
   
@@ -378,6 +385,28 @@
       grid-template-columns: 1fr;
       gap: var(--spacing-md);
     }
+  }
+  
+  /* ========================================
+     ICON STYLES
+     ======================================== */
+  
+  .inline-icon {
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 0.25em;
+  }
+  
+  .search-icon {
+    width: 1.2em;
+    height: 1.2em;
+    color: var(--text-muted);
+  }
+  
+  .loading-spinner {
+    animation: spin 2s linear infinite;
   }
   
   /* ========================================
@@ -682,12 +711,12 @@
             </h3>
             <div class="repo-meta">
               <span class="team-size" aria-label="Team size: ${teamSize} members">
-                👥 ${teamSize} ${teamSize === 1 ? 'member' : 'members'}
+                <svg class="inline-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="m22 21-3-3m0 0a3 3 0 1 0-4.24-4.24"/></svg> ${teamSize} ${teamSize === 1 ? 'member' : 'members'}
               </span>
               <span class="repo-status ${status.class}" aria-label="Repository status: ${status.text}">
                 ${status.text}
               </span>
-              ${isRecentlyUpdated ? '<span class="recent-badge" aria-label="Recently updated">🆕 New</span>' : ''}
+              ${isRecentlyUpdated ? '<span class="recent-badge" aria-label="Recently updated"><svg class="inline-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v6l3-3m-3 3l-3-3"/><circle cx="12" cy="12" r="10"/></svg> New</span>' : ''}
             </div>
           </div>
           
@@ -699,7 +728,7 @@
               aria-label="View ${repository.name} repository"
               title="View Repository"
             >
-              👁️
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
             </button>
             <button 
               class="action-btn edit-btn" 
@@ -707,7 +736,7 @@
               aria-label="Edit ${repository.name} repository"
               title="Edit Repository"
             >
-              ✏️
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
             </button>
             <button 
               class="action-btn delete-btn" 
@@ -715,7 +744,7 @@
               aria-label="Delete ${repository.name} repository"
               title="Delete Repository"
             >
-              🗑️
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
             </button>
           </div>
         </header>
@@ -733,10 +762,10 @@
             <div class="team-preview">
               <h4 class="team-preview-title">Team Composition</h4>
               <div class="team-stats">
-                ${activeMembers > 0 ? `<span class="stat active">✅ ${activeMembers} Active</span>` : ''}
-                ${pendingMembers > 0 ? `<span class="stat pending">⏳ ${pendingMembers} Pending</span>` : ''}
+                ${activeMembers > 0 ? `<span class="stat active"><svg class="inline-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,11 12,14 22,4"/><path d="m21,16v5a2,2 0 0,1 -2,2H5a2,2 0 0,1 -2,-2V5a2,2 0 0,1 2,-2h11"/></svg> ${activeMembers} Active</span>` : ''}
+                ${pendingMembers > 0 ? `<span class="stat pending"><svg class="inline-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg> ${pendingMembers} Pending</span>` : ''}
                 ${repository.team.filter(m => m.status === 'standby').length > 0 ? 
-                  `<span class="stat standby">💤 ${repository.team.filter(m => m.status === 'standby').length} Standby</span>` : ''
+                  `<span class="stat standby"><svg class="inline-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 10 6-6 6 6"/><path d="m6 14 6 6 6-6"/></svg> ${repository.team.filter(m => m.status === 'standby').length} Standby</span>` : ''
                 }
               </div>
             </div>
@@ -760,10 +789,10 @@
         <footer class="card-footer">
           <div class="repo-dates">
             <span class="created-date" title="Created: ${createdDate}">
-              📅 Created ${createdDate}
+              <svg class="inline-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Created ${createdDate}
             </span>
             ${updatedDate !== createdDate ? 
-              `<span class="updated-date" title="Last updated: ${updatedDate}">🔄 Updated ${updatedDate}</span>` : ''
+              `<span class="updated-date" title="Last updated: ${updatedDate}"><svg class="inline-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23,4 23,10 17,10"/><polyline points="1,20 1,14 7,14"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg> Updated ${updatedDate}</span>` : ''
             }
           </div>
           

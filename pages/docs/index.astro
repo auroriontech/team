@@ -35,7 +35,9 @@ const categoryInfo = {
   architecture: { icon: '🏗️', title: 'Architecture & Design', description: 'System architecture, technical design, and infrastructure documentation' },
   implementation: { icon: '⚙️', title: 'Implementation', description: 'Development guides, deployment procedures, and technical implementation' },
   guides: { icon: '📚', title: 'User Guides', description: 'How-to guides, tutorials, and user documentation' },
-  reference: { icon: '📖', title: 'Reference', description: 'API documentation, specifications, and reference materials' }
+  reference: { icon: '📖', title: 'Reference', description: 'API documentation, specifications, and reference materials' },
+  platforms: { icon: '☁️', title: 'Platforms', description: 'Platform-specific documentation and deployment guides' },
+  tools: { icon: '🔧', title: 'Tools & Utilities', description: 'Development tools, testing frameworks, and utility documentation' }
 };
 ---
 
@@ -101,7 +103,11 @@ const categoryInfo = {
 
     <div class="docs-content">
       {Object.entries(docsByCategory).map(([category, categoryDocs]) => {
-        const info = categoryInfo[category];
+        const info = categoryInfo[category] || { 
+          icon: '📄', 
+          title: category.charAt(0).toUpperCase() + category.slice(1), 
+          description: `Documentation for ${category}` 
+        };
         return (
           <div class="docs-section" key={category}>
             <div class="section-header">
@@ -114,7 +120,7 @@ const categoryInfo = {
             
             <div class="docs-grid">
               {categoryDocs.map((doc) => (
-                <a href={`/docs/${doc.id}`} class="doc-card" key={doc.id}>
+                <a href={`/docs/${doc.slug}`} class="doc-card" key={doc.id}>
                   <div class="doc-header">
                     <h3 class="doc-title">{doc.data.title}</h3>
                     <div class="doc-meta">

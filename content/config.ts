@@ -127,7 +127,7 @@ const agentRoleSchema = z.object({
 const docsSchema = z.object({
   title: z.string(),
   description: z.string(),
-  category: z.enum(['planning', 'architecture', 'implementation', 'guides', 'reference']),
+  category: z.enum(['planning', 'architecture', 'implementation', 'guides', 'reference', 'projects', 'platforms', 'tools']),
   priority: z.enum(['low', 'medium', 'high', 'critical']).default('medium'),
   lastUpdated: z.date(),
   status: z.enum(['draft', 'active', 'archived', 'deprecated']).default('active'),

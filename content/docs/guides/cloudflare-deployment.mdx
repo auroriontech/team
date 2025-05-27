@@ -1,0 +1,292 @@
+---
+title: "Cloudflare Deployment Guide"
+description: "Comprehensive deployment guide for Cloudflare Workers and Pages with GitHub Actions automation, environment setup, and troubleshooting"
+category: "guides"
+tags: ["deployment", "cloudflare", "github-actions", "workers", "pages", "automation", "production"]
+priority: "high"
+status: "active"
+lastUpdated: 2025-05-27
+author: "Claude AI Assistant"
+relatedDocs: ["platforms/cloudflare", "tools/testing-strategies"]
+---
+
+# Cloudflare Deployment Guide
+
+> **Migration Notice**: This project has been migrated from Cloudflare Pages to **Cloudflare Workers**. This guide covers both deployment strategies.
+
+## 🚀 Deployment Overview
+
+Aurorion Landing uses **Cloudflare Workers** with automated GitHub Actions for both staging and production deployments.
+
+### Deployment Targets
+- **Staging**: `https://aurorion-landing-staging.aurorion.workers.dev`
+- **Production**: `https://aurorion.app` (custom domain on Workers)
+
+## 🔧 Prerequisites
+
+### GitHub Secrets Configuration
+Add these secrets in your GitHub repository settings:
+
+```bash
+CLOUDFLARE_API_TOKEN=your_cloudflare_api_token_here
+CLOUDFLARE_ACCOUNT_ID=your_cloudflare_account_id_here
+```
+
+### Required Environment Variables
+Set in Cloudflare Workers dashboard:
+
+```bash
+# Required for email functionality
+RESEND_API_KEY=your_resend_api_key_here
+
+# Optional - analytics
+PUBLIC_POSTHOG_KEY=phc_your_project_key_here
+PUBLIC_POSTHOG_HOST=https://eu.i.posthog.com
+
+# Database
+DB=your_d1_database_binding
+```
+
+## 🌊 Deployment Workflows
+
+### Staging Deployment (Automatic)
+**Trigger**: Push to `staging` branch
+
+```yaml
+# .github/workflows/deploy-staging.yml
+✅ Install dependencies
+✅ Run mocked tests  
+✅ Build application
+✅ Deploy to staging
+✅ Run integration tests
+```
+
+### Production Deployment (Automatic)
+**Trigger**: Push to `main` branch
+
+```yaml
+# .github/workflows/deploy-production.yml  
+✅ Run lint checks
+✅ Run all tests
+✅ Build application  
+✅ Deploy to production
+✅ Send success notification
+```
+
+### Manual Production Deployment
+For emergency deployments or specific releases:
+
+```bash
+# Via GitHub UI
+1. Go to Actions tab
+2. Select "Deploy to Cloudflare Workers (Production)"
+3. Click "Run workflow"
+4. Enter deployment reason
+5. Click "Run workflow"
+```
+
+## 🏗️ Local Deployment Testing
+
+### Build Verification
+```bash
+# Health check before deployment
+npm run lint && npm run build
+
+# Test production build locally
+npm run preview
+```
+
+### Database Migrations
+```bash
+# Apply to staging
+npm run db:migrations:remote
+
+# Verify schema
+wrangler d1 console subscribers --remote
+```
+
+## 📋 Deployment Checklist
+
+### Pre-Deployment
+- [ ] All tests passing (`npm run test:all`)
+- [ ] No lint errors (`npm run lint`)
+- [ ] Successful build (`npm run build`)
+- [ ] Database migrations applied
+- [ ] Environment variables configured
+- [ ] Code reviewed and approved
+
+### Post-Deployment
+- [ ] Site loads correctly
+- [ ] Subscription form works
+- [ ] Email delivery functional
+- [ ] Unsubscribe flow works
+- [ ] Database operations successful
+- [ ] Performance metrics acceptable
+
+## 🔍 Verification Steps
+
+### Staging Verification
+```bash
+# Test subscription API
+curl -X POST https://aurorion-landing-staging.aurorion.workers.dev/api/subscribe \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@example.com"}'
+
+# Test unsubscribe API  
+curl -X POST https://aurorion-landing-staging.aurorion.workers.dev/api/unsubscribe \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@example.com"}'
+```
+
+### Production Verification
+1. **Homepage Load**: Verify https://aurorion.app loads
+2. **Subscribe Dialog**: Test email subscription flow
+3. **Email Receipt**: Check welcome email delivery
+4. **Unsubscribe**: Test unsubscribe link from email
+5. **Database**: Verify data in D1 console
+
+## 🚨 Rollback Procedures
+
+### Automatic Rollback
+GitHub Actions will fail deployment if:
+- Tests fail
+- Build fails
+- Lint errors found
+
+### Manual Rollback
+```bash
+# Via Cloudflare Dashboard
+1. Go to Workers & Pages → aurorion-landing
+2. Navigate to "Deployments"
+3. Find previous successful deployment
+4. Click "Rollback to this deployment"
+
+# Via Wrangler CLI
+wrangler deployments list
+wrangler rollback <deployment-id>
+```
+
+## 🎯 Branch Strategy
+
+### Main Branch
+- **Purpose**: Production releases
+- **Protection**: Requires PR approval
+- **Auto-deploy**: Yes → Production
+
+### Staging Branch  
+- **Purpose**: Pre-production testing
+- **Protection**: Basic branch protection
+- **Auto-deploy**: Yes → Staging
+
+### Feature Branches
+- **Naming**: `feature/description` or `fix/description`
+- **Target**: Create PR to `staging` first
+- **Auto-deploy**: No
+
+## 📊 Deployment Monitoring
+
+### GitHub Actions
+- **Status**: Check Actions tab for deployment status
+- **Logs**: Review build and deployment logs
+- **Notifications**: Configure Slack/email notifications
+
+### Cloudflare Workers
+- **Analytics**: Monitor traffic and performance
+- **Functions**: Check function invocation logs
+- **Errors**: Review error rates and logs
+
+### Application Monitoring
+- **PostHog**: User behavior and conversion tracking
+- **Database**: D1 query performance and errors
+- **Resend**: Email delivery rates and bounces
+
+## 🔧 Troubleshooting
+
+### Common Issues
+
+#### Build Failures
+```bash
+# Check Node.js version
+node --version  # Should be 18+
+
+# Clear cache and reinstall
+rm -rf node_modules package-lock.json
+npm install
+```
+
+#### Environment Variable Issues
+```bash
+# Verify in Cloudflare dashboard
+1. Workers & Pages → Settings → Variables
+2. Check all required variables are set
+3. Verify no trailing spaces or quotes
+```
+
+#### Database Connection Issues
+```bash
+# Test D1 binding
+wrangler d1 console subscribers --remote
+
+# Check binding in wrangler.toml
+# Verify database ID matches
+```
+
+#### Email Delivery Issues
+```bash
+# Check Resend API key
+curl -H "Authorization: Bearer $RESEND_API_KEY" \
+  https://api.resend.com/domains
+
+# Verify environment variable
+echo $RESEND_API_KEY
+```
+
+## 📈 Performance Considerations
+
+### Build Optimization
+- **Static Generation**: Astro pre-renders pages
+- **Bundle Splitting**: Automatic code splitting
+- **Image Optimization**: Astro image processing
+- **CSS Purging**: Tailwind removes unused styles
+
+### Runtime Performance
+- **Edge Functions**: Cloudflare global network
+- **Database**: D1 SQLite for fast queries
+- **CDN**: Static assets served from edge
+- **React Islands**: Selective hydration
+
+## 🔒 Security Considerations
+
+### Secrets Management
+- Use GitHub Secrets for API tokens
+- Never commit secrets to repository
+- Rotate tokens regularly
+- Use environment-specific secrets
+
+### CORS Configuration
+- Production domains whitelisted
+- Development localhost allowed
+- Staging domains included
+- Regular security reviews
+
+## 📚 Additional Resources
+
+### Cloudflare Documentation
+- [Workers Deployment](https://developers.cloudflare.com/workers/)
+- [Pages Deployment](https://developers.cloudflare.com/pages/)
+- [D1 Database](https://developers.cloudflare.com/d1/)
+- [Environment Variables](https://developers.cloudflare.com/workers/configuration/environment-variables/)
+
+### GitHub Actions
+- [Workflow Syntax](https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions)
+- [Cloudflare Actions](https://github.com/marketplace/actions/deploy-to-cloudflare-workers-with-wrangler)
+
+### Astro Documentation
+- [Deployment Guide](https://docs.astro.build/en/guides/deploy/)
+- [Cloudflare Adapter](https://docs.astro.build/en/guides/integrations-guide/cloudflare/)
+
+---
+
+**Maintained by**: Aurorion Teams  
+**Project Lead**: Caleb Coverdale  
+**Last Updated**: May 27, 2025

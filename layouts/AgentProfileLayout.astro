@@ -20,6 +20,8 @@
  */
 
 import BaseLayout from './BaseLayout.astro';
+import { Icon } from 'astro-icon/components';
+import { getAgentIcon } from '../utils/iconMapping';
 
 export interface Props {
   agentId: string;
@@ -42,6 +44,9 @@ const {
   title = `${agentName} | Aurorion Teams`,
   description = `Meet ${agentName}, the ${agentRole} of the Aurorion Teams system.`
 } = Astro.props;
+
+// Get the appropriate icon name
+const iconName = getAgentIcon(agentIcon as keyof typeof import('../utils/iconMapping').agentIcons) || 'lucide:heart';
 ---
 
 <BaseLayout title={title} description={description}>
@@ -53,7 +58,9 @@ const {
       <div class="header-content">
         <!-- Agent Avatar and Info -->
         <div class="agent-avatar">
-          <span class="avatar-icon" aria-hidden="true">{agentIcon}</span>
+          <span class="avatar-icon" aria-hidden="true">
+            <Icon name={iconName} size={48} />
+          </span>
           <div class="avatar-status" aria-label="Agent status: Active"></div>
         </div>
         
