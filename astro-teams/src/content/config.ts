@@ -233,9 +233,20 @@ export const collections = {
     type: 'content',
     schema: teamMemberSchema
   }),
-  'agent-roles': defineCollection({
+  'team-roles': defineCollection({
     type: 'content', 
     schema: agentRoleSchema
+  }),
+  'founders': defineCollection({
+    type: 'content',
+    schema: z.object({
+      name: z.string(),
+      title: z.string(),
+      bio: z.string(),
+      email: z.string().email().optional(),
+      linkedin: z.string().optional(),
+      github: z.string().optional()
+    })
   }),
   'docs': defineCollection({
     type: 'content',
