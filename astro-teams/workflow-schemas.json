@@ -1,0 +1,384 @@
+{
+  "aurorion_teams_workflows": {
+    "metadata": {
+      "version": "1.0.0",
+      "created": "2025-05-28",
+      "description": "Comprehensive workflow schemas for Aurorion Teams documentation generation",
+      "compliance": ["IEEE-829", "ISTQB", "PMBOK"]
+    },
+    
+    "workflow_schemas": {
+      "comprehensive_project_overview": {
+        "schema_id": "workflow_001",
+        "name": "Top-to-Bottom Project Documentation",
+        "description": "Complete system analysis from architecture to deployment",
+        
+        "execution_flow": {
+          "phases": [
+            {
+              "phase": 1,
+              "name": "coordination_initiation",
+              "agent": "standup-facilitator",
+              "responsibilities": [
+                "create_todo_structure",
+                "establish_sprint_objectives", 
+                "coordinate_agent_handoffs"
+              ],
+              "deliverables": ["coordination_plan", "todo_list", "sprint_structure"],
+              "duration_estimate": "15_minutes"
+            },
+            {
+              "phase": 2,
+              "name": "architecture_analysis",
+              "agent": "architect-engineer",
+              "responsibilities": [
+                "system_architecture_documentation",
+                "technical_stack_analysis",
+                "database_schema_review",
+                "configuration_assessment"
+              ],
+              "deliverables": ["architecture_documentation", "technical_analysis", "optimization_recommendations"],
+              "duration_estimate": "45_minutes"
+            },
+            {
+              "phase": 3,
+              "name": "environment_setup_analysis",
+              "agent": "technical-enablement",
+              "responsibilities": [
+                "development_workflow_documentation",
+                "environment_configuration_review",
+                "script_optimization",
+                "dependency_management"
+              ],
+              "deliverables": ["environment_documentation", "workflow_guide", "configuration_optimization"],
+              "duration_estimate": "30_minutes"
+            },
+            {
+              "phase": 4,
+              "name": "quality_assurance_review",
+              "agent": "tester-reviewer",
+              "responsibilities": [
+                "testing_strategy_documentation",
+                "quality_gates_establishment",
+                "standards_compliance_validation",
+                "test_framework_assessment"
+              ],
+              "deliverables": ["testing_documentation", "quality_framework", "compliance_report"],
+              "duration_estimate": "35_minutes"
+            },
+            {
+              "phase": 5,
+              "name": "performance_optimization_analysis",
+              "agent": "optimizer-watchdog",
+              "responsibilities": [
+                "performance_characteristics_analysis",
+                "deployment_readiness_assessment",
+                "security_vulnerability_review",
+                "optimization_recommendations"
+              ],
+              "deliverables": ["performance_report", "optimization_plan", "security_assessment"],
+              "duration_estimate": "25_minutes"
+            },
+            {
+              "phase": 6,
+              "name": "comprehensive_documentation_compilation",
+              "agent": "scrum-knowledge",
+              "responsibilities": [
+                "cross_agent_synthesis",
+                "comprehensive_overview_creation",
+                "documentation_integration",
+                "knowledge_management"
+              ],
+              "deliverables": ["PROJECT_OVERVIEW.md", "integrated_documentation", "knowledge_base_update"],
+              "duration_estimate": "40_minutes"
+            }
+          ]
+        },
+        
+        "success_criteria": {
+          "completion_metrics": {
+            "documentation_completeness": ">=95%",
+            "cross_agent_coordination": ">=98%",
+            "standards_compliance": "100%",
+            "deliverable_quality": ">=90%"
+          },
+          "quality_gates": [
+            "all_phases_completed",
+            "deliverables_validated",
+            "documentation_integrated",
+            "knowledge_base_updated"
+          ]
+        },
+        
+        "error_handling": {
+          "phase_failure_protocols": {
+            "retry_mechanism": "single_retry_with_escalation",
+            "escalation_path": ["morale-catalyst", "technical-enablement"],
+            "recovery_procedures": ["phase_restart", "alternative_approach", "scope_adjustment"]
+          },
+          "coordination_failures": {
+            "handoff_issues": "standup_facilitator_intervention",
+            "communication_gaps": "documentation_clarification",
+            "timeline_delays": "scope_prioritization"
+          }
+        }
+      },
+      
+      "system_issue_resolution": {
+        "schema_id": "workflow_002", 
+        "name": "Systematic Issue Resolution",
+        "description": "Root cause analysis and resolution for critical system issues",
+        
+        "execution_flow": {
+          "trigger_conditions": [
+            "critical_system_malfunction",
+            "authentication_failure",
+            "deployment_issues", 
+            "performance_degradation"
+          ],
+          
+          "phases": [
+            {
+              "phase": 1,
+              "name": "issue_analysis",
+              "agent": "architect-engineer",
+              "responsibilities": [
+                "root_cause_identification",
+                "system_state_assessment",
+                "impact_analysis",
+                "technical_investigation"
+              ],
+              "deliverables": ["issue_analysis_report", "root_cause_identification", "impact_assessment"],
+              "duration_estimate": "30_minutes"
+            },
+            {
+              "phase": 2,
+              "name": "environment_validation",
+              "agent": "technical-enablement",
+              "responsibilities": [
+                "configuration_verification",
+                "dependency_validation",
+                "environment_state_check",
+                "tooling_assessment"
+              ],
+              "deliverables": ["environment_report", "configuration_validation", "remediation_plan"],
+              "duration_estimate": "20_minutes"
+            },
+            {
+              "phase": 3,
+              "name": "testing_validation",
+              "agent": "tester-reviewer",
+              "responsibilities": [
+                "functionality_testing",
+                "regression_validation",
+                "quality_verification",
+                "standards_compliance_check"
+              ],
+              "deliverables": ["test_results", "validation_report", "quality_assessment"],
+              "duration_estimate": "25_minutes"
+            },
+            {
+              "phase": 4,
+              "name": "optimization_assessment",
+              "agent": "optimizer-watchdog",
+              "responsibilities": [
+                "performance_impact_analysis",
+                "security_implications_review",
+                "optimization_recommendations",
+                "monitoring_setup"
+              ],
+              "deliverables": ["performance_report", "security_assessment", "monitoring_plan"],
+              "duration_estimate": "20_minutes"
+            },
+            {
+              "phase": 5,
+              "name": "resolution_documentation",
+              "agent": "scrum-knowledge",
+              "responsibilities": [
+                "resolution_documentation",
+                "lessons_learned_capture",
+                "prevention_strategies",
+                "knowledge_base_update"
+              ],
+              "deliverables": ["resolution_documentation", "lessons_learned", "prevention_guide"],
+              "duration_estimate": "15_minutes"
+            }
+          ]
+        }
+      },
+      
+      "environment_optimization": {
+        "schema_id": "workflow_003",
+        "name": "Development Environment Optimization", 
+        "description": "Systematic optimization of development workflow and environment configuration",
+        
+        "optimization_targets": {
+          "configuration_standardization": {
+            "focus_areas": [
+              "proxy_configuration",
+              "port_optimization", 
+              "environment_variables",
+              "development_scripts"
+            ],
+            "success_metrics": {
+              "consistency_score": ">=95%",
+              "developer_experience": ">=90%",
+              "configuration_errors": "<=2%"
+            }
+          },
+          
+          "workflow_enhancement": {
+            "areas": [
+              "development_scripts",
+              "testing_automation",
+              "deployment_procedures",
+              "documentation_generation"
+            ],
+            "performance_targets": {
+              "setup_time": "<=10_minutes",
+              "build_time": "<=30_seconds", 
+              "test_execution": "<=2_minutes"
+            }
+          }
+        }
+      }
+    },
+    
+    "agent_role_specifications": {
+      "standup-facilitator": {
+        "primary_responsibilities": [
+          "cross_agent_coordination",
+          "workflow_orchestration",
+          "status_synthesis",
+          "meeting_facilitation"
+        ],
+        "decision_authority": ["workflow_coordination", "handoff_protocols", "timeline_management"],
+        "handoff_patterns": {
+          "initiation": "establishes_coordination_framework",
+          "synthesis": "consolidates_cross_agent_outputs",
+          "escalation": "manages_workflow_issues"
+        }
+      },
+      
+      "architect-engineer": {
+        "primary_responsibilities": [
+          "system_architecture_design",
+          "technical_implementation",
+          "configuration_optimization",
+          "integration_patterns"
+        ],
+        "decision_authority": ["architecture_decisions", "technology_stack", "implementation_strategy"],
+        "technical_focus": [
+          "database_schema_design",
+          "api_endpoint_architecture", 
+          "security_implementation",
+          "performance_optimization"
+        ]
+      },
+      
+      "technical-enablement": {
+        "primary_responsibilities": [
+          "development_environment_setup",
+          "tooling_provisioning",
+          "configuration_management",
+          "workflow_automation"
+        ],
+        "decision_authority": ["tool_selection", "environment_configuration", "automation_strategy"],
+        "specializations": [
+          "mcp_integration",
+          "credential_management",
+          "development_workflows",
+          "deployment_automation"
+        ]
+      },
+      
+      "tester-reviewer": {
+        "primary_responsibilities": [
+          "quality_assurance",
+          "testing_strategy",
+          "standards_compliance",
+          "validation_procedures"
+        ],
+        "decision_authority": ["testing_strategy", "quality_gates", "standards_compliance"],
+        "standards_adherence": ["IEEE_829", "ISTQB", "ISO_25010"],
+        "testing_categories": [
+          "unit_testing",
+          "integration_testing", 
+          "end_to_end_testing",
+          "security_testing",
+          "performance_testing"
+        ]
+      },
+      
+      "optimizer-watchdog": {
+        "primary_responsibilities": [
+          "performance_optimization",
+          "risk_management",
+          "security_assessment",
+          "deployment_readiness"
+        ],
+        "decision_authority": ["performance_optimization", "risk_assessment", "deployment_approval"],
+        "methodologies": ["ITIL", "DevOps", "SRE"],
+        "focus_areas": [
+          "performance_monitoring",
+          "security_vulnerability_assessment",
+          "scalability_planning",
+          "cost_optimization"
+        ]
+      },
+      
+      "scrum-knowledge": {
+        "primary_responsibilities": [
+          "documentation_compilation",
+          "knowledge_management",
+          "workflow_coordination",
+          "sprint_planning"
+        ],
+        "decision_authority": ["documentation_strategy", "knowledge_organization", "workflow_documentation"],
+        "methodologies": ["Agile", "PMBOK", "Scrum"],
+        "deliverable_types": [
+          "comprehensive_documentation",
+          "sprint_retrospectives",
+          "workflow_guides",
+          "knowledge_base_updates"
+        ]
+      }
+    },
+    
+    "integration_patterns": {
+      "documentation_system_integration": {
+        "target_locations": [
+          "/docs/projects/aurorion-teams/overview",
+          "/docs/architecture/",
+          "/docs/tools/",
+          "/docs/reference/"
+        ],
+        "format_requirements": {
+          "primary": "MDX",
+          "metadata": "frontmatter",
+          "navigation": "automatic_generation",
+          "search": "full_text_indexing"
+        }
+      },
+      
+      "database_progress_tracking": {
+        "tables": ["Projects", "ActivityLogs", "TeamMembers"],
+        "tracking_metrics": [
+          "completion_percentage",
+          "quality_scores",
+          "collaboration_ratings",
+          "timeline_adherence"
+        ]
+      },
+      
+      "workflow_automation": {
+        "script_integration": {
+          "development": ["npm run dev", "npm run dev:clean"],
+          "testing": ["npm run test", "npm run test:passkey"],
+          "database": ["npm run db:seed", "npm run db:push"],
+          "maintenance": ["npm run cleanup", "npm run lint:all"]
+        }
+      }
+    }
+  }
+}

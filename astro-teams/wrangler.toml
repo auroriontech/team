@@ -7,6 +7,13 @@ binding = "DB"
 database_name = "aurorion-teams-local"
 database_id = "local_database"
 
+[[vectorize]]
+binding = "VECTORIZE"
+index_name = "aurorion-project-knowledge"
+
+[ai]
+binding = "AI"
+
 [vars]
 WEBAUTHN_RP_NAME = "Aurorion Teams"
 WEBAUTHN_RP_ID = "team.homedevenv.com"
@@ -15,7 +22,7 @@ SITE_URL = "team.homedevenv.com"
 
 # Environment-specific overrides
 [env.local]
-vars = { WEBAUTHN_RP_ID = "localhost", WEBAUTHN_ORIGIN = "http://localhost:3000", SITE_URL = "localhost:3000" }
+vars = { WEBAUTHN_RP_ID = "team.homedevenv.com", WEBAUTHN_ORIGIN = "https://team.homedevenv.com", SITE_URL = "team.homedevenv.com" }
 
 [env.development]
-vars = { WEBAUTHN_RP_ID = "localhost", WEBAUTHN_ORIGIN = "http://localhost:3000", SITE_URL = "localhost:3000" }
+vars = { WEBAUTHN_RP_ID = "team.homedevenv.com", WEBAUTHN_ORIGIN = "https://team.homedevenv.com", SITE_URL = "team.homedevenv.com" }

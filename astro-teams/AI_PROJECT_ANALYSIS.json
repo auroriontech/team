@@ -1,0 +1,3662 @@
+{
+  "timestamp": "2025-05-28T22:41:28.670Z",
+  "project": "Aurorion Teams - AI Enhanced Analysis",
+  "insights": {
+    "overview": {
+      "totalFiles": 154,
+      "totalLines": 61173,
+      "totalSize": 2158470
+    },
+    "categories": {
+      "agent-system": 39,
+      "configuration": 10,
+      "miscellaneous": 12,
+      "ai-infrastructure": 2,
+      "documentation": 33,
+      "automation-scripts": 11,
+      "ui-components": 5,
+      "mcp-implementation": 1,
+      "api-endpoints": 6,
+      "application-pages": 21,
+      "testing": 6,
+      "utility-functions": 8
+    },
+    "complexity": {
+      "medium": 26,
+      "low": 20,
+      "high": 108
+    },
+    "importance": {
+      "critical": 45,
+      "high": 75,
+      "low": 6,
+      "medium": 28
+    },
+    "quality": {
+      "average": 97,
+      "distribution": {
+        "excellent": 153,
+        "good": 1
+      }
+    },
+    "relationships": [
+      {
+        "relationship": "imports:astro",
+        "count": 8
+      },
+      {
+        "relationship": "references:AurorionAiManager",
+        "count": 8
+      },
+      {
+        "relationship": "imports:astro:db",
+        "count": 8
+      },
+      {
+        "relationship": "imports:fs",
+        "count": 8
+      },
+      {
+        "relationship": "imports:astro:content",
+        "count": 8
+      },
+      {
+        "relationship": "imports:../layouts/BaseLayout.astro",
+        "count": 7
+      },
+      {
+        "relationship": "imports:../../layouts/AgentProfileLayout.astro",
+        "count": 7
+      },
+      {
+        "relationship": "references:aiManager",
+        "count": 6
+      },
+      {
+        "relationship": "references:vectorizeManager",
+        "count": 6
+      },
+      {
+        "relationship": "references:VectorizeManager",
+        "count": 6
+      }
+    ],
+    "issues": [
+      "2 files have multiple optimization opportunities",
+      "108 files are highly complex and may need refactoring"
+    ]
+  },
+  "optimizations": {
+    "immediate": [
+      {
+        "file": ".astro/collections/projects.schema.json",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "high",
+        "category": "architecture"
+      },
+      {
+        "file": ".astro/data-store.json",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "high",
+        "category": "architecture"
+      },
+      {
+        "file": ".astro/integrations/astro_db/db.d.ts",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "high",
+        "category": "architecture"
+      },
+      {
+        "file": "AI_INTEGRATION_STATUS.md",
+        "suggestion": "Add comprehensive error handling for async operations",
+        "priority": "high",
+        "category": "reliability"
+      },
+      {
+        "file": "CLAUDE_WORKFLOW_PROMPTS.md",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "high",
+        "category": "architecture"
+      },
+      {
+        "file": "CLOUDFLARE_STARTUP_OPTIMIZATION.md",
+        "suggestion": "Replace \"any\" types with specific interfaces",
+        "priority": "high",
+        "category": "code-quality"
+      },
+      {
+        "file": "CLOUDFLARE_STARTUP_OPTIMIZATION.md",
+        "suggestion": "Add comprehensive error handling for async operations",
+        "priority": "high",
+        "category": "reliability"
+      },
+      {
+        "file": "COMPONENT_DOCS.md",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "high",
+        "category": "architecture"
+      },
+      {
+        "file": "PROJECT_OVERVIEW.md",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "high",
+        "category": "architecture"
+      },
+      {
+        "file": "TEST_ENHANCEMENT_REPORT.md",
+        "suggestion": "Add comprehensive error handling for async operations",
+        "priority": "high",
+        "category": "reliability"
+      },
+      {
+        "file": "VECTORIZATION_STATUS.md",
+        "suggestion": "Add comprehensive error handling for async operations",
+        "priority": "high",
+        "category": "reliability"
+      },
+      {
+        "file": "db/seed-mcp-roadmap.ts",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "high",
+        "category": "architecture"
+      },
+      {
+        "file": "db/seed.ts",
+        "suggestion": "Add comprehensive error handling for async operations",
+        "priority": "high",
+        "category": "reliability"
+      },
+      {
+        "file": "drizzle/meta/0000_snapshot.json",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "high",
+        "category": "architecture"
+      },
+      {
+        "file": "package-lock.json",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "high",
+        "category": "architecture"
+      },
+      {
+        "file": "scripts/ai-project-analyzer.ts",
+        "suggestion": "Replace \"any\" types with specific interfaces",
+        "priority": "high",
+        "category": "code-quality"
+      },
+      {
+        "file": "scripts/ai-project-analyzer.ts",
+        "suggestion": "Use named imports instead of wildcard imports",
+        "priority": "high",
+        "category": "general"
+      },
+      {
+        "file": "scripts/ai-project-analyzer.ts",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "high",
+        "category": "architecture"
+      },
+      {
+        "file": "scripts/run-ai-analysis.js",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "high",
+        "category": "architecture"
+      },
+      {
+        "file": "src/content/docs/guides/migration.mdx",
+        "suggestion": "Add comprehensive error handling for async operations",
+        "priority": "high",
+        "category": "reliability"
+      },
+      {
+        "file": "src/content/docs/guides/migration.mdx",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "high",
+        "category": "architecture"
+      },
+      {
+        "file": "src/content/docs/tools/database-design.mdx",
+        "suggestion": "Add comprehensive error handling for async operations",
+        "priority": "high",
+        "category": "reliability"
+      },
+      {
+        "file": "src/content/docs/tools/database-schemas.mdx",
+        "suggestion": "Add comprehensive error handling for async operations",
+        "priority": "high",
+        "category": "reliability"
+      },
+      {
+        "file": "src/data/agentRoles.ts",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "high",
+        "category": "architecture"
+      },
+      {
+        "file": "src/db/schema.ts",
+        "suggestion": "Replace \"any\" types with specific interfaces",
+        "priority": "high",
+        "category": "code-quality"
+      },
+      {
+        "file": "src/db/schema.ts",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "high",
+        "category": "architecture"
+      },
+      {
+        "file": "src/db/validation.ts",
+        "suggestion": "Replace \"any\" types with specific interfaces",
+        "priority": "high",
+        "category": "code-quality"
+      },
+      {
+        "file": "src/db/validation.ts",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "high",
+        "category": "architecture"
+      },
+      {
+        "file": "src/layouts/AgentProfileLayout.astro",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "high",
+        "category": "architecture"
+      },
+      {
+        "file": "src/layouts/BaseLayout.astro",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "high",
+        "category": "architecture"
+      },
+      {
+        "file": "src/layouts/DocsLayout.astro",
+        "suggestion": "Add comprehensive error handling for async operations",
+        "priority": "high",
+        "category": "reliability"
+      },
+      {
+        "file": "src/mcp/server-template.ts",
+        "suggestion": "Replace \"any\" types with specific interfaces",
+        "priority": "high",
+        "category": "code-quality"
+      },
+      {
+        "file": "src/mcp/server-template.ts",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "high",
+        "category": "architecture"
+      },
+      {
+        "file": "src/pages/api/vectorize-migration.ts",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "high",
+        "category": "architecture"
+      },
+      {
+        "file": "src/pages/docs/[...slug].astro",
+        "suggestion": "Add comprehensive error handling for async operations",
+        "priority": "high",
+        "category": "reliability"
+      },
+      {
+        "file": "src/pages/docs/index.astro",
+        "suggestion": "Add comprehensive error handling for async operations",
+        "priority": "high",
+        "category": "reliability"
+      },
+      {
+        "file": "src/pages/projects/[...slug].astro",
+        "suggestion": "Add comprehensive error handling for async operations",
+        "priority": "high",
+        "category": "reliability"
+      },
+      {
+        "file": "src/pages/projects/index.astro",
+        "suggestion": "Add comprehensive error handling for async operations",
+        "priority": "high",
+        "category": "reliability"
+      },
+      {
+        "file": "src/pages/team-members.astro",
+        "suggestion": "Add comprehensive error handling for async operations",
+        "priority": "high",
+        "category": "reliability"
+      },
+      {
+        "file": "src/pages/test-db.astro",
+        "suggestion": "Add comprehensive error handling for async operations",
+        "priority": "high",
+        "category": "reliability"
+      },
+      {
+        "file": "src/services/database.ts",
+        "suggestion": "Add comprehensive error handling for async operations",
+        "priority": "high",
+        "category": "reliability"
+      },
+      {
+        "file": "src/tests/database-test-strategy.md",
+        "suggestion": "Add comprehensive error handling for async operations",
+        "priority": "high",
+        "category": "reliability"
+      },
+      {
+        "file": "src/utils/aiManager.ts",
+        "suggestion": "Replace \"any\" types with specific interfaces",
+        "priority": "high",
+        "category": "code-quality"
+      },
+      {
+        "file": "src/utils/aiManager.ts",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "high",
+        "category": "architecture"
+      },
+      {
+        "file": "tests/auth.spec.js",
+        "suggestion": "Add comprehensive error handling for async operations",
+        "priority": "high",
+        "category": "reliability"
+      },
+      {
+        "file": "tests/dashboard.spec.js",
+        "suggestion": "Add comprehensive error handling for async operations",
+        "priority": "high",
+        "category": "reliability"
+      },
+      {
+        "file": "tests/navigation.spec.js",
+        "suggestion": "Add comprehensive error handling for async operations",
+        "priority": "high",
+        "category": "reliability"
+      },
+      {
+        "file": "tests/passkey-ui.spec.js",
+        "suggestion": "Add comprehensive error handling for async operations",
+        "priority": "high",
+        "category": "reliability"
+      },
+      {
+        "file": "tests/passkey.spec.js",
+        "suggestion": "Add comprehensive error handling for async operations",
+        "priority": "high",
+        "category": "reliability"
+      },
+      {
+        "file": "workflow-schemas.json",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "high",
+        "category": "architecture"
+      }
+    ],
+    "shortTerm": [
+      {
+        "file": ".astro/content.d.ts",
+        "suggestion": "Replace \"any\" types with specific interfaces",
+        "priority": "medium",
+        "category": "code-quality"
+      },
+      {
+        "file": ".wrangler/tmp/bundle-d7wxBq/middleware-loader.entry.ts",
+        "suggestion": "Replace \"any\" types with specific interfaces",
+        "priority": "medium",
+        "category": "code-quality"
+      },
+      {
+        "file": "eslint.config.js",
+        "suggestion": "Replace \"any\" types with specific interfaces",
+        "priority": "medium",
+        "category": "code-quality"
+      },
+      {
+        "file": "scripts/ai-project-optimizer.ts",
+        "suggestion": "Replace \"any\" types with specific interfaces",
+        "priority": "medium",
+        "category": "code-quality"
+      },
+      {
+        "file": "scripts/migrate-to-vectorize.ts",
+        "suggestion": "Replace \"any\" types with specific interfaces",
+        "priority": "medium",
+        "category": "code-quality"
+      },
+      {
+        "file": "scripts/test-ai-integration.ts",
+        "suggestion": "Replace \"any\" types with specific interfaces",
+        "priority": "medium",
+        "category": "code-quality"
+      },
+      {
+        "file": "src/components/TeamMemberCustomization.astro",
+        "suggestion": "Replace \"any\" types with specific interfaces",
+        "priority": "medium",
+        "category": "code-quality"
+      },
+      {
+        "file": "src/content/docs/reference/scrum-analytics.mdx",
+        "suggestion": "Replace \"any\" types with specific interfaces",
+        "priority": "medium",
+        "category": "code-quality"
+      },
+      {
+        "file": "src/utils/memberCustomization.ts",
+        "suggestion": "Replace \"any\" types with specific interfaces",
+        "priority": "medium",
+        "category": "code-quality"
+      },
+      {
+        "file": "src/utils/vectorizeManager.ts",
+        "suggestion": "Replace \"any\" types with specific interfaces",
+        "priority": "medium",
+        "category": "code-quality"
+      }
+    ],
+    "longTerm": [
+      {
+        "file": "scripts/ai-project-optimizer.ts",
+        "suggestion": "Use named imports instead of wildcard imports",
+        "priority": "low",
+        "category": "general"
+      },
+      {
+        "file": "scripts/ai-project-optimizer.ts",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      },
+      {
+        "file": "scripts/generate-project-docs.js",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      },
+      {
+        "file": "scripts/migrate-to-vectorize.ts",
+        "suggestion": "Use named imports instead of wildcard imports",
+        "priority": "low",
+        "category": "general"
+      },
+      {
+        "file": "scripts/migrate-to-vectorize.ts",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      },
+      {
+        "file": "src/components/AgentRoleSelector.astro",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      },
+      {
+        "file": "src/components/RepositoryCard.astro",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      },
+      {
+        "file": "src/components/RepositoryList.astro",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      },
+      {
+        "file": "src/components/RepositoryModal.astro",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      },
+      {
+        "file": "src/components/TeamMemberCustomization.astro",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      },
+      {
+        "file": "src/content/docs/reference/scrum-analytics.mdx",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      },
+      {
+        "file": "src/content/docs/tools/analytics-implementation.mdx",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      },
+      {
+        "file": "src/content/docs/tools/api-design.mdx",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      },
+      {
+        "file": "src/content/docs/tools/database-design.mdx",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      },
+      {
+        "file": "src/content/docs/tools/database-schemas.mdx",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      },
+      {
+        "file": "src/content/docs/tools/testing-strategies.mdx",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      },
+      {
+        "file": "src/db/index.ts",
+        "suggestion": "Use named imports instead of wildcard imports",
+        "priority": "low",
+        "category": "general"
+      },
+      {
+        "file": "src/layouts/DocsLayout.astro",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      },
+      {
+        "file": "src/pages/dashboard.astro",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      },
+      {
+        "file": "src/pages/docs/[...slug].astro",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      },
+      {
+        "file": "src/pages/docs/index.astro",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      },
+      {
+        "file": "src/pages/index.astro",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      },
+      {
+        "file": "src/pages/login.astro",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      },
+      {
+        "file": "src/pages/models.astro",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      },
+      {
+        "file": "src/pages/projects/[...slug].astro",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      },
+      {
+        "file": "src/pages/projects/index.astro",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      },
+      {
+        "file": "src/pages/team/architect-engineer.astro",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      },
+      {
+        "file": "src/pages/team/index.astro",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      },
+      {
+        "file": "src/pages/team/morale-catalyst.astro",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      },
+      {
+        "file": "src/pages/team/optimizer-watchdog.astro",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      },
+      {
+        "file": "src/pages/team/scrum-knowledge.astro",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      },
+      {
+        "file": "src/pages/team/standup-facilitator.astro",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      },
+      {
+        "file": "src/pages/team/technical-enablement.astro",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      },
+      {
+        "file": "src/pages/team-builder.astro",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      },
+      {
+        "file": "src/pages/team-members.astro",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      },
+      {
+        "file": "src/utils/authManager.ts",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      },
+      {
+        "file": "src/utils/vectorizeManager.ts",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      },
+      {
+        "file": "tests/passkey.spec.js",
+        "suggestion": "Consider splitting large file into smaller modules",
+        "priority": "low",
+        "category": "architecture"
+      }
+    ],
+    "costSaving": [
+      {
+        "file": "OPTIMAL_AI_MODELS_2025.md",
+        "suggestion": "Add caching for AI operations to reduce costs",
+        "priority": "high",
+        "category": "cost-optimization"
+      },
+      {
+        "file": "src/utils/aiManager.ts",
+        "suggestion": "Add caching for AI operations to reduce costs",
+        "priority": "high",
+        "category": "cost-optimization"
+      }
+    ],
+    "performance": [
+      {
+        "file": ".astro/data-store.json",
+        "suggestion": "Consider using for...of loops for better performance",
+        "priority": "high",
+        "category": "performance"
+      },
+      {
+        "file": "BUDGET_CONSTRAINED_STRATEGY.md",
+        "suggestion": "Consider using for...of loops for better performance",
+        "priority": "high",
+        "category": "performance"
+      },
+      {
+        "file": "scripts/ai-project-analyzer.ts",
+        "suggestion": "Consider using for...of loops for better performance",
+        "priority": "high",
+        "category": "performance"
+      },
+      {
+        "file": "scripts/ai-project-optimizer.ts",
+        "suggestion": "Consider using for...of loops for better performance",
+        "priority": "medium",
+        "category": "performance"
+      },
+      {
+        "file": "scripts/generate-project-docs.js",
+        "suggestion": "Consider using for...of loops for better performance",
+        "priority": "medium",
+        "category": "performance"
+      },
+      {
+        "file": "scripts/run-ai-analysis.js",
+        "suggestion": "Consider using for...of loops for better performance",
+        "priority": "high",
+        "category": "performance"
+      },
+      {
+        "file": "scripts/test-ai-analysis.js",
+        "suggestion": "Consider using for...of loops for better performance",
+        "priority": "medium",
+        "category": "performance"
+      },
+      {
+        "file": "scripts/test-ai-integration.ts",
+        "suggestion": "Consider using for...of loops for better performance",
+        "priority": "medium",
+        "category": "performance"
+      },
+      {
+        "file": "src/components/AgentRoleSelector.astro",
+        "suggestion": "Consider using for...of loops for better performance",
+        "priority": "medium",
+        "category": "performance"
+      },
+      {
+        "file": "src/components/RepositoryModal.astro",
+        "suggestion": "Consider using for...of loops for better performance",
+        "priority": "medium",
+        "category": "performance"
+      },
+      {
+        "file": "src/components/TeamMemberCustomization.astro",
+        "suggestion": "Consider using for...of loops for better performance",
+        "priority": "medium",
+        "category": "performance"
+      },
+      {
+        "file": "src/content/docs/tools/testing-strategies.mdx",
+        "suggestion": "Consider using for...of loops for better performance",
+        "priority": "medium",
+        "category": "performance"
+      },
+      {
+        "file": "src/layouts/DocsLayout.astro",
+        "suggestion": "Consider using for...of loops for better performance",
+        "priority": "medium",
+        "category": "performance"
+      },
+      {
+        "file": "src/pages/docs/index.astro",
+        "suggestion": "Consider using for...of loops for better performance",
+        "priority": "medium",
+        "category": "performance"
+      },
+      {
+        "file": "src/pages/index.astro",
+        "suggestion": "Consider using for...of loops for better performance",
+        "priority": "medium",
+        "category": "performance"
+      },
+      {
+        "file": "src/pages/models.astro",
+        "suggestion": "Consider using for...of loops for better performance",
+        "priority": "medium",
+        "category": "performance"
+      },
+      {
+        "file": "src/pages/projects/index.astro",
+        "suggestion": "Consider using for...of loops for better performance",
+        "priority": "medium",
+        "category": "performance"
+      },
+      {
+        "file": "src/pages/team/index.astro",
+        "suggestion": "Consider using for...of loops for better performance",
+        "priority": "medium",
+        "category": "performance"
+      },
+      {
+        "file": "src/pages/team/optimizer-watchdog.astro",
+        "suggestion": "Consider using for...of loops for better performance",
+        "priority": "medium",
+        "category": "performance"
+      },
+      {
+        "file": "src/pages/team-builder.astro",
+        "suggestion": "Consider using for...of loops for better performance",
+        "priority": "medium",
+        "category": "performance"
+      },
+      {
+        "file": "src/pages/team-members.astro",
+        "suggestion": "Consider using for...of loops for better performance",
+        "priority": "medium",
+        "category": "performance"
+      },
+      {
+        "file": "src/utils/authManager.ts",
+        "suggestion": "Consider using for...of loops for better performance",
+        "priority": "medium",
+        "category": "performance"
+      }
+    ]
+  },
+  "files": [
+    {
+      "path": ".astro/collections/agent-roles.schema.json",
+      "size": 5594,
+      "modified": "2025-05-28T09:18:40.123Z",
+      "type": "json-config",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management",
+      "complexity": "medium",
+      "importance": "critical",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 232,
+      "chars": 5594
+    },
+    {
+      "path": ".astro/collections/docs.schema.json",
+      "size": 1971,
+      "modified": "2025-05-28T22:12:22.754Z",
+      "type": "json-config",
+      "category": "configuration",
+      "purpose": "Configuration file for system setup",
+      "complexity": "low",
+      "importance": "high",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 95,
+      "chars": 1971
+    },
+    {
+      "path": ".astro/collections/founders.schema.json",
+      "size": 739,
+      "modified": "2025-05-28T22:12:22.754Z",
+      "type": "json-config",
+      "category": "configuration",
+      "purpose": "Configuration file for system setup",
+      "complexity": "low",
+      "importance": "high",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 39,
+      "chars": 739
+    },
+    {
+      "path": ".astro/collections/projects.schema.json",
+      "size": 10781,
+      "modified": "2025-05-28T22:12:22.755Z",
+      "type": "json-config",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management with database interactions",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 428,
+      "chars": 10781
+    },
+    {
+      "path": ".astro/collections/team-members.schema.json",
+      "size": 7843,
+      "modified": "2025-05-28T22:12:22.755Z",
+      "type": "json-config",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management",
+      "complexity": "medium",
+      "importance": "critical",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 316,
+      "chars": 7843
+    },
+    {
+      "path": ".astro/collections/team-roles.schema.json",
+      "size": 5658,
+      "modified": "2025-05-28T22:12:22.755Z",
+      "type": "json-config",
+      "category": "configuration",
+      "purpose": "Configuration file for system setup",
+      "complexity": "medium",
+      "importance": "high",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 235,
+      "chars": 5658
+    },
+    {
+      "path": ".astro/content.d.ts",
+      "size": 6291,
+      "modified": "2025-05-28T21:15:35.532Z",
+      "type": "typescript-definitions",
+      "category": "miscellaneous",
+      "purpose": "General project file",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "references:AstroComponent"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Replace \"any\" types with specific interfaces"
+      ],
+      "lines": 218,
+      "chars": 6291
+    },
+    {
+      "path": ".astro/data-store.json",
+      "size": 246675,
+      "modified": "2025-05-28T21:14:40.430Z",
+      "type": "astro-endpoint",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management using asynchronous operations with database interactions",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [
+        "imports:web-vitals",
+        "imports:posthog-js",
+        "imports:astro/config",
+        "imports:react",
+        "imports:./Component.module.css",
+        "imports:astro",
+        "imports:mongodb",
+        "imports:d1",
+        "imports:zod",
+        "imports:vitest",
+        "imports:isomorphic-dompurify",
+        "imports:../../../src/components/SubscribeForm",
+        "imports:../../../src/services/EmailValidator",
+        "imports:main",
+        "references:SubscriptionService",
+        "references:AbortController",
+        "references:ExperimentManager",
+        "references:MyComponent",
+        "references:createDatabaseService",
+        "references:dbService"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Consider using for...of loops for better performance",
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 1,
+      "chars": 246043
+    },
+    {
+      "path": ".astro/integrations/astro_db/db.d.ts",
+      "size": 16597,
+      "modified": "2025-05-28T21:15:35.450Z",
+      "type": "typescript",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management",
+      "complexity": "low",
+      "importance": "critical",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 28,
+      "chars": 16597
+    },
+    {
+      "path": ".astro/settings.json",
+      "size": 58,
+      "modified": "2025-05-26T17:07:47.245Z",
+      "type": "json-config",
+      "category": "configuration",
+      "purpose": "Configuration file for system setup",
+      "complexity": "low",
+      "importance": "high",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 5,
+      "chars": 58
+    },
+    {
+      "path": ".astro/types.d.ts",
+      "size": 131,
+      "modified": "2025-05-28T21:15:35.451Z",
+      "type": "typescript",
+      "category": "miscellaneous",
+      "purpose": "General project file with database interactions",
+      "complexity": "low",
+      "importance": "low",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 3,
+      "chars": 131
+    },
+    {
+      "path": ".claude/settings.local.json",
+      "size": 826,
+      "modified": "2025-05-28T22:39:32.454Z",
+      "type": "json-config",
+      "category": "ai-infrastructure",
+      "purpose": "AI infrastructure for embeddings and intelligent processing",
+      "complexity": "low",
+      "importance": "high",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 29,
+      "chars": 826
+    },
+    {
+      "path": ".stylelintrc.json",
+      "size": 2336,
+      "modified": "2025-05-28T09:26:18.866Z",
+      "type": "json-config",
+      "category": "configuration",
+      "purpose": "Configuration file for system setup",
+      "complexity": "low",
+      "importance": "high",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 106,
+      "chars": 2336
+    },
+    {
+      "path": ".vscode/extensions.json",
+      "size": 87,
+      "modified": "2025-05-28T09:26:18.866Z",
+      "type": "json-config",
+      "category": "configuration",
+      "purpose": "Configuration file for system setup",
+      "complexity": "low",
+      "importance": "high",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 5,
+      "chars": 87
+    },
+    {
+      "path": ".vscode/launch.json",
+      "size": 207,
+      "modified": "2025-05-28T09:26:18.866Z",
+      "type": "json-config",
+      "category": "configuration",
+      "purpose": "Configuration file for system setup",
+      "complexity": "low",
+      "importance": "high",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 12,
+      "chars": 207
+    },
+    {
+      "path": ".wrangler/tmp/bundle-d7wxBq/checked-fetch.js",
+      "size": 833,
+      "modified": "2025-05-28T19:59:16.300Z",
+      "type": "javascript",
+      "category": "miscellaneous",
+      "purpose": "General project file",
+      "complexity": "low",
+      "importance": "low",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 31,
+      "chars": 833
+    },
+    {
+      "path": ".wrangler/tmp/bundle-d7wxBq/middleware-insertion-facade.js",
+      "size": 698,
+      "modified": "2025-05-28T19:59:16.301Z",
+      "type": "javascript",
+      "category": "miscellaneous",
+      "purpose": "General project file",
+      "complexity": "low",
+      "importance": "medium",
+      "relationships": [
+        "imports:/opt/homebrew/lib/node_modules/wrangler/templates/pages-shim.ts",
+        "imports:/opt/homebrew/lib/node_modules/wrangler/templates/middleware/middleware-ensure-req-body-drained.ts",
+        "imports:/opt/homebrew/lib/node_modules/wrangler/templates/middleware/middleware-miniflare3-json-error.ts"
+      ],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 11,
+      "chars": 698
+    },
+    {
+      "path": ".wrangler/tmp/bundle-d7wxBq/middleware-loader.entry.ts",
+      "size": 4165,
+      "modified": "2025-05-28T19:59:16.304Z",
+      "type": "typescript-definitions",
+      "category": "miscellaneous",
+      "purpose": "General project file with default export functionality",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:/Users/calebcoverdale/code/aurorion/team/astro-teams/.wrangler/tmp/bundle-d7wxBq/middleware-insertion-facade.js",
+        "imports:/opt/homebrew/lib/node_modules/wrangler/templates/middleware/common.ts",
+        "references:__Facade_ScheduledController",
+        "references:ScheduledController",
+        "references:wrapExportedHandler",
+        "references:ExportedHandler",
+        "references:ExportedHandlerFetchHandler"
+      ],
+      "quality": 95,
+      "optimizations": [
+        "Replace \"any\" types with specific interfaces"
+      ],
+      "lines": 135,
+      "chars": 4165
+    },
+    {
+      "path": ".wrangler/tmp/dev-fMJlSL/pages-shim.js",
+      "size": 7156,
+      "modified": "2025-05-28T19:59:16.314Z",
+      "type": "javascript",
+      "category": "miscellaneous",
+      "purpose": "General project file using asynchronous operations",
+      "complexity": "high",
+      "importance": "medium",
+      "relationships": [
+        "references:__Facade_ScheduledController",
+        "references:___Facade_ScheduledController",
+        "references:wrapExportedHandler"
+      ],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 212,
+      "chars": 7156
+    },
+    {
+      "path": "AI_INTEGRATION_STATUS.md",
+      "size": 8359,
+      "modified": "2025-05-28T22:24:28.564Z",
+      "type": "markdown",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management with database interactions",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [
+        "references:aiManager",
+        "references:AurorionAiManager",
+        "references:vectorizeManager"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Add comprehensive error handling for async operations"
+      ],
+      "lines": 232,
+      "chars": 8293
+    },
+    {
+      "path": "BUDGET_CONSTRAINED_STRATEGY.md",
+      "size": 8816,
+      "modified": "2025-05-28T22:29:17.463Z",
+      "type": "typescript-definitions",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management with database interactions",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [
+        "references:BudgetOptimizedAiManager",
+        "references:AurorionAiManager"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Consider using for...of loops for better performance"
+      ],
+      "lines": 279,
+      "chars": 8793
+    },
+    {
+      "path": "CLAUDE_WORKFLOW_PROMPTS.md",
+      "size": 14053,
+      "modified": "2025-05-28T21:31:52.498Z",
+      "type": "markdown",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management with database interactions",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [],
+      "quality": 85,
+      "optimizations": [
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 488,
+      "chars": 14041
+    },
+    {
+      "path": "CLOUDFLARE_STARTUP_OPTIMIZATION.md",
+      "size": 8920,
+      "modified": "2025-05-28T22:28:26.361Z",
+      "type": "typescript-definitions",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management using asynchronous operations with database interactions",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [
+        "references:CostOptimizedAiManager",
+        "references:AurorionAiManager",
+        "references:VectorizeManager"
+      ],
+      "quality": 90,
+      "optimizations": [
+        "Replace \"any\" types with specific interfaces",
+        "Add comprehensive error handling for async operations"
+      ],
+      "lines": 266,
+      "chars": 8891
+    },
+    {
+      "path": "COMPONENT_DOCS.md",
+      "size": 10696,
+      "modified": "2025-05-28T09:26:18.866Z",
+      "type": "typescript-definitions",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [
+        "references:themeManager",
+        "references:repositoryListManager"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 368,
+      "chars": 10604
+    },
+    {
+      "path": "CONFIGURATION_OPTIMIZATION.md",
+      "size": 4780,
+      "modified": "2025-05-28T21:16:20.327Z",
+      "type": "markdown",
+      "category": "documentation",
+      "purpose": "Project documentation and guides",
+      "complexity": "high",
+      "importance": "medium",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 161,
+      "chars": 4738
+    },
+    {
+      "path": "FEATURES.md",
+      "size": 9962,
+      "modified": "2025-05-28T09:26:18.867Z",
+      "type": "typescript-definitions",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [],
+      "quality": 95,
+      "optimizations": [],
+      "lines": 237,
+      "chars": 9906
+    },
+    {
+      "path": "MCP_INTEGRATION_PLAN.md",
+      "size": 10032,
+      "modified": "2025-05-28T22:06:03.242Z",
+      "type": "markdown",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [],
+      "quality": 85,
+      "optimizations": [],
+      "lines": 252,
+      "chars": 9085
+    },
+    {
+      "path": "OPTIMAL_AI_MODELS_2025.md",
+      "size": 8446,
+      "modified": "2025-05-28T22:36:52.448Z",
+      "type": "markdown",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management using asynchronous operations",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [
+        "references:OptimizedAiManager",
+        "references:AurorionAiManager",
+        "references:aiManager"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Add caching for AI operations to reduce costs"
+      ],
+      "lines": 238,
+      "chars": 8420
+    },
+    {
+      "path": "PROGRESS.md",
+      "size": 7773,
+      "modified": "2025-05-28T09:26:18.867Z",
+      "type": "markdown",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [
+        "references:dataManager"
+      ],
+      "quality": 75,
+      "optimizations": [],
+      "lines": 202,
+      "chars": 7523
+    },
+    {
+      "path": "PROJECT_OVERVIEW.md",
+      "size": 20161,
+      "modified": "2025-05-28T21:22:20.134Z",
+      "type": "markdown",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management with database interactions",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [
+        "references:authManager",
+        "references:dataManager"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 546,
+      "chars": 18615
+    },
+    {
+      "path": "README-D1-LOCAL.md",
+      "size": 2638,
+      "modified": "2025-05-28T19:54:46.360Z",
+      "type": "markdown",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management with database interactions",
+      "complexity": "medium",
+      "importance": "critical",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 86,
+      "chars": 2638
+    },
+    {
+      "path": "README.md",
+      "size": 3565,
+      "modified": "2025-05-28T09:26:18.868Z",
+      "type": "markdown",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management",
+      "complexity": "medium",
+      "importance": "high",
+      "relationships": [],
+      "quality": 85,
+      "optimizations": [],
+      "lines": 104,
+      "chars": 3457
+    },
+    {
+      "path": "SPRINT_RETROSPECTIVE.md",
+      "size": 8939,
+      "modified": "2025-05-28T21:16:35.026Z",
+      "type": "markdown",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 229,
+      "chars": 8867
+    },
+    {
+      "path": "TESTING.md",
+      "size": 4984,
+      "modified": "2025-05-28T21:15:41.580Z",
+      "type": "markdown",
+      "category": "documentation",
+      "purpose": "Project documentation and guides with database interactions",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 183,
+      "chars": 4972
+    },
+    {
+      "path": "TEST_ENHANCEMENT_REPORT.md",
+      "size": 6388,
+      "modified": "2025-05-28T21:15:49.125Z",
+      "type": "markdown",
+      "category": "documentation",
+      "purpose": "Project documentation and guides with database interactions",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [
+        "Add comprehensive error handling for async operations"
+      ],
+      "lines": 230,
+      "chars": 6350
+    },
+    {
+      "path": "VECTORIZATION_STATUS.md",
+      "size": 6724,
+      "modified": "2025-05-28T22:14:31.346Z",
+      "type": "markdown",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management with database interactions",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [
+        "imports:./scripts/migrate-to-vectorize",
+        "references:VectorizeManager",
+        "references:vectorizeManager"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Add comprehensive error handling for async operations"
+      ],
+      "lines": 187,
+      "chars": 6692
+    },
+    {
+      "path": "db/config.ts",
+      "size": 5841,
+      "modified": "2025-05-28T20:03:42.098Z",
+      "type": "typescript",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management with default export functionality",
+      "complexity": "medium",
+      "importance": "critical",
+      "relationships": [
+        "imports:astro:db"
+      ],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 143,
+      "chars": 5841
+    },
+    {
+      "path": "db/seed-mcp-roadmap.ts",
+      "size": 14349,
+      "modified": "2025-05-28T22:04:41.898Z",
+      "type": "astro-endpoint",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management using asynchronous operations with database interactions",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [
+        "imports:astro:db",
+        "imports:nanoid"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 412,
+      "chars": 14337
+    },
+    {
+      "path": "db/seed-project-progress.ts",
+      "size": 7000,
+      "modified": "2025-05-28T21:30:16.720Z",
+      "type": "astro-endpoint",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management using asynchronous operations with database interactions",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [
+        "imports:astro:db",
+        "imports:nanoid"
+      ],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 192,
+      "chars": 6990
+    },
+    {
+      "path": "db/seed.ts",
+      "size": 6384,
+      "modified": "2025-05-28T22:04:58.773Z",
+      "type": "astro-endpoint",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management using asynchronous operations with database interactions",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [
+        "imports:astro:db",
+        "imports:./seed-project-progress",
+        "imports:./seed-mcp-roadmap"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Add comprehensive error handling for async operations"
+      ],
+      "lines": 156,
+      "chars": 6384
+    },
+    {
+      "path": "drizzle/meta/0000_snapshot.json",
+      "size": 24534,
+      "modified": "2025-05-28T09:26:18.870Z",
+      "type": "json-config",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [],
+      "quality": 85,
+      "optimizations": [
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 933,
+      "chars": 24534
+    },
+    {
+      "path": "drizzle/meta/_journal.json",
+      "size": 202,
+      "modified": "2025-05-28T09:26:18.870Z",
+      "type": "json-config",
+      "category": "configuration",
+      "purpose": "Configuration file for system setup",
+      "complexity": "low",
+      "importance": "high",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 13,
+      "chars": 202
+    },
+    {
+      "path": "drizzle.config.ts",
+      "size": 364,
+      "modified": "2025-05-28T09:26:18.869Z",
+      "type": "typescript-definitions",
+      "category": "miscellaneous",
+      "purpose": "General project file with default export functionality with database interactions",
+      "complexity": "low",
+      "importance": "high",
+      "relationships": [
+        "imports:drizzle-kit"
+      ],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 13,
+      "chars": 364
+    },
+    {
+      "path": "ecosystem.config.js",
+      "size": 394,
+      "modified": "2025-05-28T09:26:18.870Z",
+      "type": "javascript",
+      "category": "miscellaneous",
+      "purpose": "General project file",
+      "complexity": "low",
+      "importance": "medium",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 18,
+      "chars": 394
+    },
+    {
+      "path": "eslint.config.js",
+      "size": 2784,
+      "modified": "2025-05-28T19:46:41.959Z",
+      "type": "typescript-definitions",
+      "category": "miscellaneous",
+      "purpose": "General project file with default export functionality",
+      "complexity": "medium",
+      "importance": "medium",
+      "relationships": [
+        "imports:eslint-plugin-astro",
+        "imports:eslint-plugin-jsx-a11y"
+      ],
+      "quality": 95,
+      "optimizations": [
+        "Replace \"any\" types with specific interfaces"
+      ],
+      "lines": 100,
+      "chars": 2784
+    },
+    {
+      "path": "package-lock.json",
+      "size": 481692,
+      "modified": "2025-05-28T22:12:22.259Z",
+      "type": "json-config",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management with database interactions",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 13510,
+      "chars": 481692
+    },
+    {
+      "path": "package.json",
+      "size": 2574,
+      "modified": "2025-05-28T22:12:22.192Z",
+      "type": "json-config",
+      "category": "configuration",
+      "purpose": "Configuration file for system setup with database interactions",
+      "complexity": "low",
+      "importance": "critical",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 62,
+      "chars": 2574
+    },
+    {
+      "path": "playwright.config.js",
+      "size": 2043,
+      "modified": "2025-05-28T21:14:44.869Z",
+      "type": "javascript",
+      "category": "miscellaneous",
+      "purpose": "General project file",
+      "complexity": "medium",
+      "importance": "medium",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 71,
+      "chars": 2043
+    },
+    {
+      "path": "scripts/README.md",
+      "size": 3351,
+      "modified": "2025-05-28T09:26:18.872Z",
+      "type": "markdown",
+      "category": "automation-scripts",
+      "purpose": "Automation script for development and deployment",
+      "complexity": "medium",
+      "importance": "medium",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 106,
+      "chars": 3303
+    },
+    {
+      "path": "scripts/ai-project-analyzer.ts",
+      "size": 21981,
+      "modified": "2025-05-28T22:32:18.201Z",
+      "type": "typescript-definitions",
+      "category": "automation-scripts",
+      "purpose": "Automation script for development and deployment with default export functionality using asynchronous operations with database interactions",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [
+        "imports:fs",
+        "imports:path",
+        "imports:glob"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Replace \"any\" types with specific interfaces",
+        "Consider using for...of loops for better performance",
+        "Use named imports instead of wildcard imports",
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 708,
+      "chars": 21935
+    },
+    {
+      "path": "scripts/ai-project-optimizer.ts",
+      "size": 21532,
+      "modified": "2025-05-28T22:33:54.455Z",
+      "type": "typescript-definitions",
+      "category": "automation-scripts",
+      "purpose": "Automation script for development and deployment using asynchronous operations with database interactions",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:fs",
+        "imports:path",
+        "references:generateCacheManager",
+        "references:aiManager",
+        "references:vectorizeManager",
+        "references:AiCacheManager"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Replace \"any\" types with specific interfaces",
+        "Consider using for...of loops for better performance",
+        "Use named imports instead of wildcard imports",
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 664,
+      "chars": 21472
+    },
+    {
+      "path": "scripts/generate-project-docs.js",
+      "size": 14775,
+      "modified": "2025-05-28T09:59:11.875Z",
+      "type": "script",
+      "category": "automation-scripts",
+      "purpose": "Automation script for development and deployment with database interactions",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:fs",
+        "imports:path",
+        "imports:url"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Consider using for...of loops for better performance",
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 677,
+      "chars": 14715
+    },
+    {
+      "path": "scripts/migrate-to-vectorize.ts",
+      "size": 17257,
+      "modified": "2025-05-28T22:11:05.268Z",
+      "type": "typescript-definitions",
+      "category": "automation-scripts",
+      "purpose": "Automation script for development and deployment using asynchronous operations with database interactions",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:../src/utils/vectorizeManager",
+        "imports:fs",
+        "imports:path",
+        "references:VectorizeManager",
+        "references:vectorizeManager"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Replace \"any\" types with specific interfaces",
+        "Use named imports instead of wildcard imports",
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 493,
+      "chars": 17221
+    },
+    {
+      "path": "scripts/populate-vectorize.ts",
+      "size": 6292,
+      "modified": "2025-05-28T22:17:31.492Z",
+      "type": "script",
+      "category": "automation-scripts",
+      "purpose": "Automation script for development and deployment with database interactions",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:child_process",
+        "imports:fs"
+      ],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 190,
+      "chars": 6282
+    },
+    {
+      "path": "scripts/run-ai-analysis.js",
+      "size": 24534,
+      "modified": "2025-05-28T22:41:24.550Z",
+      "type": "astro-endpoint",
+      "category": "automation-scripts",
+      "purpose": "Automation script for development and deployment using asynchronous operations with database interactions",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [
+        "imports:fs",
+        "imports:path"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Consider using for...of loops for better performance",
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 697,
+      "chars": 24448
+    },
+    {
+      "path": "scripts/seed-db.ts",
+      "size": 6720,
+      "modified": "2025-05-28T20:12:12.983Z",
+      "type": "typescript",
+      "category": "automation-scripts",
+      "purpose": "Automation script for development and deployment using asynchronous operations with database interactions",
+      "complexity": "high",
+      "importance": "medium",
+      "relationships": [
+        "imports:astro:db"
+      ],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 160,
+      "chars": 6720
+    },
+    {
+      "path": "scripts/test-ai-analysis.js",
+      "size": 7793,
+      "modified": "2025-05-28T22:37:10.104Z",
+      "type": "script-test",
+      "category": "automation-scripts",
+      "purpose": "Automation script for development and deployment using asynchronous operations",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:fs",
+        "imports:path"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Consider using for...of loops for better performance"
+      ],
+      "lines": 258,
+      "chars": 7769
+    },
+    {
+      "path": "scripts/test-ai-integration.ts",
+      "size": 5522,
+      "modified": "2025-05-28T22:23:38.215Z",
+      "type": "typescript-definitions-test",
+      "category": "automation-scripts",
+      "purpose": "Automation script for development and deployment using asynchronous operations",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:../src/utils/aiManager.js",
+        "references:AurorionAiManager",
+        "references:aiManager"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Replace \"any\" types with specific interfaces",
+        "Consider using for...of loops for better performance"
+      ],
+      "lines": 151,
+      "chars": 5488
+    },
+    {
+      "path": "scripts/test-vectorize.ts",
+      "size": 1035,
+      "modified": "2025-05-28T22:18:17.310Z",
+      "type": "script-test",
+      "category": "automation-scripts",
+      "purpose": "Automation script for development and deployment with database interactions",
+      "complexity": "medium",
+      "importance": "low",
+      "relationships": [
+        "imports:child_process",
+        "imports:fs"
+      ],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 41,
+      "chars": 1027
+    },
+    {
+      "path": "src/components/AgentRoleSelector.astro",
+      "size": 29869,
+      "modified": "2025-05-28T09:26:18.873Z",
+      "type": "typescript-definitions",
+      "category": "ui-components",
+      "purpose": "User interface component for application display",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:../data/agentRoles",
+        "references:AgentRoleSelectorManager",
+        "references:agentRoleSelectorManager"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Consider using for...of loops for better performance",
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 1090,
+      "chars": 29821
+    },
+    {
+      "path": "src/components/RepositoryCard.astro",
+      "size": 22742,
+      "modified": "2025-05-28T09:26:18.874Z",
+      "type": "typescript-definitions",
+      "category": "ui-components",
+      "purpose": "User interface component for application display using asynchronous operations",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:../types",
+        "references:RepositoryCardManager",
+        "references:escapeHandler",
+        "references:repositoryCardManager"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 873,
+      "chars": 22702
+    },
+    {
+      "path": "src/components/RepositoryList.astro",
+      "size": 29228,
+      "modified": "2025-05-28T09:26:18.874Z",
+      "type": "astro-component",
+      "category": "ui-components",
+      "purpose": "User interface component for application display using asynchronous operations",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:astro-icon/components",
+        "references:RepositoryListManager",
+        "references:dataManager",
+        "references:repositoryListManager"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 891,
+      "chars": 29212
+    },
+    {
+      "path": "src/components/RepositoryModal.astro",
+      "size": 23458,
+      "modified": "2025-05-28T09:26:18.874Z",
+      "type": "typescript-definitions",
+      "category": "ui-components",
+      "purpose": "User interface component for application display using asynchronous operations",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "references:dataManager"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Consider using for...of loops for better performance",
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 885,
+      "chars": 23448
+    },
+    {
+      "path": "src/components/TeamMemberCustomization.astro",
+      "size": 31105,
+      "modified": "2025-05-28T09:26:18.874Z",
+      "type": "typescript-definitions",
+      "category": "ui-components",
+      "purpose": "User interface component for application display",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:../utils/memberCustomization",
+        "references:TeamMemberCustomizationManager",
+        "references:teamMemberCustomizationManager"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Replace \"any\" types with specific interfaces",
+        "Consider using for...of loops for better performance",
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 1148,
+      "chars": 31091
+    },
+    {
+      "path": "src/content/config.ts",
+      "size": 8112,
+      "modified": "2025-05-28T09:40:31.865Z",
+      "type": "typescript",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management with database interactions",
+      "complexity": "medium",
+      "importance": "critical",
+      "relationships": [
+        "imports:astro:content"
+      ],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 259,
+      "chars": 8112
+    },
+    {
+      "path": "src/content/docs/agent-prompts-architect-engineer.mdx",
+      "size": 4219,
+      "modified": "2025-05-28T09:26:18.874Z",
+      "type": "mdx-documentation",
+      "category": "documentation",
+      "purpose": "Project documentation and guides with database interactions",
+      "complexity": "medium",
+      "importance": "medium",
+      "relationships": [],
+      "quality": 85,
+      "optimizations": [],
+      "lines": 96,
+      "chars": 4193
+    },
+    {
+      "path": "src/content/docs/agent-prompts-morale-catalyst.mdx",
+      "size": 5208,
+      "modified": "2025-05-28T09:26:18.875Z",
+      "type": "mdx-documentation",
+      "category": "documentation",
+      "purpose": "Project documentation and guides",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [],
+      "quality": 85,
+      "optimizations": [],
+      "lines": 112,
+      "chars": 5186
+    },
+    {
+      "path": "src/content/docs/agent-prompts-optimizer-watchdog.mdx",
+      "size": 5027,
+      "modified": "2025-05-28T09:26:18.875Z",
+      "type": "mdx-documentation",
+      "category": "documentation",
+      "purpose": "Project documentation and guides",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [],
+      "quality": 85,
+      "optimizations": [],
+      "lines": 113,
+      "chars": 5007
+    },
+    {
+      "path": "src/content/docs/agent-prompts-scrum-knowledge.mdx",
+      "size": 5190,
+      "modified": "2025-05-28T09:26:18.875Z",
+      "type": "mdx-documentation",
+      "category": "documentation",
+      "purpose": "Project documentation and guides",
+      "complexity": "medium",
+      "importance": "high",
+      "relationships": [],
+      "quality": 85,
+      "optimizations": [],
+      "lines": 114,
+      "chars": 5170
+    },
+    {
+      "path": "src/content/docs/agent-prompts-standup-facilitator.mdx",
+      "size": 5756,
+      "modified": "2025-05-28T09:26:18.875Z",
+      "type": "mdx-documentation",
+      "category": "documentation",
+      "purpose": "Project documentation and guides",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [],
+      "quality": 85,
+      "optimizations": [],
+      "lines": 123,
+      "chars": 5732
+    },
+    {
+      "path": "src/content/docs/agent-prompts-technical-enablement.mdx",
+      "size": 6158,
+      "modified": "2025-05-28T09:26:18.875Z",
+      "type": "mdx-documentation",
+      "category": "documentation",
+      "purpose": "Project documentation and guides",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [],
+      "quality": 85,
+      "optimizations": [],
+      "lines": 107,
+      "chars": 6124
+    },
+    {
+      "path": "src/content/docs/agent-prompts-tester-reviewer.mdx",
+      "size": 5540,
+      "modified": "2025-05-28T09:26:18.875Z",
+      "type": "mdx-documentation-test",
+      "category": "documentation",
+      "purpose": "Project documentation and guides",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [],
+      "quality": 85,
+      "optimizations": [],
+      "lines": 119,
+      "chars": 5520
+    },
+    {
+      "path": "src/content/docs/architecture/typescript-improvements.mdx",
+      "size": 7627,
+      "modified": "2025-05-28T09:26:18.875Z",
+      "type": "typescript-definitions",
+      "category": "documentation",
+      "purpose": "Project documentation and guides with database interactions",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "references:SubscriptionService",
+        "references:AbortController"
+      ],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 263,
+      "chars": 7607
+    },
+    {
+      "path": "src/content/docs/guides/cloudflare-deployment.mdx",
+      "size": 7686,
+      "modified": "2025-05-28T09:26:18.875Z",
+      "type": "mdx-documentation",
+      "category": "documentation",
+      "purpose": "Project documentation and guides with database interactions",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 292,
+      "chars": 7628
+    },
+    {
+      "path": "src/content/docs/guides/migration.mdx",
+      "size": 16114,
+      "modified": "2025-05-28T09:26:18.875Z",
+      "type": "astro-endpoint",
+      "category": "documentation",
+      "purpose": "Project documentation and guides using asynchronous operations with database interactions",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [
+        "imports:astro/config",
+        "imports:react",
+        "imports:./Component.module.css",
+        "imports:astro",
+        "imports:mongodb",
+        "imports:d1",
+        "references:MyComponent"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Add comprehensive error handling for async operations",
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 648,
+      "chars": 16098
+    },
+    {
+      "path": "src/content/docs/implementation-backlog.mdx",
+      "size": 3461,
+      "modified": "2025-05-28T09:26:18.875Z",
+      "type": "mdx-documentation",
+      "category": "documentation",
+      "purpose": "Project documentation and guides",
+      "complexity": "medium",
+      "importance": "medium",
+      "relationships": [],
+      "quality": 85,
+      "optimizations": [],
+      "lines": 80,
+      "chars": 3461
+    },
+    {
+      "path": "src/content/docs/platforms/cloudflare.mdx",
+      "size": 6332,
+      "modified": "2025-05-28T09:26:18.876Z",
+      "type": "typescript-definitions",
+      "category": "documentation",
+      "purpose": "Project documentation and guides with default export functionality using asynchronous operations with database interactions",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 278,
+      "chars": 6292
+    },
+    {
+      "path": "src/content/docs/projects/aurorion-landing/api.mdx",
+      "size": 1355,
+      "modified": "2025-05-28T09:26:18.876Z",
+      "type": "mdx-documentation",
+      "category": "documentation",
+      "purpose": "Project documentation and guides",
+      "complexity": "medium",
+      "importance": "medium",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 84,
+      "chars": 1355
+    },
+    {
+      "path": "src/content/docs/projects/aurorion-landing/contributing.mdx",
+      "size": 3880,
+      "modified": "2025-05-28T09:26:18.876Z",
+      "type": "mdx-documentation",
+      "category": "documentation",
+      "purpose": "Project documentation and guides",
+      "complexity": "high",
+      "importance": "medium",
+      "relationships": [
+        "imports:main"
+      ],
+      "quality": 85,
+      "optimizations": [],
+      "lines": 210,
+      "chars": 3850
+    },
+    {
+      "path": "src/content/docs/projects/aurorion-landing/deployment.mdx",
+      "size": 2430,
+      "modified": "2025-05-28T09:26:18.876Z",
+      "type": "mdx-documentation",
+      "category": "documentation",
+      "purpose": "Project documentation and guides with database interactions",
+      "complexity": "medium",
+      "importance": "medium",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 138,
+      "chars": 2430
+    },
+    {
+      "path": "src/content/docs/projects/aurorion-landing/index.mdx",
+      "size": 1697,
+      "modified": "2025-05-28T09:26:18.876Z",
+      "type": "mdx-documentation",
+      "category": "documentation",
+      "purpose": "Project documentation and guides",
+      "complexity": "medium",
+      "importance": "medium",
+      "relationships": [],
+      "quality": 85,
+      "optimizations": [],
+      "lines": 52,
+      "chars": 1693
+    },
+    {
+      "path": "src/content/docs/projects/aurorion-landing/overview.mdx",
+      "size": 1343,
+      "modified": "2025-05-28T09:26:18.876Z",
+      "type": "mdx-documentation",
+      "category": "documentation",
+      "purpose": "Project documentation and guides",
+      "complexity": "low",
+      "importance": "medium",
+      "relationships": [],
+      "quality": 85,
+      "optimizations": [],
+      "lines": 75,
+      "chars": 1343
+    },
+    {
+      "path": "src/content/docs/projects/aurorion-teams/api.mdx",
+      "size": 1345,
+      "modified": "2025-05-28T09:26:18.876Z",
+      "type": "mdx-documentation",
+      "category": "documentation",
+      "purpose": "Project documentation and guides",
+      "complexity": "medium",
+      "importance": "medium",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 84,
+      "chars": 1345
+    },
+    {
+      "path": "src/content/docs/projects/aurorion-teams/contributing.mdx",
+      "size": 3868,
+      "modified": "2025-05-28T09:26:18.876Z",
+      "type": "mdx-documentation",
+      "category": "documentation",
+      "purpose": "Project documentation and guides",
+      "complexity": "high",
+      "importance": "medium",
+      "relationships": [
+        "imports:main"
+      ],
+      "quality": 85,
+      "optimizations": [],
+      "lines": 210,
+      "chars": 3838
+    },
+    {
+      "path": "src/content/docs/projects/aurorion-teams/deployment.mdx",
+      "size": 2420,
+      "modified": "2025-05-28T09:26:18.876Z",
+      "type": "mdx-documentation",
+      "category": "documentation",
+      "purpose": "Project documentation and guides with database interactions",
+      "complexity": "medium",
+      "importance": "medium",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 138,
+      "chars": 2420
+    },
+    {
+      "path": "src/content/docs/projects/aurorion-teams/index.mdx",
+      "size": 1685,
+      "modified": "2025-05-28T09:26:18.876Z",
+      "type": "mdx-documentation",
+      "category": "documentation",
+      "purpose": "Project documentation and guides",
+      "complexity": "medium",
+      "importance": "medium",
+      "relationships": [],
+      "quality": 85,
+      "optimizations": [],
+      "lines": 52,
+      "chars": 1681
+    },
+    {
+      "path": "src/content/docs/projects/aurorion-teams/overview.mdx",
+      "size": 9327,
+      "modified": "2025-05-28T22:05:13.760Z",
+      "type": "mdx-documentation",
+      "category": "documentation",
+      "purpose": "Project documentation and guides with database interactions",
+      "complexity": "high",
+      "importance": "medium",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 213,
+      "chars": 8303
+    },
+    {
+      "path": "src/content/docs/reference/scrum-analytics.mdx",
+      "size": 19327,
+      "modified": "2025-05-28T09:26:18.877Z",
+      "type": "typescript-definitions",
+      "category": "documentation",
+      "purpose": "Project documentation and guides using asynchronous operations",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:web-vitals",
+        "references:ExperimentManager"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Replace \"any\" types with specific interfaces",
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 652,
+      "chars": 19327
+    },
+    {
+      "path": "src/content/docs/reference/scrum-workflow.mdx",
+      "size": 6612,
+      "modified": "2025-05-28T09:26:18.877Z",
+      "type": "mdx-documentation",
+      "category": "documentation",
+      "purpose": "Project documentation and guides",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [],
+      "quality": 85,
+      "optimizations": [],
+      "lines": 233,
+      "chars": 6538
+    },
+    {
+      "path": "src/content/docs/tools/analytics-implementation.mdx",
+      "size": 11375,
+      "modified": "2025-05-28T09:26:18.877Z",
+      "type": "mdx-documentation",
+      "category": "documentation",
+      "purpose": "Project documentation and guides",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:posthog-js"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 318,
+      "chars": 11333
+    },
+    {
+      "path": "src/content/docs/tools/api-design.mdx",
+      "size": 14717,
+      "modified": "2025-05-28T09:26:18.877Z",
+      "type": "mdx-documentation",
+      "category": "documentation",
+      "purpose": "Project documentation and guides using asynchronous operations with database interactions",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:zod",
+        "imports:vitest",
+        "imports:isomorphic-dompurify"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 620,
+      "chars": 14715
+    },
+    {
+      "path": "src/content/docs/tools/database-design.mdx",
+      "size": 10559,
+      "modified": "2025-05-28T09:26:18.877Z",
+      "type": "typescript-definitions",
+      "category": "documentation",
+      "purpose": "Project documentation and guides using asynchronous operations with database interactions",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [
+        "Add comprehensive error handling for async operations",
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 386,
+      "chars": 10559
+    },
+    {
+      "path": "src/content/docs/tools/database-schemas.mdx",
+      "size": 12383,
+      "modified": "2025-05-28T09:26:18.877Z",
+      "type": "mdx-documentation",
+      "category": "documentation",
+      "purpose": "Project documentation and guides with database interactions",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "references:createDatabaseService",
+        "references:dbService"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Add comprehensive error handling for async operations",
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 425,
+      "chars": 12337
+    },
+    {
+      "path": "src/content/docs/tools/testing-strategies.mdx",
+      "size": 19902,
+      "modified": "2025-05-28T09:26:18.878Z",
+      "type": "mdx-documentation-test",
+      "category": "documentation",
+      "purpose": "Project documentation and guides using asynchronous operations with database interactions",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:vitest",
+        "imports:../../../src/components/SubscribeForm",
+        "imports:../../../src/services/EmailValidator"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Consider using for...of loops for better performance",
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 731,
+      "chars": 19856
+    },
+    {
+      "path": "src/content/projects/aurorion-landing.mdx",
+      "size": 8275,
+      "modified": "2025-05-28T09:26:18.878Z",
+      "type": "mdx-documentation",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management with database interactions",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 258,
+      "chars": 8261
+    },
+    {
+      "path": "src/content/projects/aurorion-teams.mdx",
+      "size": 7448,
+      "modified": "2025-05-28T09:26:18.878Z",
+      "type": "mdx-documentation",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management with database interactions",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 208,
+      "chars": 7428
+    },
+    {
+      "path": "src/content/team-members/benjamin-ceo.mdx",
+      "size": 4000,
+      "modified": "2025-05-28T09:26:18.878Z",
+      "type": "mdx-documentation",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management",
+      "complexity": "medium",
+      "importance": "critical",
+      "relationships": [],
+      "quality": 85,
+      "optimizations": [],
+      "lines": 109,
+      "chars": 3994
+    },
+    {
+      "path": "src/content/team-members/caleb-architect.mdx",
+      "size": 3184,
+      "modified": "2025-05-28T09:26:18.878Z",
+      "type": "mdx-documentation",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management",
+      "complexity": "medium",
+      "importance": "critical",
+      "relationships": [],
+      "quality": 85,
+      "optimizations": [],
+      "lines": 98,
+      "chars": 3180
+    },
+    {
+      "path": "src/content/team-roles/architect-engineer.mdx",
+      "size": 5158,
+      "modified": "2025-05-28T09:26:18.878Z",
+      "type": "mdx-documentation",
+      "category": "documentation",
+      "purpose": "Project documentation and guides",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [],
+      "quality": 85,
+      "optimizations": [],
+      "lines": 139,
+      "chars": 5152
+    },
+    {
+      "path": "src/content/team-roles/optimizer-watchdog.mdx",
+      "size": 8197,
+      "modified": "2025-05-28T09:26:18.879Z",
+      "type": "mdx-documentation",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [],
+      "quality": 85,
+      "optimizations": [],
+      "lines": 173,
+      "chars": 8193
+    },
+    {
+      "path": "src/data/agentRoles.ts",
+      "size": 12548,
+      "modified": "2025-05-28T09:26:18.879Z",
+      "type": "typescript-definitions",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [
+        "imports:../types"
+      ],
+      "quality": 85,
+      "optimizations": [
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 296,
+      "chars": 12532
+    },
+    {
+      "path": "src/db/index.ts",
+      "size": 2265,
+      "modified": "2025-05-28T19:53:24.462Z",
+      "type": "typescript",
+      "category": "miscellaneous",
+      "purpose": "General project file with database interactions",
+      "complexity": "high",
+      "importance": "low",
+      "relationships": [
+        "imports:drizzle-orm/d1",
+        "imports:./schema"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Use named imports instead of wildcard imports"
+      ],
+      "lines": 68,
+      "chars": 2265
+    },
+    {
+      "path": "src/db/schema.ts",
+      "size": 15554,
+      "modified": "2025-05-28T09:43:38.420Z",
+      "type": "typescript",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [
+        "imports:drizzle-orm/sqlite-core",
+        "imports:drizzle-orm"
+      ],
+      "quality": 95,
+      "optimizations": [
+        "Replace \"any\" types with specific interfaces",
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 400,
+      "chars": 15554
+    },
+    {
+      "path": "src/db/validation.ts",
+      "size": 10343,
+      "modified": "2025-05-28T09:26:18.880Z",
+      "type": "typescript",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [
+        "imports:zod"
+      ],
+      "quality": 95,
+      "optimizations": [
+        "Replace \"any\" types with specific interfaces",
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 221,
+      "chars": 10343
+    },
+    {
+      "path": "src/layouts/AgentProfileLayout.astro",
+      "size": 13516,
+      "modified": "2025-05-28T09:26:18.880Z",
+      "type": "typescript-definitions",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [
+        "imports:./BaseLayout.astro",
+        "imports:astro-icon/components",
+        "imports:../utils/iconMapping",
+        "references:AgentProfileManager",
+        "references:agentProfileManager"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 553,
+      "chars": 13494
+    },
+    {
+      "path": "src/layouts/BaseLayout.astro",
+      "size": 21796,
+      "modified": "2025-05-28T10:16:35.599Z",
+      "type": "typescript-definitions",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [
+        "references:themeManager",
+        "references:dataManager",
+        "references:DataManager"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 812,
+      "chars": 21776
+    },
+    {
+      "path": "src/layouts/DocsLayout.astro",
+      "size": 13308,
+      "modified": "2025-05-28T09:26:18.880Z",
+      "type": "typescript-definitions",
+      "category": "miscellaneous",
+      "purpose": "General project file",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:./BaseLayout.astro",
+        "imports:astro:content",
+        "imports:astro-icon/components"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Consider using for...of loops for better performance",
+        "Add comprehensive error handling for async operations",
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 505,
+      "chars": 13308
+    },
+    {
+      "path": "src/mcp/server-template.ts",
+      "size": 11674,
+      "modified": "2025-05-28T22:13:19.803Z",
+      "type": "typescript-definitions",
+      "category": "mcp-implementation",
+      "purpose": "Model Context Protocol implementation for agent communication using asynchronous operations",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [
+        "imports:zod",
+        "references:setupHandler",
+        "references:setRequestHandler"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Replace \"any\" types with specific interfaces",
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 381,
+      "chars": 11674
+    },
+    {
+      "path": "src/pages/api/ai-categorization.ts",
+      "size": 6685,
+      "modified": "2025-05-28T22:23:08.947Z",
+      "type": "typescript-definitions",
+      "category": "api-endpoints",
+      "purpose": "Server-side API endpoint for application functionality using asynchronous operations",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:astro",
+        "imports:../../utils/vectorizeManager",
+        "imports:../../utils/aiManager",
+        "references:VectorizeManager",
+        "references:vectorizeManager",
+        "references:AurorionAiManager",
+        "references:aiManager"
+      ],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 193,
+      "chars": 6681
+    },
+    {
+      "path": "src/pages/api/auth/webauthn-authentication-start.ts",
+      "size": 2054,
+      "modified": "2025-05-28T21:02:07.235Z",
+      "type": "typescript-definitions",
+      "category": "api-endpoints",
+      "purpose": "Server-side API endpoint for application functionality using asynchronous operations with database interactions",
+      "complexity": "medium",
+      "importance": "high",
+      "relationships": [
+        "imports:astro",
+        "imports:astro:db",
+        "imports:nanoid"
+      ],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 65,
+      "chars": 2054
+    },
+    {
+      "path": "src/pages/api/auth/webauthn-authentication-verify.ts",
+      "size": 6183,
+      "modified": "2025-05-28T21:00:26.042Z",
+      "type": "typescript-definitions",
+      "category": "api-endpoints",
+      "purpose": "Server-side API endpoint for application functionality using asynchronous operations with database interactions",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:astro",
+        "imports:astro:db",
+        "imports:nanoid"
+      ],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 201,
+      "chars": 6183
+    },
+    {
+      "path": "src/pages/api/auth/webauthn-registration-start.ts",
+      "size": 2505,
+      "modified": "2025-05-28T09:57:16.792Z",
+      "type": "typescript-definitions",
+      "category": "api-endpoints",
+      "purpose": "Server-side API endpoint for application functionality using asynchronous operations with database interactions",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:astro",
+        "imports:../../../db/index.js",
+        "imports:../../../db/schema.js",
+        "imports:nanoid"
+      ],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 76,
+      "chars": 2505
+    },
+    {
+      "path": "src/pages/api/auth/webauthn-registration-verify.ts",
+      "size": 5501,
+      "modified": "2025-05-28T09:57:16.842Z",
+      "type": "typescript-definitions",
+      "category": "api-endpoints",
+      "purpose": "Server-side API endpoint for application functionality using asynchronous operations with database interactions",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [
+        "imports:astro",
+        "imports:../../../db/index.js",
+        "imports:../../../db/schema.js",
+        "imports:drizzle-orm",
+        "imports:nanoid"
+      ],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 171,
+      "chars": 5501
+    },
+    {
+      "path": "src/pages/api/vectorize-migration.ts",
+      "size": 11526,
+      "modified": "2025-05-28T22:11:59.470Z",
+      "type": "typescript-definitions",
+      "category": "api-endpoints",
+      "purpose": "Server-side API endpoint for application functionality using asynchronous operations with database interactions",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [
+        "imports:astro",
+        "imports:../../utils/vectorizeManager",
+        "references:VectorizeManager",
+        "references:vectorizeManager"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 251,
+      "chars": 11526
+    },
+    {
+      "path": "src/pages/dashboard.astro",
+      "size": 14101,
+      "modified": "2025-05-28T09:59:58.387Z",
+      "type": "astro-component",
+      "category": "application-pages",
+      "purpose": "Application page providing user interface",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:../layouts/BaseLayout.astro"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 541,
+      "chars": 14081
+    },
+    {
+      "path": "src/pages/docs/[...slug].astro",
+      "size": 11035,
+      "modified": "2025-05-28T09:26:18.880Z",
+      "type": "astro-component",
+      "category": "application-pages",
+      "purpose": "Application page providing user interface using asynchronous operations",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:../../layouts/DocsLayout.astro",
+        "imports:astro:content",
+        "imports:../../utils/statusColors"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Add comprehensive error handling for async operations",
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 480,
+      "chars": 11031
+    },
+    {
+      "path": "src/pages/docs/index.astro",
+      "size": 14101,
+      "modified": "2025-05-28T09:26:18.880Z",
+      "type": "astro-component",
+      "category": "application-pages",
+      "purpose": "Application page providing user interface",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:../../layouts/BaseLayout.astro",
+        "imports:astro:content"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Consider using for...of loops for better performance",
+        "Add comprehensive error handling for async operations",
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 527,
+      "chars": 14067
+    },
+    {
+      "path": "src/pages/founders/index.astro",
+      "size": 9407,
+      "modified": "2025-05-28T09:26:18.881Z",
+      "type": "astro-component",
+      "category": "application-pages",
+      "purpose": "Application page providing user interface",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:../../layouts/BaseLayout.astro"
+      ],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 351,
+      "chars": 9399
+    },
+    {
+      "path": "src/pages/index.astro",
+      "size": 43717,
+      "modified": "2025-05-28T10:25:17.287Z",
+      "type": "astro-component",
+      "category": "application-pages",
+      "purpose": "Application page providing user interface using asynchronous operations",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:../layouts/BaseLayout.astro"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Consider using for...of loops for better performance",
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 1505,
+      "chars": 43651
+    },
+    {
+      "path": "src/pages/login.astro",
+      "size": 28530,
+      "modified": "2025-05-28T19:45:17.222Z",
+      "type": "astro-component",
+      "category": "application-pages",
+      "purpose": "Application page providing user interface using asynchronous operations",
+      "complexity": "high",
+      "importance": "medium",
+      "relationships": [
+        "imports:../layouts/BaseLayout.astro",
+        "references:dataManager"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 1055,
+      "chars": 28506
+    },
+    {
+      "path": "src/pages/models.astro",
+      "size": 21730,
+      "modified": "2025-05-28T19:59:10.219Z",
+      "type": "astro-component",
+      "category": "application-pages",
+      "purpose": "Application page providing user interface using asynchronous operations",
+      "complexity": "high",
+      "importance": "medium",
+      "relationships": [
+        "imports:../layouts/BaseLayout.astro"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Consider using for...of loops for better performance",
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 681,
+      "chars": 21730
+    },
+    {
+      "path": "src/pages/projects/[...slug].astro",
+      "size": 23463,
+      "modified": "2025-05-28T09:26:18.881Z",
+      "type": "astro-component",
+      "category": "application-pages",
+      "purpose": "Application page providing user interface using asynchronous operations",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:../../layouts/BaseLayout.astro",
+        "imports:astro:content",
+        "imports:../../utils/statusColors"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Add comprehensive error handling for async operations",
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 947,
+      "chars": 23451
+    },
+    {
+      "path": "src/pages/projects/index.astro",
+      "size": 23994,
+      "modified": "2025-05-28T09:26:18.881Z",
+      "type": "typescript-definitions",
+      "category": "application-pages",
+      "purpose": "Application page providing user interface",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:../../layouts/BaseLayout.astro",
+        "imports:astro:content",
+        "imports:../../utils/statusColors",
+        "imports:astro-icon/components"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Consider using for...of loops for better performance",
+        "Add comprehensive error handling for async operations",
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 883,
+      "chars": 23961
+    },
+    {
+      "path": "src/pages/team/architect-engineer.astro",
+      "size": 22154,
+      "modified": "2025-05-28T09:26:18.882Z",
+      "type": "typescript-definitions",
+      "category": "application-pages",
+      "purpose": "Application page providing user interface with database interactions",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:../../layouts/AgentProfileLayout.astro"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 773,
+      "chars": 22074
+    },
+    {
+      "path": "src/pages/team/index.astro",
+      "size": 17872,
+      "modified": "2025-05-28T09:26:18.882Z",
+      "type": "astro-component",
+      "category": "application-pages",
+      "purpose": "Application page providing user interface",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:../../layouts/BaseLayout.astro",
+        "imports:../../data/agentRoles",
+        "imports:astro-icon/components",
+        "references:AgentsDirectoryManager",
+        "references:agentsDirectoryManager"
+      ],
+      "quality": 95,
+      "optimizations": [
+        "Consider using for...of loops for better performance",
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 701,
+      "chars": 17848
+    },
+    {
+      "path": "src/pages/team/morale-catalyst.astro",
+      "size": 32134,
+      "modified": "2025-05-28T09:26:18.882Z",
+      "type": "astro-component",
+      "category": "application-pages",
+      "purpose": "Application page providing user interface with database interactions",
+      "complexity": "high",
+      "importance": "medium",
+      "relationships": [
+        "imports:../../layouts/AgentProfileLayout.astro",
+        "imports:astro-icon/components"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 1061,
+      "chars": 32134
+    },
+    {
+      "path": "src/pages/team/optimizer-watchdog.astro",
+      "size": 15039,
+      "modified": "2025-05-28T09:26:18.882Z",
+      "type": "astro-component",
+      "category": "application-pages",
+      "purpose": "Application page providing user interface",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:../../layouts/AgentProfileLayout.astro"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Consider using for...of loops for better performance",
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 492,
+      "chars": 14973
+    },
+    {
+      "path": "src/pages/team/scrum-knowledge.astro",
+      "size": 11736,
+      "modified": "2025-05-28T09:26:18.882Z",
+      "type": "astro-component",
+      "category": "application-pages",
+      "purpose": "Application page providing user interface",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:../../layouts/AgentProfileLayout.astro"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 441,
+      "chars": 11680
+    },
+    {
+      "path": "src/pages/team/standup-facilitator.astro",
+      "size": 17061,
+      "modified": "2025-05-28T09:26:18.882Z",
+      "type": "typescript-definitions",
+      "category": "application-pages",
+      "purpose": "Application page providing user interface",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:../../layouts/AgentProfileLayout.astro"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 629,
+      "chars": 16989
+    },
+    {
+      "path": "src/pages/team/technical-enablement.astro",
+      "size": 16501,
+      "modified": "2025-05-28T09:26:18.883Z",
+      "type": "astro-component",
+      "category": "application-pages",
+      "purpose": "Application page providing user interface",
+      "complexity": "high",
+      "importance": "medium",
+      "relationships": [
+        "imports:../../layouts/AgentProfileLayout.astro"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 578,
+      "chars": 16433
+    },
+    {
+      "path": "src/pages/team/tester-reviewer.astro",
+      "size": 9258,
+      "modified": "2025-05-28T09:26:18.883Z",
+      "type": "astro-component-test",
+      "category": "application-pages",
+      "purpose": "Application page providing user interface",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:../../layouts/AgentProfileLayout.astro"
+      ],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 306,
+      "chars": 9220
+    },
+    {
+      "path": "src/pages/team-builder.astro",
+      "size": 26732,
+      "modified": "2025-05-28T09:26:18.881Z",
+      "type": "astro-component",
+      "category": "application-pages",
+      "purpose": "Application page providing user interface",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:../layouts/BaseLayout.astro",
+        "imports:../components/AgentRoleSelector.astro",
+        "imports:../components/TeamMemberCustomization.astro",
+        "imports:../utils/agentRoles",
+        "references:teamMemberCustomizationManager"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Consider using for...of loops for better performance",
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 1048,
+      "chars": 26692
+    },
+    {
+      "path": "src/pages/team-members.astro",
+      "size": 17340,
+      "modified": "2025-05-28T09:26:18.882Z",
+      "type": "typescript-definitions",
+      "category": "application-pages",
+      "purpose": "Application page providing user interface",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:../layouts/BaseLayout.astro",
+        "imports:astro:content"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Consider using for...of loops for better performance",
+        "Add comprehensive error handling for async operations",
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 670,
+      "chars": 17325
+    },
+    {
+      "path": "src/pages/test-db.astro",
+      "size": 2397,
+      "modified": "2025-05-28T20:28:39.353Z",
+      "type": "astro-component-test",
+      "category": "application-pages",
+      "purpose": "Application page providing user interface with database interactions",
+      "complexity": "medium",
+      "importance": "medium",
+      "relationships": [
+        "imports:astro:db",
+        "imports:../layouts/BaseLayout.astro"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Add comprehensive error handling for async operations"
+      ],
+      "lines": 63,
+      "chars": 2395
+    },
+    {
+      "path": "src/pages/test.astro",
+      "size": 286,
+      "modified": "2025-05-28T09:26:18.883Z",
+      "type": "astro-component-test",
+      "category": "application-pages",
+      "purpose": "Application page providing user interface",
+      "complexity": "low",
+      "importance": "low",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 15,
+      "chars": 284
+    },
+    {
+      "path": "src/services/database.ts",
+      "size": 4615,
+      "modified": "2025-05-28T09:26:18.883Z",
+      "type": "typescript",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management using asynchronous operations with database interactions",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:../db",
+        "imports:../db/schema",
+        "imports:drizzle-orm",
+        "references:DatabaseService",
+        "references:createDatabaseService"
+      ],
+      "quality": 95,
+      "optimizations": [
+        "Add comprehensive error handling for async operations"
+      ],
+      "lines": 152,
+      "chars": 4615
+    },
+    {
+      "path": "src/tests/database-test-strategy.md",
+      "size": 8196,
+      "modified": "2025-05-28T09:26:18.883Z",
+      "type": "markdown-test",
+      "category": "testing",
+      "purpose": "Test files for quality assurance using asynchronous operations with database interactions",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [
+        "Add comprehensive error handling for async operations"
+      ],
+      "lines": 261,
+      "chars": 8180
+    },
+    {
+      "path": "src/types/index.ts",
+      "size": 1383,
+      "modified": "2025-05-28T09:40:31.866Z",
+      "type": "typescript-definitions",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management",
+      "complexity": "low",
+      "importance": "high",
+      "relationships": [],
+      "quality": 95,
+      "optimizations": [],
+      "lines": 68,
+      "chars": 1383
+    },
+    {
+      "path": "src/utils/agentRoles.ts",
+      "size": 2115,
+      "modified": "2025-05-28T09:26:18.884Z",
+      "type": "typescript-definitions",
+      "category": "utility-functions",
+      "purpose": "Utility functions and helper methods using asynchronous operations",
+      "complexity": "medium",
+      "importance": "medium",
+      "relationships": [
+        "imports:astro:content",
+        "imports:../types",
+        "imports:../data/agentRoles"
+      ],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 63,
+      "chars": 2115
+    },
+    {
+      "path": "src/utils/aiManager.ts",
+      "size": 14983,
+      "modified": "2025-05-28T22:21:56.304Z",
+      "type": "typescript-definitions",
+      "category": "utility-functions",
+      "purpose": "Utility functions and helper methods using asynchronous operations with database interactions",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [
+        "references:AurorionAiManager"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Replace \"any\" types with specific interfaces",
+        "Add caching for AI operations to reduce costs",
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 467,
+      "chars": 14983
+    },
+    {
+      "path": "src/utils/authManager.ts",
+      "size": 12026,
+      "modified": "2025-05-28T09:40:31.866Z",
+      "type": "typescript-definitions",
+      "category": "utility-functions",
+      "purpose": "Utility functions and helper methods using asynchronous operations",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "references:AuthManager",
+        "references:authManager"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Consider using for...of loops for better performance",
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 500,
+      "chars": 12026
+    },
+    {
+      "path": "src/utils/dataManager.ts",
+      "size": 6272,
+      "modified": "2025-05-28T09:40:31.866Z",
+      "type": "typescript-definitions",
+      "category": "utility-functions",
+      "purpose": "Utility functions and helper methods",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:../types",
+        "imports:../data/agentRoles"
+      ],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 243,
+      "chars": 6272
+    },
+    {
+      "path": "src/utils/iconMapping.ts",
+      "size": 4470,
+      "modified": "2025-05-28T09:26:18.884Z",
+      "type": "typescript",
+      "category": "utility-functions",
+      "purpose": "Utility functions and helper methods with database interactions",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 170,
+      "chars": 4470
+    },
+    {
+      "path": "src/utils/memberCustomization.ts",
+      "size": 5271,
+      "modified": "2025-05-28T09:26:18.884Z",
+      "type": "typescript-definitions",
+      "category": "utility-functions",
+      "purpose": "Utility functions and helper methods",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [
+        "Replace \"any\" types with specific interfaces"
+      ],
+      "lines": 224,
+      "chars": 5271
+    },
+    {
+      "path": "src/utils/statusColors.ts",
+      "size": 2888,
+      "modified": "2025-05-28T09:26:18.884Z",
+      "type": "typescript",
+      "category": "utility-functions",
+      "purpose": "Utility functions and helper methods",
+      "complexity": "medium",
+      "importance": "high",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 82,
+      "chars": 2888
+    },
+    {
+      "path": "src/utils/vectorizeManager.ts",
+      "size": 10966,
+      "modified": "2025-05-28T22:22:29.446Z",
+      "type": "typescript-definitions",
+      "category": "utility-functions",
+      "purpose": "Utility functions and helper methods using asynchronous operations with database interactions",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [
+        "imports:./aiManager",
+        "references:AurorionAiManager",
+        "references:aiManager",
+        "references:VectorizeManager"
+      ],
+      "quality": 100,
+      "optimizations": [
+        "Replace \"any\" types with specific interfaces",
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 431,
+      "chars": 10966
+    },
+    {
+      "path": "tests/auth.spec.js",
+      "size": 2145,
+      "modified": "2025-05-28T10:05:13.151Z",
+      "type": "javascript-test",
+      "category": "testing",
+      "purpose": "Test files for quality assurance using asynchronous operations",
+      "complexity": "high",
+      "importance": "low",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [
+        "Add comprehensive error handling for async operations"
+      ],
+      "lines": 60,
+      "chars": 2145
+    },
+    {
+      "path": "tests/dashboard.spec.js",
+      "size": 7127,
+      "modified": "2025-05-28T10:18:29.742Z",
+      "type": "javascript-test",
+      "category": "testing",
+      "purpose": "Test files for quality assurance using asynchronous operations",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [
+        "Add comprehensive error handling for async operations"
+      ],
+      "lines": 201,
+      "chars": 7127
+    },
+    {
+      "path": "tests/navigation.spec.js",
+      "size": 3047,
+      "modified": "2025-05-28T10:04:56.191Z",
+      "type": "javascript-test",
+      "category": "testing",
+      "purpose": "Test files for quality assurance using asynchronous operations",
+      "complexity": "high",
+      "importance": "medium",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [
+        "Add comprehensive error handling for async operations"
+      ],
+      "lines": 96,
+      "chars": 3047
+    },
+    {
+      "path": "tests/passkey-ui.spec.js",
+      "size": 7100,
+      "modified": "2025-05-28T19:51:01.482Z",
+      "type": "javascript-test",
+      "category": "testing",
+      "purpose": "Test files for quality assurance using asynchronous operations",
+      "complexity": "high",
+      "importance": "medium",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [
+        "Add comprehensive error handling for async operations"
+      ],
+      "lines": 195,
+      "chars": 7100
+    },
+    {
+      "path": "tests/passkey.spec.js",
+      "size": 11185,
+      "modified": "2025-05-28T21:15:19.388Z",
+      "type": "javascript-test",
+      "category": "testing",
+      "purpose": "Test files for quality assurance using asynchronous operations",
+      "complexity": "high",
+      "importance": "high",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [
+        "Add comprehensive error handling for async operations",
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 308,
+      "chars": 11183
+    },
+    {
+      "path": "tsconfig.json",
+      "size": 109,
+      "modified": "2025-05-28T09:26:18.884Z",
+      "type": "json-config",
+      "category": "configuration",
+      "purpose": "Configuration file for system setup",
+      "complexity": "low",
+      "importance": "high",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 6,
+      "chars": 109
+    },
+    {
+      "path": "workflow-schemas.json",
+      "size": 13586,
+      "modified": "2025-05-28T21:32:57.619Z",
+      "type": "json-config",
+      "category": "agent-system",
+      "purpose": "AI agent system component for workflow management with database interactions",
+      "complexity": "high",
+      "importance": "critical",
+      "relationships": [],
+      "quality": 85,
+      "optimizations": [
+        "Consider splitting large file into smaller modules"
+      ],
+      "lines": 384,
+      "chars": 13586
+    },
+    {
+      "path": "wrangler.toml",
+      "size": 786,
+      "modified": "2025-05-28T22:20:51.536Z",
+      "type": "toml-config",
+      "category": "ai-infrastructure",
+      "purpose": "AI infrastructure for embeddings and intelligent processing with database interactions",
+      "complexity": "low",
+      "importance": "critical",
+      "relationships": [],
+      "quality": 100,
+      "optimizations": [],
+      "lines": 28,
+      "chars": 786
+    }
+  ]
+}
