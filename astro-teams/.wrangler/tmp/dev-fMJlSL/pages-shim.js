@@ -1,8 +1,8 @@
-var __defProp = Object.defineProperty;
-var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
+const __defProp = Object.defineProperty;
+const __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 
 // .wrangler/tmp/bundle-d7wxBq/checked-fetch.js
-var urls = /* @__PURE__ */ new Set();
+const urls = /* @__PURE__ */ new Set();
 function checkURL(request, init) {
   const url = request instanceof URL ? request : new URL(
     (typeof request === "string" ? new Request(request, init) : request).url
@@ -28,7 +28,7 @@ globalThis.fetch = new Proxy(globalThis.fetch, {
 });
 
 // ../../../../../../opt/homebrew/lib/node_modules/wrangler/templates/pages-shim.ts
-var pages_shim_default = {
+const pages_shim_default = {
   async fetch(request, env, context) {
     const response = await env.ASSETS.fetch(request.url, request);
     return new Response(response.body, response);
@@ -36,7 +36,7 @@ var pages_shim_default = {
 };
 
 // ../../../../../../opt/homebrew/lib/node_modules/wrangler/templates/middleware/middleware-ensure-req-body-drained.ts
-var drainBody = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx) => {
+const drainBody = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx) => {
   try {
     return await middlewareCtx.next(request, env);
   } finally {
@@ -51,7 +51,7 @@ var drainBody = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx)
     }
   }
 }, "drainBody");
-var middleware_ensure_req_body_drained_default = drainBody;
+const middleware_ensure_req_body_drained_default = drainBody;
 
 // ../../../../../../opt/homebrew/lib/node_modules/wrangler/templates/middleware/middleware-miniflare3-json-error.ts
 function reduceError(e) {
@@ -63,7 +63,7 @@ function reduceError(e) {
   };
 }
 __name(reduceError, "reduceError");
-var jsonError = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx) => {
+const jsonError = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx) => {
   try {
     return await middlewareCtx.next(request, env);
   } catch (e) {
@@ -74,17 +74,17 @@ var jsonError = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx)
     });
   }
 }, "jsonError");
-var middleware_miniflare3_json_error_default = jsonError;
+const middleware_miniflare3_json_error_default = jsonError;
 
 // .wrangler/tmp/bundle-d7wxBq/middleware-insertion-facade.js
-var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
+const __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   middleware_ensure_req_body_drained_default,
   middleware_miniflare3_json_error_default
 ];
-var middleware_insertion_facade_default = pages_shim_default;
+const middleware_insertion_facade_default = pages_shim_default;
 
 // ../../../../../../opt/homebrew/lib/node_modules/wrangler/templates/middleware/common.ts
-var __facade_middleware__ = [];
+const __facade_middleware__ = [];
 function __facade_register__(...args) {
   __facade_middleware__.push(...args.flat());
 }
@@ -109,7 +109,7 @@ function __facade_invoke__(request, env, ctx, dispatch, finalMiddleware) {
 __name(__facade_invoke__, "__facade_invoke__");
 
 // .wrangler/tmp/bundle-d7wxBq/middleware-loader.entry.ts
-var __Facade_ScheduledController__ = class ___Facade_ScheduledController__ {
+const __Facade_ScheduledController__ = class ___Facade_ScheduledController__ {
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;
     this.cron = cron;
@@ -197,13 +197,13 @@ function wrapWorkerEntrypoint(klass) {
   };
 }
 __name(wrapWorkerEntrypoint, "wrapWorkerEntrypoint");
-var WRAPPED_ENTRY;
+let WRAPPED_ENTRY;
 if (typeof middleware_insertion_facade_default === "object") {
   WRAPPED_ENTRY = wrapExportedHandler(middleware_insertion_facade_default);
 } else if (typeof middleware_insertion_facade_default === "function") {
   WRAPPED_ENTRY = wrapWorkerEntrypoint(middleware_insertion_facade_default);
 }
-var middleware_loader_entry_default = WRAPPED_ENTRY;
+const middleware_loader_entry_default = WRAPPED_ENTRY;
 export {
   __INTERNAL_WRANGLER_MIDDLEWARE__,
   middleware_loader_entry_default as default

@@ -1,7 +1,7 @@
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 
-// .wrangler/tmp/bundle-QZwcDo/checked-fetch.js
+// .wrangler/tmp/bundle-ESGKWk/checked-fetch.js
 var urls = /* @__PURE__ */ new Set();
 function checkURL(request, init) {
   const url = request instanceof URL ? request : new URL(
@@ -27,7 +27,7 @@ globalThis.fetch = new Proxy(globalThis.fetch, {
   }
 });
 
-// .wrangler/tmp/bundle-QZwcDo/strip-cf-connecting-ip-header.js
+// .wrangler/tmp/bundle-ESGKWk/strip-cf-connecting-ip-header.js
 function stripCfConnectingIPHeader(input, init) {
   const request = new Request(input, init);
   request.headers.delete("CF-Connecting-IP");
@@ -223,6 +223,43 @@ async function queryVectorize(request, env, corsHeaders) {
   });
 }
 __name(queryVectorize, "queryVectorize");
+async function getAvailableModels(request, env, corsHeaders) {
+  const models = [
+    {
+      name: "@cf/meta/llama-3.1-8b-instruct",
+      description: "Advanced reasoning and code generation with 8B parameters",
+      type: "text-generation",
+      provider: "cloudflare"
+    },
+    {
+      name: "@cf/baai/bge-base-en-v1.5",
+      description: "768-dimensional embeddings for semantic search",
+      type: "embedding",
+      provider: "cloudflare"
+    },
+    {
+      name: "@cf/baai/bge-reranker-base",
+      description: "Reranks search results for better accuracy",
+      type: "reranker",
+      provider: "cloudflare"
+    },
+    {
+      name: "@cf/microsoft/phi-2",
+      description: "Efficient 2.7B parameter model for quick tasks",
+      type: "text-generation",
+      provider: "cloudflare"
+    }
+  ];
+  return new Response(JSON.stringify({
+    models,
+    count: models.length,
+    provider: "cloudflare-ai",
+    status: "available"
+  }), {
+    headers: { "Content-Type": "application/json", ...corsHeaders }
+  });
+}
+__name(getAvailableModels, "getAvailableModels");
 function getApiDocs() {
   return `
 <!DOCTYPE html>
@@ -343,7 +380,7 @@ function getApiDocs() {
 }
 __name(getApiDocs, "getApiDocs");
 
-// ../node_modules/wrangler/templates/middleware/middleware-ensure-req-body-drained.ts
+// ../../../../../.local/share/mise/installs/node/24.1.0/lib/node_modules/wrangler/templates/middleware/middleware-ensure-req-body-drained.ts
 var drainBody = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx) => {
   try {
     return await middlewareCtx.next(request, env);
@@ -361,7 +398,7 @@ var drainBody = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx)
 }, "drainBody");
 var middleware_ensure_req_body_drained_default = drainBody;
 
-// ../node_modules/wrangler/templates/middleware/middleware-miniflare3-json-error.ts
+// ../../../../../.local/share/mise/installs/node/24.1.0/lib/node_modules/wrangler/templates/middleware/middleware-miniflare3-json-error.ts
 function reduceError(e) {
   return {
     name: e?.name,
@@ -384,14 +421,14 @@ var jsonError = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx)
 }, "jsonError");
 var middleware_miniflare3_json_error_default = jsonError;
 
-// .wrangler/tmp/bundle-QZwcDo/middleware-insertion-facade.js
+// .wrangler/tmp/bundle-ESGKWk/middleware-insertion-facade.js
 var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   middleware_ensure_req_body_drained_default,
   middleware_miniflare3_json_error_default
 ];
 var middleware_insertion_facade_default = ai_test_default;
 
-// ../node_modules/wrangler/templates/middleware/common.ts
+// ../../../../../.local/share/mise/installs/node/24.1.0/lib/node_modules/wrangler/templates/middleware/common.ts
 var __facade_middleware__ = [];
 function __facade_register__(...args) {
   __facade_middleware__.push(...args.flat());
@@ -416,7 +453,7 @@ function __facade_invoke__(request, env, ctx, dispatch, finalMiddleware) {
 }
 __name(__facade_invoke__, "__facade_invoke__");
 
-// .wrangler/tmp/bundle-QZwcDo/middleware-loader.entry.ts
+// .wrangler/tmp/bundle-ESGKWk/middleware-loader.entry.ts
 var __Facade_ScheduledController__ = class ___Facade_ScheduledController__ {
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;

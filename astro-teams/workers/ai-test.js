@@ -30,6 +30,8 @@ export default {
         return await analyzeFile(request, env, corsHeaders);
       } else if (path === '/query-vectorize') {
         return await queryVectorize(request, env, corsHeaders);
+      } else if (path === '/api/models') {
+        return await getAvailableModels(request, env, corsHeaders);
       } else {
         return new Response(getApiDocs(), {
           headers: { 'Content-Type': 'text/html', ...corsHeaders }
@@ -198,6 +200,45 @@ async function queryVectorize(request, env, corsHeaders) {
     results: vectorResponse.matches,
     count: vectorResponse.count,
     success: true
+  }), {
+    headers: { 'Content-Type': 'application/json', ...corsHeaders }
+  });
+}
+
+async function getAvailableModels(request, env, corsHeaders) {
+  // Return list of available Cloudflare AI models
+  const models = [
+    {
+      name: '@cf/meta/llama-3.1-8b-instruct',
+      description: 'Advanced reasoning and code generation with 8B parameters',
+      type: 'text-generation',
+      provider: 'cloudflare'
+    },
+    {
+      name: '@cf/baai/bge-base-en-v1.5',
+      description: '768-dimensional embeddings for semantic search',
+      type: 'embedding',
+      provider: 'cloudflare'
+    },
+    {
+      name: '@cf/baai/bge-reranker-base',
+      description: 'Reranks search results for better accuracy',
+      type: 'reranker', 
+      provider: 'cloudflare'
+    },
+    {
+      name: '@cf/microsoft/phi-2',
+      description: 'Efficient 2.7B parameter model for quick tasks',
+      type: 'text-generation',
+      provider: 'cloudflare'
+    }
+  ];
+
+  return new Response(JSON.stringify({
+    models,
+    count: models.length,
+    provider: 'cloudflare-ai',
+    status: 'available'
   }), {
     headers: { 'Content-Type': 'application/json', ...corsHeaders }
   });

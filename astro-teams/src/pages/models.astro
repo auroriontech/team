@@ -100,66 +100,66 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
         </svg>
-        Recommended Models for Aurorion Teams
+        Cloudflare AI Models for Aurorion Teams
       </h2>
       <div class="recommendations-grid">
         <div class="recommendation-card">
           <div class="card-content">
-            <h3>DeepSeek-R1:7b</h3>
+            <h3>@cf/meta/llama-3.1-8b-instruct</h3>
             <p class="role">Architect-Engineer Agent</p>
-            <p class="description">Excellent reasoning and code generation</p>
-            <span class="size">Size: ~4.1GB</span>
+            <p class="description">Advanced reasoning and code generation with 8B parameters</p>
+            <span class="size">Status: Always Available (Cloud)</span>
           </div>
-          <button class="download-model action-btn small" data-model="deepseek-r1:7b">
+          <button class="test-cf-model action-btn small" data-model="@cf/meta/llama-3.1-8b-instruct">
             <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
-            Download
+            Test
           </button>
         </div>
         
         <div class="recommendation-card">
           <div class="card-content">
-            <h3>Gemma2:27b</h3>
-            <p class="role">Tester-Reviewer Agent</p>
-            <p class="description">High accuracy for quality validation</p>
-            <span class="size">Size: ~16GB</span>
+            <h3>@cf/baai/bge-base-en-v1.5</h3>
+            <p class="role">Embedding & Search</p>
+            <p class="description">768-dimensional embeddings for semantic search</p>
+            <span class="size">Status: Always Available (Cloud)</span>
           </div>
-          <button class="download-model action-btn small" data-model="gemma2:27b">
+          <button class="test-cf-model action-btn small" data-model="@cf/baai/bge-base-en-v1.5">
             <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
-            Download
+            Test
           </button>
         </div>
 
         <div class="recommendation-card">
           <div class="card-content">
-            <h3>Llama3.2:3b</h3>
-            <p class="role">Lightweight Option</p>
-            <p class="description">Good for testing and development</p>
-            <span class="size">Size: ~2GB</span>
+            <h3>@cf/baai/bge-reranker-base</h3>
+            <p class="role">Search Optimization</p>
+            <p class="description">Reranks search results for better accuracy</p>
+            <span class="size">Status: Always Available (Cloud)</span>
           </div>
-          <button class="download-model action-btn small" data-model="llama3.2:3b">
+          <button class="test-cf-model action-btn small" data-model="@cf/baai/bge-reranker-base">
             <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
-            Download
+            Test
           </button>
         </div>
 
         <div class="recommendation-card">
           <div class="card-content">
-            <h3>Qwen2.5:14b</h3>
-            <p class="role">Multi-purpose Agent</p>
-            <p class="description">Balanced performance and efficiency</p>
-            <span class="size">Size: ~8.7GB</span>
+            <h3>@cf/microsoft/phi-2</h3>
+            <p class="role">Lightweight Reasoning</p>
+            <p class="description">Efficient 2.7B parameter model for quick tasks</p>
+            <span class="size">Status: Always Available (Cloud)</span>
           </div>
-          <button class="download-model action-btn small" data-model="qwen2.5:14b">
+          <button class="test-cf-model action-btn small" data-model="@cf/microsoft/phi-2">
             <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
-            Download
+            Test
           </button>
         </div>
       </div>
@@ -449,6 +449,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   </style>
 
   <script>
+    const CLOUDFLARE_AI_URL = 'http://localhost:8788'; // Local Cloudflare AI Worker
     const OLLAMA_BASE_URL = 'http://ollama.homedevenv.com';
     const LMSTUDIO_URL = 'http://localhost:1234';
     
@@ -459,7 +460,21 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       const statusElement = document.getElementById('ollama-status');
       const indicatorElement = document.getElementById('status-indicator');
       
-      // Check LM Studio first (port 1234)
+      // Check Cloudflare AI Worker first (priority for Aurorion Teams)
+      try {
+        const cfResponse = await fetch(`${CLOUDFLARE_AI_URL}/api/models`);
+        if (cfResponse.ok) {
+          statusElement.textContent = 'Cloudflare AI';
+          indicatorElement.className = 'status-dot online';
+          currentProvider = 'cloudflare';
+          currentBaseUrl = CLOUDFLARE_AI_URL;
+          return 'cloudflare';
+        }
+      } catch (error) {
+        console.log('Cloudflare AI Worker not available on port 8787');
+      }
+      
+      // Check LM Studio (port 1234)
       try {
         const lmResponse = await fetch(`${LMSTUDIO_URL}/v1/models`);
         if (lmResponse.ok) {
@@ -521,7 +536,23 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
         let response, data;
         
-        if (currentProvider === 'lmstudio') {
+        if (currentProvider === 'cloudflare') {
+          // Cloudflare AI Worker API
+          response = await fetch(`${currentBaseUrl}/api/models`);
+          const cfData = await response.json();
+          
+          // Convert Cloudflare AI format to consistent format
+          data = {
+            models: cfData.models.map(model => ({
+              name: model.name,
+              size: 0, // Cloudflare AI models are cloud-hosted
+              modified: new Date().toISOString(),
+              digest: 'cloudflare-' + model.name.replace(/[@\/]/g, '-'),
+              provider: 'cloudflare',
+              description: model.description || 'Cloudflare AI model'
+            }))
+          };
+        } else if (currentProvider === 'lmstudio') {
           // LM Studio uses OpenAI-compatible API
           response = await fetch(`${currentBaseUrl}/v1/models`);
           const lmData = await response.json();
@@ -656,19 +687,95 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       }
     }
 
+    async function testCloudflareModel(modelName) {
+      const btn = document.querySelector(`[data-model="${modelName}"]`);
+      const originalText = btn.textContent;
+      btn.textContent = 'Testing...';
+      btn.disabled = true;
+      
+      try {
+        let endpoint, payload;
+        
+        if (modelName.includes('embedding') || modelName.includes('bge-base')) {
+          // Test embedding model
+          endpoint = '/test-embedding';
+          payload = { text: 'Hello, this is a test embedding for Aurorion Teams AI system.' };
+        } else if (modelName.includes('reranker')) {
+          // Test reranker model
+          endpoint = '/test-reranker';
+          payload = {
+            query: 'AI agent architecture',
+            documents: ['AI agent system design', 'Database architecture', 'User interface components']
+          };
+        } else {
+          // Test text generation model
+          endpoint = '/test-reasoning';
+          payload = {
+            messages: [
+              { role: 'system', content: 'You are an AI assistant for the Aurorion Teams system.' },
+              { role: 'user', content: 'Explain what makes a good AI agent architecture in 2 sentences.' }
+            ]
+          };
+        }
+
+        const response = await fetch(`${CLOUDFLARE_AI_URL}${endpoint}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          btn.textContent = 'Success!';
+          btn.style.background = '#c6f6d5';
+          btn.style.color = '#22543d';
+          
+          // Show result in alert (could be improved with modal)
+          if (result.data && Array.isArray(result.data)) {
+            alert(`${modelName} Test Result: Generated ${result.data.length} dimensional embedding`);
+          } else if (result.response) {
+            alert(`${modelName} Test Result: ${result.response.substring(0, 200)}...`);
+          } else {
+            alert(`${modelName} Test Successful!`);
+          }
+        } else {
+          throw new Error(`HTTP ${response.status}`);
+        }
+      } catch (error) {
+        console.error('Model test failed:', error);
+        btn.textContent = 'Error';
+        btn.style.background = '#fed7e2';
+        btn.style.color = '#742a2a';
+        alert(`${modelName} test failed: ${error.message}`);
+      }
+      
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.disabled = false;
+        btn.style.background = '';
+        btn.style.color = '';
+      }, 3000);
+    }
+
     // Event listeners
     document.getElementById('refresh-btn').addEventListener('click', loadModels);
     
     document.getElementById('download-recommended').addEventListener('click', () => {
-      if (confirm('Download DeepSeek-R1:7b and Llama3.2:3b for testing?')) {
-        downloadModel('deepseek-r1:7b');
-        setTimeout(() => downloadModel('llama3.2:3b'), 1000);
+      if (confirm('Test Cloudflare AI models? This will run sample queries on Llama 3.1 and BGE embeddings.')) {
+        testCloudflareModel('@cf/meta/llama-3.1-8b-instruct');
+        setTimeout(() => testCloudflareModel('@cf/baai/bge-base-en-v1.5'), 1000);
       }
     });
 
     document.querySelectorAll('.download-model').forEach(btn => {
       btn.addEventListener('click', (e) => {
         downloadModel(e.target.dataset.model);
+      });
+    });
+
+    document.querySelectorAll('.test-cf-model').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        testCloudflareModel(e.target.dataset.model);
       });
     });
 
