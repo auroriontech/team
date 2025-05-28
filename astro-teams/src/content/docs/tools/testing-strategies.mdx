@@ -1,0 +1,731 @@
+---
+title: "Testing Strategies"
+description: "Comprehensive testing strategies and patterns for web applications, APIs, and infrastructure"
+category: "tools"
+priority: "high"
+lastUpdated: 2024-05-27
+status: "active"
+tags: ["tool-testing", "playwright", "integration", "unit", "e2e", "reusable"]
+authors: ["Aurorion Teams"]
+---
+
+# Testing Strategies
+
+## Overview
+
+Comprehensive testing strategies and patterns for modern web applications, covering everything from unit tests to end-to-end testing across multiple environments and platforms.
+
+## Testing Architecture
+
+### Multi-Layer Testing Strategy
+```
+🎯 End-to-End Testing (Playwright)
+├── 🌐 UI/UX Testing - User interactions and visual validation
+├── 🔗 API Integration - Real backend and mocked scenarios  
+├── 🏗️ Service Layer - Business logic and validation services
+├── ☁️ Infrastructure - Platform-specific functionality
+└── 🔒 Security Testing - CORS, validation, injection prevention
+```
+
+### Test Coverage Matrix
+- **Unit Tests**: Individual functions and components
+- **Integration Tests**: Service interactions and API endpoints
+- **End-to-End Tests**: Complete user workflows
+- **Performance Tests**: Load testing and response times
+- **Security Tests**: Vulnerability scanning and input validation
+- **Accessibility Tests**: WCAG compliance and screen reader support
+
+## Playwright End-to-End Testing
+
+### Configuration Architecture
+```typescript
+// playwright.config.ts
+import { defineConfig, devices } from '@playwright/test';
+
+export default defineConfig({
+  testDir: './tests',
+  fullyParallel: true,
+  forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? 2 : 0,
+  workers: process.env.CI ? 1 : undefined,
+  
+  // Enhanced reporting
+  reporter: [
+    ['html'],
+    ['junit', { outputFile: 'test-results/junit.xml' }],
+    ['json', { outputFile: 'test-results/results.json' }]
+  ],
+  
+  use: {
+    baseURL: process.env.BASE_URL || 'http://localhost:4321',
+    trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
+  },
+
+  projects: [
+    // Fast feedback with mocked APIs
+    {
+      name: 'chromium-mocked',
+      use: { 
+        ...devices['Desktop Chrome'],
+        baseURL: 'http://localhost:4321'
+      },
+      testMatch: '**/mocked-*.spec.ts'
+    },
+    
+    // Real API integration testing
+    {
+      name: 'chromium-integration',
+      use: { 
+        ...devices['Desktop Chrome'],
+        baseURL: 'http://localhost:4321'
+      },
+      testMatch: '**/integration-*.spec.ts',
+      dependencies: ['chromium-mocked']
+    },
+    
+    // Service layer testing
+    {
+      name: 'service-tests',
+      use: { 
+        ...devices['Desktop Chrome'],
+      },
+      testMatch: '**/services-*.spec.ts'
+    },
+    
+    // Platform-specific testing
+    {
+      name: 'platform-workers',
+      use: { 
+        ...devices['Desktop Chrome'],
+        baseURL: process.env.WORKERS_URL || 'http://localhost:8787'
+      },
+      testMatch: '**/workers-*.spec.ts'
+    },
+    
+    // Staging environment validation
+    {
+      name: 'staging-validation',
+      use: { 
+        ...devices['Desktop Chrome'],
+        baseURL: process.env.STAGING_URL
+      },
+      testMatch: '**/staging-*.spec.ts',
+      dependencies: ['chromium-integration']
+    },
+    
+    // Mobile testing
+    {
+      name: 'mobile-chrome',
+      use: { ...devices['Pixel 5'] },
+      testMatch: '**/mobile-*.spec.ts'
+    },
+    
+    // Cross-browser testing
+    {
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
+      testMatch: '**/cross-browser-*.spec.ts'
+    },
+    
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+      testMatch: '**/cross-browser-*.spec.ts'
+    }
+  ],
+
+  // Global setup and teardown
+  globalSetup: require.resolve('./tests/global-setup'),
+  globalTeardown: require.resolve('./tests/global-teardown'),
+});
+```
+
+### Test Organization Patterns
+
+#### Page Object Model
+```typescript
+// tests/pages/HomePage.ts
+export class HomePage {
+  constructor(private page: Page) {}
+  
+  // Locators
+  get subscribeButton() {
+    return this.page.getByRole('button', { name: /subscribe/i });
+  }
+  
+  get emailInput() {
+    return this.page.getByPlaceholder(/enter your email/i);
+  }
+  
+  get successMessage() {
+    return this.page.getByTestId('success-message');
+  }
+  
+  // Actions
+  async subscribe(email: string) {
+    await this.emailInput.fill(email);
+    await this.subscribeButton.click();
+    return this.waitForResponse();
+  }
+  
+  async waitForResponse() {
+    return this.page.waitForResponse(resp => 
+      resp.url().includes('/api/subscribe') && resp.status() === 200
+    );
+  }
+  
+  // Assertions
+  async expectSubscriptionSuccess() {
+    await expect(this.successMessage).toBeVisible();
+    await expect(this.successMessage).toContainText('Thank you');
+  }
+}
+```
+
+#### Test Data Management
+```typescript
+// tests/fixtures/test-data.ts
+export const testUsers = {
+  valid: {
+    email: 'test@example.com',
+    name: 'Test User'
+  },
+  invalid: {
+    email: 'invalid-email',
+    name: ''
+  }
+};
+
+export const testScenarios = {
+  subscription: {
+    success: {
+      email: 'success@example.com',
+      expectedMessage: 'Thank you for subscribing!'
+    },
+    duplicate: {
+      email: 'duplicate@example.com',
+      expectedMessage: 'Email already subscribed'
+    },
+    invalid: {
+      email: 'invalid',
+      expectedMessage: 'Please enter a valid email'
+    }
+  }
+};
+```
+
+### API Testing Patterns
+
+#### Mocked API Testing
+```typescript
+// tests/mocked-api.spec.ts
+import { test, expect } from '@playwright/test';
+
+test.describe('Subscription API - Mocked', () => {
+  test.beforeEach(async ({ page }) => {
+    // Mock successful API response
+    await page.route('**/api/subscribe', async route => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          status: 'success',
+          message: 'Subscription successful'
+        })
+      });
+    });
+  });
+  
+  test('should handle successful subscription', async ({ page }) => {
+    const homePage = new HomePage(page);
+    
+    await page.goto('/');
+    await homePage.subscribe('test@example.com');
+    await homePage.expectSubscriptionSuccess();
+  });
+  
+  test('should handle API errors gracefully', async ({ page }) => {
+    // Mock error response
+    await page.route('**/api/subscribe', async route => {
+      await route.fulfill({
+        status: 400,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          status: 'error',
+          message: 'Invalid email format'
+        })
+      });
+    });
+    
+    const homePage = new HomePage(page);
+    await page.goto('/');
+    await homePage.subscribe('invalid-email');
+    
+    await expect(page.getByText('Invalid email format')).toBeVisible();
+  });
+});
+```
+
+#### Real API Integration Testing
+```typescript
+// tests/integration-api.spec.ts
+import { test, expect } from '@playwright/test';
+
+test.describe('Subscription API - Real Integration', () => {
+  test('should create real subscription', async ({ request, page }) => {
+    const email = `test-${Date.now()}@example.com`;
+    
+    // Test API directly
+    const response = await request.post('/api/subscribe', {
+      data: { email }
+    });
+    
+    expect(response.status()).toBe(200);
+    
+    const data = await response.json();
+    expect(data.status).toBe('success');
+    
+    // Test UI integration
+    await page.goto('/');
+    const homePage = new HomePage(page);
+    await homePage.subscribe(email);
+    await homePage.expectSubscriptionSuccess();
+  });
+  
+  test('should prevent duplicate subscriptions', async ({ request }) => {
+    const email = 'duplicate@example.com';
+    
+    // First subscription
+    await request.post('/api/subscribe', { data: { email } });
+    
+    // Second subscription (should fail)
+    const response = await request.post('/api/subscribe', { data: { email } });
+    expect(response.status()).toBe(409);
+    
+    const data = await response.json();
+    expect(data.error.code).toBe('DUPLICATE_EMAIL');
+  });
+});
+```
+
+### Service Layer Testing
+
+#### Business Logic Testing
+```typescript
+// tests/services-validation.spec.ts
+import { test, expect } from '@playwright/test';
+
+test.describe('Email Validation Service', () => {
+  test('should validate email formats', async ({ page }) => {
+    await page.goto('/');
+    
+    const testCases = [
+      { email: 'valid@example.com', shouldPass: true },
+      { email: 'invalid-email', shouldPass: false },
+      { email: 'test@', shouldPass: false },
+      { email: '@example.com', shouldPass: false },
+      { email: 'test@example', shouldPass: false }
+    ];
+    
+    for (const testCase of testCases) {
+      await page.fill('[data-testid="email-input"]', testCase.email);
+      await page.click('[data-testid="validate-button"]');
+      
+      const errorMessage = page.getByTestId('email-error');
+      
+      if (testCase.shouldPass) {
+        await expect(errorMessage).not.toBeVisible();
+      } else {
+        await expect(errorMessage).toBeVisible();
+      }
+    }
+  });
+});
+```
+
+### Platform-Specific Testing
+
+#### Cloudflare Workers Testing
+```typescript
+// tests/workers-functionality.spec.ts
+import { test, expect } from '@playwright/test';
+
+test.describe('Cloudflare Workers Functionality', () => {
+  test('should handle CORS properly', async ({ request }) => {
+    const response = await request.post('/api/subscribe', {
+      data: { email: 'test@example.com' },
+      headers: {
+        'Origin': 'https://aurorion.app'
+      }
+    });
+    
+    expect(response.headers()['access-control-allow-origin']).toBe('https://aurorion.app');
+  });
+  
+  test('should enforce rate limiting', async ({ request }) => {
+    const requests = Array.from({ length: 101 }, (_, i) => 
+      request.post('/api/subscribe', {
+        data: { email: `test${i}@example.com` }
+      })
+    );
+    
+    const responses = await Promise.all(requests);
+    const rateLimitedResponses = responses.filter(r => r.status() === 429);
+    
+    expect(rateLimitedResponses.length).toBeGreaterThan(0);
+  });
+});
+```
+
+#### Database Testing
+```typescript
+// tests/database-integration.spec.ts
+import { test, expect } from '@playwright/test';
+
+test.describe('D1 Database Integration', () => {
+  test('should persist subscription data', async ({ request }) => {
+    const email = `persistence-test-${Date.now()}@example.com`;
+    
+    // Create subscription
+    await request.post('/api/subscribe', { data: { email } });
+    
+    // Verify persistence via API
+    const response = await request.get(`/api/subscribers?email=${email}`);
+    expect(response.status()).toBe(200);
+    
+    const data = await response.json();
+    expect(data.data.email).toBe(email);
+    expect(data.data.subscribed_at).toBeDefined();
+  });
+  
+  test('should handle database constraints', async ({ request }) => {
+    const email = 'constraint-test@example.com';
+    
+    // First subscription
+    const response1 = await request.post('/api/subscribe', { data: { email } });
+    expect(response1.status()).toBe(200);
+    
+    // Duplicate subscription (should be handled gracefully)
+    const response2 = await request.post('/api/subscribe', { data: { email } });
+    expect(response2.status()).toBe(409);
+  });
+});
+```
+
+## Unit Testing Patterns
+
+### Component Testing
+```typescript
+// tests/unit/components/SubscribeForm.test.ts
+import { describe, it, expect, vi } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { SubscribeForm } from '../../../src/components/SubscribeForm';
+
+describe('SubscribeForm', () => {
+  it('should validate email input', async () => {
+    const mockOnSubmit = vi.fn();
+    
+    render(<SubscribeForm onSubmit={mockOnSubmit} />);
+    
+    const emailInput = screen.getByPlaceholderText(/enter your email/i);
+    const submitButton = screen.getByRole('button', { name: /subscribe/i });
+    
+    // Test invalid email
+    fireEvent.change(emailInput, { target: { value: 'invalid-email' } });
+    fireEvent.click(submitButton);
+    
+    expect(screen.getByText(/please enter a valid email/i)).toBeInTheDocument();
+    expect(mockOnSubmit).not.toHaveBeenCalled();
+    
+    // Test valid email
+    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    fireEvent.click(submitButton);
+    
+    expect(mockOnSubmit).toHaveBeenCalledWith('test@example.com');
+  });
+});
+```
+
+### Service Testing
+```typescript
+// tests/unit/services/EmailValidator.test.ts
+import { describe, it, expect } from 'vitest';
+import { EmailValidator } from '../../../src/services/EmailValidator';
+
+describe('EmailValidator', () => {
+  const validator = new EmailValidator();
+  
+  it('should validate correct email formats', () => {
+    const validEmails = [
+      'test@example.com',
+      'user.name@example.co.uk',
+      'user+tag@example.org'
+    ];
+    
+    validEmails.forEach(email => {
+      expect(validator.isValid(email)).toBe(true);
+    });
+  });
+  
+  it('should reject invalid email formats', () => {
+    const invalidEmails = [
+      'invalid-email',
+      'test@',
+      '@example.com',
+      'test@example',
+      'test..test@example.com'
+    ];
+    
+    invalidEmails.forEach(email => {
+      expect(validator.isValid(email)).toBe(false);
+    });
+  });
+});
+```
+
+## Performance Testing
+
+### Load Testing Setup
+```typescript
+// tests/performance/load-testing.spec.ts
+import { test, expect } from '@playwright/test';
+
+test.describe('Performance Testing', () => {
+  test('should handle concurrent subscriptions', async ({ browser }) => {
+    const contexts = await Promise.all(
+      Array.from({ length: 10 }, () => browser.newContext())
+    );
+    
+    const startTime = Date.now();
+    
+    const results = await Promise.all(
+      contexts.map(async (context, index) => {
+        const page = await context.newPage();
+        await page.goto('/');
+        
+        const response = await page.request.post('/api/subscribe', {
+          data: { email: `load-test-${index}@example.com` }
+        });
+        
+        await context.close();
+        return { status: response.status(), index };
+      })
+    );
+    
+    const endTime = Date.now();
+    const duration = endTime - startTime;
+    
+    // All requests should succeed
+    results.forEach(result => {
+      expect(result.status).toBe(200);
+    });
+    
+    // Should complete within reasonable time
+    expect(duration).toBeLessThan(5000); // 5 seconds
+  });
+});
+```
+
+### Response Time Testing
+```typescript
+// tests/performance/response-times.spec.ts
+import { test, expect } from '@playwright/test';
+
+test.describe('Response Time Testing', () => {
+  test('API endpoints should respond quickly', async ({ request }) => {
+    const endpoints = [
+      { path: '/api/subscribe', method: 'POST', data: { email: 'test@example.com' } },
+      { path: '/api/subscriber-count', method: 'GET' },
+      { path: '/api/health', method: 'GET' }
+    ];
+    
+    for (const endpoint of endpoints) {
+      const startTime = Date.now();
+      
+      const response = endpoint.method === 'POST' 
+        ? await request.post(endpoint.path, { data: endpoint.data })
+        : await request.get(endpoint.path);
+      
+      const endTime = Date.now();
+      const responseTime = endTime - startTime;
+      
+      expect(response.status()).toBeLessThan(400);
+      expect(responseTime).toBeLessThan(1000); // Under 1 second
+    }
+  });
+});
+```
+
+## Security Testing
+
+### Input Validation Testing
+```typescript
+// tests/security/input-validation.spec.ts
+import { test, expect } from '@playwright/test';
+
+test.describe('Security - Input Validation', () => {
+  test('should prevent XSS attacks', async ({ page }) => {
+    const maliciousInputs = [
+      '<script>alert("xss")</script>',
+      'javascript:alert("xss")',
+      '<img src="x" onerror="alert(\'xss\')">'
+    ];
+    
+    await page.goto('/');
+    
+    for (const input of maliciousInputs) {
+      await page.fill('[data-testid="email-input"]', input);
+      await page.click('[data-testid="submit-button"]');
+      
+      // Should not execute script
+      const alerts = [];
+      page.on('dialog', dialog => {
+        alerts.push(dialog.message());
+        dialog.dismiss();
+      });
+      
+      expect(alerts).toHaveLength(0);
+    }
+  });
+  
+  test('should prevent SQL injection', async ({ request }) => {
+    const maliciousInputs = [
+      "'; DROP TABLE subscribers; --",
+      "' OR '1'='1",
+      "admin@example.com'; INSERT INTO subscribers (email) VALUES ('hacked@example.com'); --"
+    ];
+    
+    for (const input of maliciousInputs) {
+      const response = await request.post('/api/subscribe', {
+        data: { email: input }
+      });
+      
+      // Should either reject input or handle safely
+      expect([200, 400, 422]).toContain(response.status());
+      
+      // Verify no malicious data was inserted
+      const checkResponse = await request.get('/api/subscribers?email=hacked@example.com');
+      expect(checkResponse.status()).toBe(404);
+    }
+  });
+});
+```
+
+## Testing Best Practices
+
+### Test Organization
+```typescript
+// tests/utils/test-helpers.ts
+export class TestHelpers {
+  static async cleanupTestData(request: APIRequestContext) {
+    // Clean up test data after tests
+    await request.delete('/api/test-cleanup');
+  }
+  
+  static generateTestEmail(): string {
+    return `test-${Date.now()}-${Math.random().toString(36).substr(2, 9)}@example.com`;
+  }
+  
+  static async waitForCondition(
+    condition: () => Promise<boolean>,
+    timeout: number = 5000
+  ): Promise<void> {
+    const start = Date.now();
+    
+    while (Date.now() - start < timeout) {
+      if (await condition()) return;
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    
+    throw new Error(`Condition not met within ${timeout}ms`);
+  }
+}
+```
+
+### Environment Configuration
+```typescript
+// tests/config/test-environments.ts
+export const environments = {
+  local: {
+    baseURL: 'http://localhost:4321',
+    apiURL: 'http://localhost:4321/api',
+    timeout: 30000
+  },
+  staging: {
+    baseURL: process.env.STAGING_URL!,
+    apiURL: `${process.env.STAGING_URL}/api`,
+    timeout: 60000
+  },
+  production: {
+    baseURL: process.env.PRODUCTION_URL!,
+    apiURL: `${process.env.PRODUCTION_URL}/api`,
+    timeout: 60000
+  }
+};
+
+export const getCurrentEnvironment = () => {
+  const env = process.env.TEST_ENV || 'local';
+  return environments[env as keyof typeof environments];
+};
+```
+
+### CI/CD Integration
+```yaml
+# .github/workflows/test.yml
+name: Testing Pipeline
+
+on: [push, pull_request]
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: npm ci
+      - run: npm run test:unit
+      
+  integration-tests:
+    runs-on: ubuntu-latest
+    needs: unit-tests
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: npm ci
+      - run: npm run build
+      - run: npm run test:integration
+        env:
+          TEST_DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
+          
+  e2e-tests:
+    runs-on: ubuntu-latest
+    needs: integration-tests
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: npm ci
+      - run: npx playwright install
+      - run: npm run test:e2e
+        env:
+          BASE_URL: http://localhost:4321
+      - uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report/
+```
+
+## Related Documentation
+
+- [API Design Patterns](/docs/tools/api-design)
+- [Database Design](/docs/tools/database-design)
+- [Cloudflare Platform Guide](/docs/platforms/cloudflare)
+- [Performance Optimization](/docs/guides/performance)

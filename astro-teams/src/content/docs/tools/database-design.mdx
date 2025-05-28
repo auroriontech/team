@@ -1,0 +1,386 @@
+---
+title: "Database Design Patterns"
+description: "Reusable database design patterns for SQLite, D1, and other SQL databases"
+category: "reference"
+priority: "high"
+lastUpdated: 2024-05-27
+status: "active"
+tags: ["tool-database", "sqlite", "d1", "schema", "patterns", "reusable"]
+authors: ["Aurorion Teams"]
+---
+
+# Database Design Patterns
+
+## Overview
+
+Reusable database design patterns and best practices for SQLite, Cloudflare D1, and other SQL databases across projects.
+
+## Platform Support
+
+### Cloudflare D1
+- **Type**: SQLite-compatible serverless database
+- **Use Cases**: Web applications, edge computing
+- **Features**: Global replication, automatic scaling
+- **Access**: Via bindings in Workers/Pages
+
+### SQLite
+- **Type**: Embedded SQL database
+- **Use Cases**: Local development, mobile apps, small applications
+- **Features**: Zero-configuration, file-based, ACID compliant
+
+### Other SQL Databases
+- **PostgreSQL**: For complex applications requiring advanced features
+- **MySQL**: For traditional web applications
+- **SQL Server**: For enterprise applications
+
+## Common Schema Patterns
+
+### User Management
+
+#### Basic User Table
+```sql
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email TEXT NOT NULL UNIQUE COLLATE NOCASE,
+    username TEXT UNIQUE,
+    password_hash TEXT,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    last_login TIMESTAMP,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    email_verified BOOLEAN NOT NULL DEFAULT FALSE
+);
+
+-- Indexes for performance
+CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_users_username ON users(username);
+CREATE INDEX idx_users_active ON users(is_active);
+```
+
+#### User Preferences
+```sql
+CREATE TABLE user_preferences (
+    user_id INTEGER NOT NULL,
+    preference_key TEXT NOT NULL,
+    preference_value TEXT,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, preference_key),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+```
+
+### Subscription Management
+
+#### Subscribers Table
+```sql
+CREATE TABLE subscribers (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email TEXT NOT NULL UNIQUE COLLATE NOCASE,
+    consent BOOLEAN NOT NULL DEFAULT TRUE,
+    early_access BOOLEAN NOT NULL DEFAULT FALSE,
+    subscribed_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    unsubscribed_at TIMESTAMP,
+    user_agent TEXT,
+    ip_address TEXT,
+    source TEXT DEFAULT 'website',
+    status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'unsubscribed', 'bounced'))
+);
+
+-- Indexes
+CREATE INDEX idx_subscribers_email ON subscribers(email);
+CREATE INDEX idx_subscribers_status ON subscribers(status);
+CREATE INDEX idx_subscribers_source ON subscribers(source);
+CREATE INDEX idx_subscribers_subscribed_at ON subscribers(subscribed_at);
+```
+
+#### Subscription Events (Audit Trail)
+```sql
+CREATE TABLE subscription_events (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    subscriber_id INTEGER NOT NULL,
+    event_type TEXT NOT NULL CHECK (event_type IN ('subscribe', 'unsubscribe', 'bounce', 'update')),
+    event_data TEXT, -- JSON data
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    ip_address TEXT,
+    user_agent TEXT,
+    FOREIGN KEY (subscriber_id) REFERENCES subscribers(id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_subscription_events_subscriber ON subscription_events(subscriber_id);
+CREATE INDEX idx_subscription_events_type ON subscription_events(event_type);
+```
+
+### Content Management
+
+#### Posts/Articles
+```sql
+CREATE TABLE posts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    slug TEXT NOT NULL UNIQUE,
+    content TEXT,
+    excerpt TEXT,
+    author_id INTEGER,
+    status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'published', 'archived')),
+    published_at TIMESTAMP,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (author_id) REFERENCES users(id)
+);
+
+CREATE INDEX idx_posts_slug ON posts(slug);
+CREATE INDEX idx_posts_status ON posts(status);
+CREATE INDEX idx_posts_author ON posts(author_id);
+CREATE INDEX idx_posts_published_at ON posts(published_at);
+```
+
+#### Tags and Categories
+```sql
+CREATE TABLE categories (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE,
+    slug TEXT NOT NULL UNIQUE,
+    description TEXT,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE tags (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE,
+    slug TEXT NOT NULL UNIQUE,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE post_tags (
+    post_id INTEGER NOT NULL,
+    tag_id INTEGER NOT NULL,
+    PRIMARY KEY (post_id, tag_id),
+    FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,
+    FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE
+);
+```
+
+### Analytics and Tracking
+
+#### Page Views
+```sql
+CREATE TABLE page_views (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    page_url TEXT NOT NULL,
+    referrer TEXT,
+    user_agent TEXT,
+    ip_address TEXT,
+    session_id TEXT,
+    user_id INTEGER,
+    viewed_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- Partitioning by date for large datasets
+CREATE INDEX idx_page_views_date ON page_views(DATE(viewed_at));
+CREATE INDEX idx_page_views_url ON page_views(page_url);
+CREATE INDEX idx_page_views_session ON page_views(session_id);
+```
+
+#### Custom Events
+```sql
+CREATE TABLE events (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    event_name TEXT NOT NULL,
+    event_data TEXT, -- JSON data
+    user_id INTEGER,
+    session_id TEXT,
+    ip_address TEXT,
+    user_agent TEXT,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE INDEX idx_events_name ON events(event_name);
+CREATE INDEX idx_events_user ON events(user_id);
+CREATE INDEX idx_events_session ON events(session_id);
+```
+
+## Design Principles
+
+### 1. Normalization
+- **First Normal Form**: Eliminate repeating groups
+- **Second Normal Form**: Eliminate partial dependencies
+- **Third Normal Form**: Eliminate transitive dependencies
+- **Balance**: Sometimes denormalize for performance
+
+### 2. Indexing Strategy
+```sql
+-- Primary keys (automatic indexes)
+-- Foreign keys (create indexes)
+-- Frequently queried columns
+-- Composite indexes for multi-column queries
+
+-- Example: Composite index for filtering and sorting
+CREATE INDEX idx_posts_status_published ON posts(status, published_at DESC);
+```
+
+### 3. Data Types
+- **INTEGER**: Auto-incrementing IDs, counts, boolean flags
+- **TEXT**: Strings, JSON data, large text content
+- **REAL**: Floating-point numbers, prices, percentages
+- **BLOB**: Binary data, files (use sparingly)
+- **TIMESTAMP**: Dates and times (store as UTC)
+
+### 4. Constraints
+```sql
+-- Check constraints for data validation
+status TEXT NOT NULL CHECK (status IN ('active', 'inactive', 'pending'))
+
+-- Unique constraints
+email TEXT NOT NULL UNIQUE COLLATE NOCASE
+
+-- Foreign key constraints with cascading
+FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+```
+
+## Migration Patterns
+
+### Versioned Schema Changes
+```sql
+-- migrations/001_initial_schema.sql
+CREATE TABLE schema_migrations (
+    version INTEGER PRIMARY KEY,
+    applied_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO schema_migrations (version) VALUES (1);
+```
+
+### Safe Column Additions
+```sql
+-- Add new columns with defaults
+ALTER TABLE users ADD COLUMN phone TEXT;
+ALTER TABLE users ADD COLUMN verified_phone BOOLEAN NOT NULL DEFAULT FALSE;
+```
+
+### Data Migration Example
+```sql
+-- Migrate existing data
+UPDATE subscribers 
+SET status = 'active' 
+WHERE unsubscribed_at IS NULL AND status IS NULL;
+
+UPDATE subscribers 
+SET status = 'unsubscribed' 
+WHERE unsubscribed_at IS NOT NULL;
+```
+
+## Performance Optimization
+
+### Query Optimization
+```sql
+-- Use indexes effectively
+EXPLAIN QUERY PLAN SELECT * FROM users WHERE email = ?;
+
+-- Limit results
+SELECT * FROM posts ORDER BY created_at DESC LIMIT 10;
+
+-- Use covering indexes when possible
+CREATE INDEX idx_posts_cover ON posts(status, published_at, title);
+```
+
+### Database Maintenance
+```sql
+-- Analyze tables for query optimization
+ANALYZE;
+
+-- Vacuum to reclaim space (SQLite)
+VACUUM;
+
+-- Update statistics
+UPDATE sqlite_stat1 SET stat = NULL;
+ANALYZE;
+```
+
+## Security Best Practices
+
+### Data Protection
+- **Encrypt sensitive data** at application level
+- **Use parameterized queries** to prevent SQL injection
+- **Validate input** before database operations
+- **Audit trail** for sensitive operations
+
+### Access Control
+- **Principle of least privilege** for database users
+- **Connection security** (SSL/TLS)
+- **Regular security updates**
+- **Backup encryption**
+
+## Cloudflare D1 Specific
+
+### Binding Setup
+```typescript
+// TypeScript interface for D1 binding
+export interface Env {
+  DB: D1Database;
+}
+
+// Usage in API routes
+export async function POST({ request, locals }) {
+  const db = locals.runtime?.env.DB;
+  
+  const result = await db.prepare(
+    "INSERT INTO subscribers (email) VALUES (?) RETURNING id"
+  ).bind(email).first();
+  
+  return new Response(JSON.stringify(result));
+}
+```
+
+### Local Development
+```bash
+# Create local D1 database
+wrangler d1 create my-database
+
+# Apply schema locally
+wrangler d1 execute my-database --local --file=schema.sql
+
+# Apply schema to production
+wrangler d1 execute my-database --file=schema.sql
+```
+
+## Testing Strategies
+
+### Unit Tests
+```typescript
+// Test database operations
+describe('User Repository', () => {
+  it('should create user with valid email', async () => {
+    const user = await userRepo.create({
+      email: 'test@example.com',
+      username: 'testuser'
+    });
+    
+    expect(user.id).toBeDefined();
+    expect(user.email).toBe('test@example.com');
+  });
+});
+```
+
+### Integration Tests
+```sql
+-- Test data setup
+BEGIN TRANSACTION;
+
+INSERT INTO users (email, username) VALUES ('test@example.com', 'testuser');
+INSERT INTO posts (title, slug, author_id, status) 
+VALUES ('Test Post', 'test-post', 1, 'published');
+
+-- Run tests...
+
+ROLLBACK; -- Clean up test data
+```
+
+## Related Documentation
+
+- [Cloudflare Platform Guide](/docs/platforms/cloudflare)
+- [API Design Patterns](/docs/tools/api-design)
+- [Testing Strategies](/docs/tools/testing-strategies)
+- [Migration Guide](/docs/guides/migration)

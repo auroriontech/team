@@ -1,0 +1,351 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Founders - Aurorion Leadership Team">
+  <div class="founders-page">
+    <div class="hero-section">
+      <h1>Aurorion Founders</h1>
+      <p class="hero-description">
+        The visionary leadership team driving innovation in AI-powered business solutions
+      </p>
+    </div>
+
+    <div class="founders-grid">
+      <div class="founder-card">
+        <div class="founder-avatar">
+          <img src="/avatars/benjamin-ceo.jpg" alt="Benjamin Kim" loading="lazy" />
+        </div>
+        <div class="founder-info">
+          <h2>Benjamin Kim</h2>
+          <h3>CEO & Founder</h3>
+          <p class="founder-bio">
+            Strategic visionary with 15+ years enterprise software experience. 
+            Led 2 successful exits and raised $25M+ in venture capital across multiple companies.
+          </p>
+          <div class="founder-expertise">
+            <span class="expertise-tag">Strategic Vision</span>
+            <span class="expertise-tag">Enterprise Software</span>
+            <span class="expertise-tag">Team Building</span>
+            <span class="expertise-tag">Market Development</span>
+          </div>
+          <div class="founder-contact">
+            <a href="mailto:benjamin@auroriontech.com" class="contact-link">
+              <i class="icon-mail"></i> benjamin@auroriontech.com
+            </a>
+            <a href="https://linkedin.com/in/benjamin-kim-ceo" class="contact-link">
+              <i class="icon-linkedin"></i> LinkedIn
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="founder-card">
+        <div class="founder-avatar">
+          <img src="/avatars/caleb-architect.jpg" alt="Caleb Coverdale" loading="lazy" />
+        </div>
+        <div class="founder-info">
+          <h2>Caleb Coverdale</h2>
+          <h3>CTO & Co-Founder</h3>
+          <p class="founder-bio">
+            Technical architect with 12+ years full-stack experience. 
+            Expert in AI/ML infrastructure and scalable systems design.
+          </p>
+          <div class="founder-expertise">
+            <span class="expertise-tag">System Architecture</span>
+            <span class="expertise-tag">AI/ML Infrastructure</span>
+            <span class="expertise-tag">Cloud Platforms</span>
+            <span class="expertise-tag">Engineering Leadership</span>
+          </div>
+          <div class="founder-contact">
+            <a href="mailto:caleb@auroriontech.com" class="contact-link">
+              <i class="icon-mail"></i> caleb@auroriontech.com
+            </a>
+            <a href="https://github.com/calebcoverdale" class="contact-link">
+              <i class="icon-github"></i> GitHub
+            </a>
+            <a href="https://linkedin.com/in/caleb-coverdale-cto" class="contact-link">
+              <i class="icon-linkedin"></i> LinkedIn
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="company-structure">
+      <h2>Organizational Structure</h2>
+      <div class="structure-diagram">
+        <div class="structure-level founders-level">
+          <h3>Founders (Strategic Leadership)</h3>
+          <div class="structure-cards">
+            <div class="structure-card founder">
+              <span class="role">CEO</span>
+              <span class="focus">Business Strategy & Vision</span>
+            </div>
+            <div class="structure-card founder">
+              <span class="role">CTO</span>
+              <span class="focus">Technical Architecture & Engineering</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="structure-level team-level">
+          <h3>Team Members (Operational Execution)</h3>
+          <div class="structure-cards">
+            <div class="structure-card team">
+              <span class="role">Architect-Engineer</span>
+              <span class="focus">System Design & Implementation</span>
+            </div>
+            <div class="structure-card team">
+              <span class="role">Optimizer-Watchdog</span>
+              <span class="focus">Performance & Enterprise Value</span>
+            </div>
+            <div class="structure-card team">
+              <span class="role">Tester-Reviewer</span>
+              <span class="focus">Quality Validation & Testing</span>
+            </div>
+            <div class="structure-card team">
+              <span class="role">Scrum-Knowledge</span>
+              <span class="focus">Workflow Coordination</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="company-culture">
+      <h2>Company Culture & Values</h2>
+      <div class="culture-grid">
+        <div class="culture-item">
+          <h3>🤝 AI-Human Collaboration</h3>
+          <p>Leveraging AI capabilities while maintaining human oversight and strategic direction</p>
+        </div>
+        <div class="culture-item">
+          <h3>💎 Quality Excellence</h3>
+          <p>Never compromising on technical or business quality in pursuit of rapid growth</p>
+        </div>
+        <div class="culture-item">
+          <h3>🔍 Transparency</h3>
+          <p>Open communication and shared decision-making across all levels of the organization</p>
+        </div>
+        <div class="culture-item">
+          <h3>🚀 Innovation</h3>
+          <p>Pushing boundaries while maintaining practical business focus and measurable outcomes</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .founders-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .hero-section {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .hero-section h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, var(--primary-600), var(--primary-400));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero-description {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .founders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
+  }
+
+  .founder-card {
+    background: var(--surface-primary);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-primary);
+  }
+
+  .founder-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    border: 4px solid var(--primary-500);
+  }
+
+  .founder-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .founder-info h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+  }
+
+  .founder-info h3 {
+    color: var(--primary-600);
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  .founder-bio {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .founder-expertise {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .expertise-tag {
+    background: var(--primary-100);
+    color: var(--primary-700);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .founder-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--primary-600);
+    text-decoration: none;
+    font-size: 0.875rem;
+  }
+
+  .contact-link:hover {
+    color: var(--primary-700);
+  }
+
+  .company-structure {
+    margin-bottom: 4rem;
+  }
+
+  .company-structure h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+  }
+
+  .structure-diagram {
+    background: var(--surface-secondary);
+    border-radius: 12px;
+    padding: 2rem;
+  }
+
+  .structure-level {
+    margin-bottom: 2rem;
+  }
+
+  .structure-level h3 {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+  }
+
+  .structure-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+
+  .structure-card {
+    background: var(--surface-primary);
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    border: 2px solid transparent;
+  }
+
+  .structure-card.founder {
+    border-color: var(--primary-300);
+  }
+
+  .structure-card.team {
+    border-color: var(--secondary-300);
+  }
+
+  .structure-card .role {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .structure-card .focus {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+  }
+
+  .company-culture h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+  }
+
+  .culture-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .culture-item {
+    background: var(--surface-primary);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-500);
+  }
+
+  .culture-item h3 {
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+  }
+
+  .culture-item p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 768px) {
+    .founders-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .structure-cards {
+      grid-template-columns: 1fr;
+    }
+    
+    .culture-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

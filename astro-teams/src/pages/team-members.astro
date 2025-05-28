@@ -1,0 +1,670 @@
+---
+/**
+ * Team Members Management Page
+ * 
+ * Displays all team members from MDX content collections
+ * Provides member management interface for adding/editing profiles
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const teamMembers = await getCollection('team-members');
+const agentRoles = await getCollection('agent-roles');
+
+// Group members by role for better organization
+const membersByRole = teamMembers.reduce((acc, member) => {
+  const role = member.data.role;
+  if (!acc[role]) acc[role] = [];
+  acc[role].push(member);
+  return acc;
+}, {} as Record<string, typeof teamMembers>);
+---
+
+<BaseLayout title="Team Members | Aurorion Teams">
+  <main class="team-members-page">
+    <div class="page-header">
+      <h1 class="page-title">
+        <span class="title-icon">👥</span>
+        Team Members
+      </h1>
+      <p class="page-subtitle">
+        Manage team member profiles and project assignments
+      </p>
+      <div class="header-actions">
+        <button class="btn btn-primary" id="addMemberBtn">
+          <span class="icon">➕</span>
+          Add Member
+        </button>
+      </div>
+    </div>
+
+    <div class="members-overview">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">{teamMembers.length}</div>
+          <div class="stat-label">Total Members</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">{teamMembers.filter(m => m.data.status === 'active').length}</div>
+          <div class="stat-label">Active</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">{Object.keys(membersByRole).length}</div>
+          <div class="stat-label">Roles Covered</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="members-content">
+      {Object.entries(membersByRole).map(([roleId, members]) => {
+        const roleData = agentRoles.find(r => r.id === roleId);
+        return (
+          <div class="role-section" key={roleId}>
+            <div class="role-header">
+              <h2 class="role-title">
+                <span class="role-icon">{roleData?.data.icon || '👤'}</span>
+                {roleData?.data.name || roleId}
+              </h2>
+              <div class="role-count">{members.length} member{members.length !== 1 ? 's' : ''}</div>
+            </div>
+            
+            <div class="members-grid">
+              {members.map((member) => (
+                <div class="member-card" key={member.id} data-member-id={member.id}>
+                  <div class="member-header">
+                    <div class="member-avatar">
+                      {member.data.avatar ? (
+                        <img src={member.data.avatar} alt={member.data.name} />
+                      ) : (
+                        <div class="avatar-placeholder">{member.data.name.charAt(0)}</div>
+                      )}
+                    </div>
+                    <div class="member-info">
+                      <h3 class="member-name">{member.data.name}</h3>
+                      <div class="member-status" data-status={member.data.status}>
+                        {member.data.status}
+                      </div>
+                    </div>
+                    <div class="member-actions">
+                      <button class="action-btn edit-btn" data-member-id={member.id}>
+                        <span class="icon">✏️</span>
+                      </button>
+                      <button class="action-btn view-btn" data-member-id={member.id}>
+                        <span class="icon">👁️</span>
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <div class="member-bio">
+                    <p>{member.data.bio}</p>
+                  </div>
+                  
+                  <div class="member-skills">
+                    {member.data.skills.slice(0, 3).map(skill => (
+                      <span class="skill-tag" key={skill}>{skill}</span>
+                    ))}
+                    {member.data.skills.length > 3 && (
+                      <span class="skill-tag more">+{member.data.skills.length - 3} more</span>
+                    )}
+                  </div>
+                  
+                  {member.data.projects && (
+                    <div class="member-projects">
+                      <div class="projects-header">Current Projects</div>
+                      {Object.entries(member.data.projects).map(([projectId, project]) => (
+                        <div class="project-item" key={projectId}>
+                          <div class="project-name">{projectId}</div>
+                          <div class="project-contribution">{project.contribution}%</div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  
+                  {member.data.metrics && (
+                    <div class="member-metrics">
+                      <div class="metric">
+                        <span class="metric-label">Quality Score</span>
+                        <span class="metric-value">{member.data.metrics.qualityScore || 'N/A'}</span>
+                      </div>
+                      <div class="metric">
+                        <span class="metric-label">Tasks Completed</span>
+                        <span class="metric-value">{member.data.metrics.tasksCompleted}</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+
+    <!-- Add/Edit Member Modal -->
+    <div class="modal hidden" id="memberModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="modalTitle">Add Team Member</h3>
+          <button class="modal-close" id="modalClose">×</button>
+        </div>
+        <div class="modal-body">
+          <form id="memberForm">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="memberName">Name</label>
+                <input type="text" id="memberName" required>
+              </div>
+              <div class="form-group">
+                <label for="memberRole">Role</label>
+                <select id="memberRole" required>
+                  {agentRoles.map(role => (
+                    <option value={role.id} key={role.id}>{role.data.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div class="form-group full-width">
+                <label for="memberBio">Bio</label>
+                <textarea id="memberBio" rows="3"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="memberStatus">Status</label>
+                <select id="memberStatus">
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                  <option value="on-leave">On Leave</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="memberEmail">Email</label>
+                <input type="email" id="memberEmail">
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+              <button type="submit" class="btn btn-primary" id="saveBtn">Save Member</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .team-members-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .page-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--color-text);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .title-icon {
+    font-size: 2rem;
+  }
+
+  .page-subtitle {
+    color: var(--color-text-secondary);
+    font-size: 1.1rem;
+    margin: 0.5rem 0 0 0;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .members-overview {
+    margin-bottom: 2rem;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .stat-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    text-align: center;
+  }
+
+  .stat-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--color-primary);
+    margin-bottom: 0.25rem;
+  }
+
+  .stat-label {
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+  }
+
+  .role-section {
+    margin-bottom: 3rem;
+  }
+
+  .role-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--color-border);
+  }
+
+  .role-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .role-icon {
+    font-size: 1.25rem;
+  }
+
+  .role-count {
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    background: var(--color-surface);
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    border: 1px solid var(--color-border);
+  }
+
+  .members-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .member-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    transition: all 0.2s ease;
+  }
+
+  .member-card:hover {
+    border-color: var(--color-primary);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .member-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .member-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .member-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    background: var(--color-primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.25rem;
+  }
+
+  .member-info {
+    flex: 1;
+  }
+
+  .member-name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin: 0 0 0.25rem 0;
+  }
+
+  .member-status {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .member-status[data-status="active"] {
+    background: rgba(34, 197, 94, 0.1);
+    color: #16a34a;
+  }
+
+  .member-status[data-status="inactive"] {
+    background: rgba(107, 114, 128, 0.1);
+    color: #6b7280;
+  }
+
+  .member-status[data-status="on-leave"] {
+    background: rgba(251, 191, 36, 0.1);
+    color: #f59e0b;
+  }
+
+  .member-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .action-btn {
+    background: none;
+    border: 1px solid var(--color-border);
+    border-radius: 0.25rem;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .action-btn:hover {
+    background: var(--color-surface-hover);
+    border-color: var(--color-primary);
+  }
+
+  .member-bio {
+    margin-bottom: 1rem;
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .member-skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .skill-tag {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+  }
+
+  .skill-tag.more {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+  }
+
+  .member-projects {
+    margin-bottom: 1rem;
+  }
+
+  .projects-header {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .project-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.25rem 0;
+    font-size: 0.875rem;
+  }
+
+  .project-name {
+    color: var(--color-text-secondary);
+  }
+
+  .project-contribution {
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .member-metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .metric {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .metric-label {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .metric-value {
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  /* Modal Styles */
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+
+  .modal.hidden {
+    display: none;
+  }
+
+  .modal-content {
+    background: var(--color-background);
+    border-radius: var(--border-radius);
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .modal-header h3 {
+    margin: 0;
+    color: var(--color-text);
+  }
+
+  .modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--color-text-secondary);
+  }
+
+  .modal-body {
+    padding: 1.5rem;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .form-group.full-width {
+    grid-column: 1 / -1;
+  }
+
+  .form-group label {
+    font-weight: 600;
+    color: var(--color-text);
+    font-size: 0.875rem;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-size: 0.875rem;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  @media (max-width: 768px) {
+    .team-members-page {
+      padding: 1rem;
+    }
+
+    .page-header {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .members-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  // Team member management functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const addMemberBtn = document.getElementById('addMemberBtn');
+    const memberModal = document.getElementById('memberModal');
+    const modalClose = document.getElementById('modalClose');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const memberForm = document.getElementById('memberForm');
+
+    // Modal controls
+    addMemberBtn?.addEventListener('click', () => {
+      memberModal?.classList.remove('hidden');
+      document.getElementById('modalTitle').textContent = 'Add Team Member';
+    });
+
+    modalClose?.addEventListener('click', () => {
+      memberModal?.classList.add('hidden');
+    });
+
+    cancelBtn?.addEventListener('click', () => {
+      memberModal?.classList.add('hidden');
+    });
+
+    // Edit member buttons
+    document.querySelectorAll('.edit-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const memberId = e.target.closest('.edit-btn').getAttribute('data-member-id');
+        // TODO: Load member data and populate form
+        memberModal?.classList.remove('hidden');
+        document.getElementById('modalTitle').textContent = 'Edit Team Member';
+      });
+    });
+
+    // View member buttons
+    document.querySelectorAll('.view-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const memberId = e.target.closest('.view-btn').getAttribute('data-member-id');
+        // TODO: Navigate to member detail page
+        window.location.href = `/team-members/${memberId}`;
+      });
+    });
+
+    // Form submission
+    memberForm?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      // TODO: Handle form submission
+      console.log('Form submitted');
+      memberModal?.classList.add('hidden');
+    });
+
+    // Close modal on backdrop click
+    memberModal?.addEventListener('click', (e) => {
+      if (e.target === memberModal) {
+        memberModal.classList.add('hidden');
+      }
+    });
+  });
+</script>

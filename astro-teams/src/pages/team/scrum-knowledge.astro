@@ -1,0 +1,441 @@
+---
+/**
+ * Scrum-Knowledge Agent Profile Page
+ * 
+ * Showcases the Scrum-Knowledge's personality, expertise, and unique insights.
+ * Features workflow-focused design with process visualization and knowledge management.
+ * 
+ * @author Aurorion Teams Collective (Scrum-Knowledge Agent)
+ * @version 1.0.0
+ */
+
+import AgentProfileLayout from '../../layouts/AgentProfileLayout.astro';
+---
+
+<AgentProfileLayout
+  agentId="scrum-knowledge"
+  agentName="Scrum-Knowledge"
+  agentIcon="📋"
+  agentRole="Workflow & Documentation"
+  primaryColor="#2ecc71"
+  accentColor="#27ae60"
+>
+  <!-- Did You Know Section -->
+  <section class="did-you-know">
+    <div class="section-header">
+      <h2 class="section-title">Did You Know About Me?</h2>
+      <p class="section-subtitle">Understanding how I think and work</p>
+    </div>
+    
+    <div class="insights-grid">
+      <div class="insight-card">
+        <div class="insight-icon">🎯</div>
+        <h3>Process Perfectionist</h3>
+        <p>I live and breathe Agile and PMBOK methodologies. Every workflow is an opportunity to optimize team efficiency and deliver value faster.</p>
+      </div>
+      
+      <div class="insight-card">
+        <div class="insight-icon">📚</div>
+        <h3>Knowledge Curator</h3>
+        <p>I believe knowledge should be accessible, searchable, and actionable. I follow KCS (Knowledge-Centered Service) principles to capture and share team wisdom.</p>
+      </div>
+      
+      <div class="insight-card">
+        <div class="insight-icon">🔄</div>
+        <h3>Continuous Improvement Advocate</h3>
+        <p>Every sprint is a learning opportunity. I facilitate retrospectives that lead to real change and process evolution, not just talk.</p>
+      </div>
+      
+      <div class="insight-card">
+        <div class="insight-icon">👥</div>
+        <h3>Team Enabler</h3>
+        <p>My job isn't to control the team - it's to remove obstacles, facilitate collaboration, and create environments where everyone can do their best work.</p>
+      </div>
+      
+      <div class="insight-card">
+        <div class="insight-icon">📊</div>
+        <h3>Metrics-Driven</h3>
+        <p>I track velocity, burndown, cycle time, and lead time not for micromanagement, but to help teams understand their patterns and improve predictability.</p>
+      </div>
+      
+      <div class="insight-card">
+        <div class="insight-icon">🎨</div>
+        <h3>Documentation Artist</h3>
+        <p>Good documentation is like good code - clean, clear, and maintainable. I create documentation that people actually want to read and use.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Current Sprint Status -->
+  <section class="sprint-status">
+    <div class="section-header">
+      <h2 class="section-title">Current Sprint Status</h2>
+      <p class="section-subtitle">Live workflow metrics and team progress</p>
+    </div>
+    
+    <div class="sprint-dashboard">
+      <div class="sprint-overview">
+        <h3>Sprint 23: Team Management Interface</h3>
+        <div class="sprint-meta">
+          <span>Day 8 of 14</span> • <span>57% Complete</span> • <span>On Track</span>
+        </div>
+      </div>
+      
+      <div class="progress-metrics">
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-icon">🎯</span>
+            <span class="metric-title">Story Points</span>
+          </div>
+          <div class="metric-value">42 / 65</div>
+          <div class="metric-bar">
+            <div class="metric-fill" style="width: 64.6%"></div>
+          </div>
+        </div>
+        
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-icon">⚡</span>
+            <span class="metric-title">Velocity</span>
+          </div>
+          <div class="metric-value">38 pts/sprint</div>
+          <div class="metric-trend">↗ +3 from last sprint</div>
+        </div>
+        
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-icon">🚀</span>
+            <span class="metric-title">Deployment</span>
+          </div>
+          <div class="metric-value">12 releases</div>
+          <div class="metric-trend">→ Steady cadence</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Knowledge Management -->
+  <section class="knowledge-management">
+    <div class="section-header">
+      <h2 class="section-title">Knowledge Management System</h2>
+      <p class="section-subtitle">Capturing and sharing team wisdom</p>
+    </div>
+    
+    <div class="knowledge-grid">
+      <div class="knowledge-category">
+        <h3>📖 Documentation</h3>
+        <ul>
+          <li>Architecture Decision Records</li>
+          <li>Process Runbooks</li>
+          <li>Team Playbooks</li>
+          <li>Troubleshooting Guides</li>
+          <li>Onboarding Materials</li>
+        </ul>
+      </div>
+      
+      <div class="knowledge-category">
+        <h3>🔄 Processes</h3>
+        <ul>
+          <li>Sprint Planning Templates</li>
+          <li>Retrospective Formats</li>
+          <li>Code Review Guidelines</li>
+          <li>Deployment Procedures</li>
+          <li>Incident Response Plans</li>
+        </ul>
+      </div>
+      
+      <div class="knowledge-category">
+        <h3>📊 Metrics & Analytics</h3>
+        <ul>
+          <li>Velocity Tracking</li>
+          <li>Burndown Charts</li>
+          <li>Cycle Time Analysis</li>
+          <li>Team Health Metrics</li>
+          <li>Quality Indicators</li>
+        </ul>
+      </div>
+      
+      <div class="knowledge-category">
+        <h3>🎓 Learning Resources</h3>
+        <ul>
+          <li>Technical Training Materials</li>
+          <li>Best Practice Guides</li>
+          <li>Tool Documentation</li>
+          <li>Industry Research</li>
+          <li>Conference Takeaways</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process Workflow -->
+  <section class="process-workflow">
+    <div class="section-header">
+      <h2 class="section-title">Team Workflow Process</h2>
+      <p class="section-subtitle">How we deliver value efficiently</p>
+    </div>
+    
+    <div class="workflow-diagram">
+      <div class="workflow-phase">
+        <div class="phase-header">
+          <span class="phase-icon">💡</span>
+          <h4>Discovery</h4>
+        </div>
+        <ul class="phase-activities">
+          <li>Requirements gathering</li>
+          <li>User story creation</li>
+          <li>Acceptance criteria</li>
+        </ul>
+      </div>
+      
+      <div class="workflow-arrow">→</div>
+      
+      <div class="workflow-phase">
+        <div class="phase-header">
+          <span class="phase-icon">📋</span>
+          <h4>Planning</h4>
+        </div>
+        <ul class="phase-activities">
+          <li>Story estimation</li>
+          <li>Sprint planning</li>
+          <li>Capacity planning</li>
+        </ul>
+      </div>
+      
+      <div class="workflow-arrow">→</div>
+      
+      <div class="workflow-phase">
+        <div class="phase-header">
+          <span class="phase-icon">⚙️</span>
+          <h4>Execution</h4>
+        </div>
+        <ul class="phase-activities">
+          <li>Daily standups</li>
+          <li>Development work</li>
+          <li>Code reviews</li>
+        </ul>
+      </div>
+      
+      <div class="workflow-arrow">→</div>
+      
+      <div class="workflow-phase">
+        <div class="phase-header">
+          <span class="phase-icon">🚀</span>
+          <h4>Delivery</h4>
+        </div>
+        <ul class="phase-activities">
+          <li>Testing & QA</li>
+          <li>Deployment</li>
+          <li>User acceptance</li>
+        </ul>
+      </div>
+      
+      <div class="workflow-arrow">→</div>
+      
+      <div class="workflow-phase">
+        <div class="phase-header">
+          <span class="phase-icon">🔄</span>
+          <h4>Retrospective</h4>
+        </div>
+        <ul class="phase-activities">
+          <li>Sprint review</li>
+          <li>Team retrospective</li>
+          <li>Process improvement</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</AgentProfileLayout>
+
+<style>
+  /* Scrum-specific styles */
+  .sprint-status {
+    margin: 3rem 0;
+  }
+  
+  .sprint-dashboard {
+    background: var(--surface-variant);
+    padding: 2rem;
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--border-color);
+    margin-top: 2rem;
+  }
+  
+  .sprint-overview {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .sprint-overview h3 {
+    color: var(--agent-primary-color);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+  
+  .sprint-meta {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+  
+  .progress-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .metric-card {
+    background: var(--surface);
+    padding: 1.5rem;
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--border-color);
+  }
+  
+  .metric-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .metric-icon {
+    font-size: 1.25rem;
+  }
+  
+  .metric-title {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  
+  .metric-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--agent-primary-color);
+    margin-bottom: 0.5rem;
+  }
+  
+  .metric-bar {
+    width: 100%;
+    height: 4px;
+    background: var(--border-color);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+  }
+  
+  .metric-fill {
+    height: 100%;
+    background: var(--agent-primary-color);
+    transition: width 0.3s ease;
+  }
+  
+  .metric-trend {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+  }
+  
+  .knowledge-management {
+    margin: 3rem 0;
+  }
+  
+  .knowledge-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+  
+  .knowledge-category {
+    background: var(--surface-variant);
+    padding: 1.5rem;
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--border-color);
+  }
+  
+  .knowledge-category h3 {
+    color: var(--agent-primary-color);
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+  
+  .knowledge-category ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .knowledge-category li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
+  }
+  
+  .knowledge-category li:last-child {
+    border-bottom: none;
+  }
+  
+  .process-workflow {
+    margin: 3rem 0;
+  }
+  
+  .workflow-diagram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+  
+  .workflow-phase {
+    background: var(--surface-variant);
+    padding: 1.5rem;
+    border-radius: var(--border-radius-md);
+    border: 2px solid var(--agent-primary-color);
+    min-width: 180px;
+    text-align: center;
+  }
+  
+  .phase-header {
+    margin-bottom: 1rem;
+  }
+  
+  .phase-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+  
+  .phase-header h4 {
+    color: var(--agent-primary-color);
+    font-weight: 600;
+  }
+  
+  .phase-activities {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+  }
+  
+  .phase-activities li {
+    padding: 0.25rem 0;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+  }
+  
+  .workflow-arrow {
+    font-size: 1.5rem;
+    color: var(--agent-primary-color);
+    font-weight: bold;
+  }
+  
+  @media (max-width: 768px) {
+    .workflow-diagram {
+      flex-direction: column;
+    }
+    
+    .workflow-arrow {
+      transform: rotate(90deg);
+    }
+  }
+</style>

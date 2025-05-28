@@ -1,0 +1,289 @@
+
+> astro-teams@0.0.1 dev
+> astro dev --host 0.0.0.0
+
+18:28:28 [types] Generated 0ms
+18:28:28 [content] Syncing content
+18:28:28 [content] Synced content
+
+ astro  v5.8.0 ready in 85 ms
+
+┃ Local    http://localhost:4321/
+┃ Network  http://10.0.0.5:4321/
+           http://100.64.0.5:4321/
+           http://10.0.0.136:4321/
+
+18:28:28 watching for file changes...
+18:28:34 [200] HEAD / 7ms
+18:28:56 [200] / 8ms
+18:29:04 [200] / 7ms
+18:33:41 [200] / 12ms
+18:36:13 [200] / 4ms
+18:36:21 [200] / 4ms
+18:41:32 [200] / 13ms
+18:43:34 [200] / 12ms
+18:43:37 [200] / 11ms
+18:50:07 [200] / 20ms
+18:50:15 [200] / 12ms
+18:50:15 [200] / 10ms
+18:50:17 [200] / 3ms
+18:50:24 [200] / 8ms
+18:51:44 [200] / 8ms
+18:51:45 [200] / 3ms
+20:02:33 [200] / 17ms
+20:02:39 [200] / 5ms
+20:22:15 [200] / 8ms
+20:23:13 [200] / 5ms
+20:23:15 [200] / 5ms
+20:23:28 [200] / 6ms
+20:23:38 [200] / 10ms
+20:25:40 [200] / 8ms
+20:26:32 Configuration file updated. Restarting...
+20:26:32 [vite] Re-optimizing dependencies because vite config has changed
+20:26:32 [content] Syncing content
+20:26:32 [content] Astro config changed
+20:26:32 [content] Clearing content store
+20:26:32 [content] Synced content
+20:26:32 [types] Generated 79ms
+20:26:32 [vite] Re-optimizing dependencies because vite config has changed
+20:52:34 [200] / 5ms
+20:52:38 [200] / 3ms
+20:52:49 [200] / 8ms
+20:53:13 [200] / 7ms
+20:54:25 [200] / 2ms
+20:54:52 [200] / 9ms
+20:56:55 [200] / 8ms
+20:57:23 [200] / 4ms
+20:57:44 [200] / 12ms
+21:01:30 [200] / 10ms
+21:01:43 [200] / 9ms
+21:03:35 [200] / 9ms
+21:04:24 [200] / 8ms
+21:06:25 [200] / 9ms
+21:06:47 [200] / 5ms
+21:07:47 [200] / 8ms
+21:08:26 [200] / 9ms
+21:08:30 [200] / 5ms
+21:08:31 [200] / 8ms
+21:08:37 [200] / 5ms
+21:09:29 [200] / 5ms
+21:09:29 [200] / 4ms
+21:09:38 [200] / 5ms
+21:09:59 [404] /teambuilder 4ms
+21:10:01 [200] / 8ms
+21:10:10 [200] /team-builder 4ms
+21:10:51 [404] /agents/standup-facilitator 1ms
+21:10:56 [200] /agents/architect-engineer 3ms
+21:11:44 [200] / 8ms
+21:11:54 [200] / 7ms
+21:12:03 [200] / 9ms
+21:13:07 [200] /team-builder 8ms
+21:13:10 [200] / 8ms
+21:13:26 [watch] src/pages/team-builder.astro
+21:13:32 [watch] src/pages/team-builder.astro
+21:13:35 [200] /team-builder 4ms
+21:13:40 [watch] /src/pages/team-builder.astro?astro&type=style&index=0&lang.css, /src/pages/team-builder.astro?astro&type=style&index=1&lang.css
+21:13:41 [200] /team-builder 3ms
+21:14:09 [200] /team-builder 8ms
+21:14:33 [200] / 9ms
+21:15:44 [200] / 6ms
+21:16:17 [200] / 8ms
+21:16:37 [200] / 5ms
+21:16:42 [200] /team-builder 5ms
+21:16:59 [200] /agents/architect-engineer 6ms
+21:18:13 [200] /agents/architect-engineer 11ms
+21:18:54 [200] /team-builder 10ms
+21:19:02 [200] /agents/scrum-knowledge 3ms
+21:19:25 [200] /agents 3ms
+21:19:49 [200] / 5ms
+21:20:07 [404] /apple-touch-icon-precomposed.png 1ms
+21:20:07 [404] /apple-touch-icon-precomposed.png 1ms
+21:20:07 [404] /apple-touch-icon.png 1ms
+21:20:07 [404] /apple-touch-icon.png 0ms
+21:20:07 [200] /team-builder 5ms
+21:20:07 [200] /agents/scrum-knowledge 4ms
+21:20:10 [watch] src/layouts/BaseLayout.astro
+21:20:21 [watch] src/layouts/BaseLayout.astro
+21:20:31 [watch] src/layouts/BaseLayout.astro
+21:45:01 [200] /agents/scrum-knowledge 5ms
+21:45:27 [200] / 6ms
+21:46:22 [watch] src/layouts/BaseLayout.astro
+21:46:30 [watch] src/layouts/BaseLayout.astro
+21:46:37 [200] / 3ms
+21:46:41 [watch] /src/layouts/BaseLayout.astro?astro&type=style&index=1&lang.css, /src/layouts/BaseLayout.astro?astro&type=style&index=0&lang.css
+21:46:48 [watch] src/layouts/BaseLayout.astro
+21:47:17 [watch] src/pages/team-builder.astro
+21:47:42 [watch] src/components/TeamMemberCustomization.astro
+21:47:56 [watch] src/pages/team-builder.astro
+21:48:04 [watch] src/pages/team-builder.astro
+21:48:04 [200] / 3ms
+21:48:22 [watch] src/components/AgentRoleSelector.astro
+21:48:33 [watch] src/pages/team-builder.astro
+21:48:51 [200] / 4ms
+21:50:50 [200] / 9ms
+21:53:44 [200] / 19ms
+23:08:34 [watch] src/pages/team-builder.astro
+23:08:39 [watch] src/pages/team-builder.astro
+23:22:29 [watch] src/pages/team-builder.astro
+23:22:49 [watch] src/pages/team-builder.astro
+23:23:05 [watch] src/pages/team-builder.astro
+23:23:53 [watch] src/pages/team-builder.astro
+23:23:56 [watch] src/pages/team-builder.astro
+23:24:00 [watch] src/pages/team-builder.astro
+23:24:41 [watch] src/components/TeamMemberCustomization.astro
+23:30:38 [watch] src/components/TeamMemberCustomization.astro
+00:00:14 [content] Syncing content
+00:00:14 [WARN] [glob-loader] No files found matching "**/*{.md,.mdx},!**/_*/**/*{.md,.mdx},!**/_*{.md,.mdx}" in directory "src/content/agent-roles"
+00:00:14 [content] Synced content
+
+Auto-generating collections for folders in "src/content/" that are not defined as collections.
+This is deprecated, so you should define these collections yourself in "src/content.config.ts".
+The following collections have been auto-generated: docs
+
+00:12:23 [watch] src/layouts/BaseLayout.astro
+00:14:49 [content] Syncing content
+00:14:49 [content] Content config changed
+00:14:49 [content] Clearing content store
+00:14:49 [content] Synced content
+00:15:21 [glob-loader] Reloaded data from agent-prompts-technical-enablement.mdx
+00:17:35 [ERROR] [InvalidContentEntryDataError] docs → agent-prompts-morale-catalyst data does not match collection schema.
+lastUpdated: Expected type `"date"`, received `"string"`
+  Hint:
+    See https://docs.astro.build/en/guides/content-collections/ for more information on content schemas.
+  Error reference:
+    https://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/
+  Stack trace:
+    at /Users/calebcoverdale/code/aurorion/teams/astro-teams/src/content/docs/agent-prompts-morale-catalyst.mdx
+    [...] See full stack trace in the browser, or rerun with --verbose.
+00:17:35 [ERROR] [InvalidContentEntryDataError] docs → agent-prompts-optimizer-watchdog data does not match collection schema.
+lastUpdated: Expected type `"date"`, received `"string"`
+  Hint:
+    See https://docs.astro.build/en/guides/content-collections/ for more information on content schemas.
+  Error reference:
+    https://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/
+  Stack trace:
+    at /Users/calebcoverdale/code/aurorion/teams/astro-teams/src/content/docs/agent-prompts-optimizer-watchdog.mdx
+    [...] See full stack trace in the browser, or rerun with --verbose.
+00:17:35 [ERROR] [InvalidContentEntryDataError] docs → agent-prompts-standup-facilitator data does not match collection schema.
+lastUpdated: Expected type `"date"`, received `"string"`
+  Hint:
+    See https://docs.astro.build/en/guides/content-collections/ for more information on content schemas.
+  Error reference:
+    https://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/
+  Stack trace:
+    at getEntryDataAndImages (file:///Users/calebcoverdale/code/aurorion/teams/astro-teams/node_modules/astro/dist/content/utils.js:150:26)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+00:17:35 [ERROR] [InvalidContentEntryDataError] docs → agent-prompts-scrum-knowledge data does not match collection schema.
+lastUpdated: Expected type `"date"`, received `"string"`
+  Hint:
+    See https://docs.astro.build/en/guides/content-collections/ for more information on content schemas.
+  Error reference:
+    https://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/
+  Stack trace:
+    at /Users/calebcoverdale/code/aurorion/teams/astro-teams/src/content/docs/agent-prompts-scrum-knowledge.mdx
+    [...] See full stack trace in the browser, or rerun with --verbose.
+00:17:35 [ERROR] [InvalidContentEntryDataError] docs → agent-prompts-tester-reviewer data does not match collection schema.
+lastUpdated: Expected type `"date"`, received `"string"`
+  Hint:
+    See https://docs.astro.build/en/guides/content-collections/ for more information on content schemas.
+  Error reference:
+    https://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/
+  Stack trace:
+    at getEntryDataAndImages (file:///Users/calebcoverdale/code/aurorion/teams/astro-teams/node_modules/astro/dist/content/utils.js:150:26)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+00:21:25 [content] Syncing content
+00:21:25 [content] Content config changed
+00:21:25 [content] Clearing content store
+00:21:25 [ERROR] [InvalidContentEntryDataError] docs → agent-prompts-morale-catalyst data does not match collection schema.
+lastUpdated: Expected type `"date"`, received `"string"`
+  Hint:
+    See https://docs.astro.build/en/guides/content-collections/ for more information on content schemas.
+  Error reference:
+    https://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/
+  Stack trace:
+    at /Users/calebcoverdale/code/aurorion/teams/astro-teams/src/content/docs/agent-prompts-morale-catalyst.mdx
+    [...] See full stack trace in the browser, or rerun with --verbose.
+00:25:50 [glob-loader] Reloaded data from aurorion-teams.mdx
+00:25:50 [content] Syncing content
+00:25:50 [content] Content config changed
+00:25:50 [content] Clearing content store
+00:25:50 [ERROR] [InvalidContentEntryDataError] docs → agent-prompts-morale-catalyst data does not match collection schema.
+lastUpdated: Expected type `"date"`, received `"string"`
+  Hint:
+    See https://docs.astro.build/en/guides/content-collections/ for more information on content schemas.
+  Error reference:
+    https://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/
+  Stack trace:
+    at getEntryDataAndImages (file:///Users/calebcoverdale/code/aurorion/teams/astro-teams/node_modules/astro/dist/content/utils.js:150:26)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+00:25:59 [glob-loader] Reloaded data from aurorion-teams.mdx
+00:26:11 [glob-loader] Reloaded data from aurorion-teams.mdx
+00:26:17 [watch] src/layouts/BaseLayout.astro
+00:40:17 [glob-loader] Reloaded data from benjamin-ceo.mdx
+00:40:25 [glob-loader] Reloaded data from aurorion-teams.mdx
+00:40:41 [glob-loader] Reloaded data from aurorion-teams.mdx
+00:40:48 [glob-loader] Reloaded data from caleb-architect.mdx
+00:40:55 [glob-loader] Reloaded data from caleb-architect.mdx
+00:41:03 [glob-loader] Reloaded data from benjamin-ceo.mdx
+00:41:07 [glob-loader] Reloaded data from benjamin-ceo.mdx
+00:41:14 [glob-loader] Reloaded data from caleb-architect.mdx
+00:41:17 [glob-loader] Reloaded data from caleb-architect.mdx
+00:41:25 [glob-loader] Reloaded data from aurorion-teams.mdx
+00:44:21 [watch] src/layouts/BaseLayout.astro
+00:50:11 [watch] /src/layouts/BaseLayout.astro?astro&type=style&index=0&lang.css
+00:50:11 [watch] src/styles/globals.css
+00:50:21 [watch] /src/layouts/BaseLayout.astro?astro&type=style&index=0&lang.css
+00:50:21 [watch] src/styles/globals.css
+00:51:36 [watch] /src/layouts/BaseLayout.astro?astro&type=style&index=0&lang.css
+00:51:36 [watch] src/styles/globals.css
+00:52:03 [watch] /src/layouts/BaseLayout.astro?astro&type=style&index=0&lang.css
+00:52:03 [watch] src/styles/globals.css
+01:03:09 Configuration file updated. Restarting...
+01:03:10 [vite] Re-optimizing dependencies because vite config has changed
+01:03:10 [content] Syncing content
+01:03:10 [content] Synced content
+01:03:10 [types] Generated 170ms
+01:03:10 [vite] Re-optimizing dependencies because vite config has changed
+01:03:10 [vite] Port 4321 is in use, trying another one...
+01:24:53 Configuration file updated. Restarting...
+01:24:53 [vite] Re-optimizing dependencies because vite config has changed
+01:24:53 [content] Syncing content
+01:24:53 [content] Synced content
+01:24:53 [types] Generated 146ms
+01:24:53 [vite] Re-optimizing dependencies because vite config has changed
+01:24:53 [vite] Port 4321 is in use, trying another one...
+01:31:29 Configuration file updated. Restarting...
+01:31:29 [vite] Re-optimizing dependencies because vite config has changed
+01:31:29 [content] Syncing content
+01:31:29 [content] Synced content
+01:31:29 [types] Generated 132ms
+01:31:29 [vite] Re-optimizing dependencies because vite config has changed
+01:31:29 [vite] Port 4321 is in use, trying another one...
+01:31:41 Configuration file updated. Restarting...
+1:31:41 AM [vite] (ssr) Error when evaluating SSR module /Users/calebcoverdale/code/aurorion/teams/astro-teams/astro.config.mjs: Cannot find module 'astro-icon' imported from '/Users/calebcoverdale/code/aurorion/teams/astro-teams/astro.config.mjs'
+      at fetchModule (file:///Users/calebcoverdale/code/aurorion/teams/astro-teams/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:46813:19)
+      at RunnableDevEnvironment.fetchModule (file:///Users/calebcoverdale/code/aurorion/teams/astro-teams/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:47904:12)
+      at fetchModule (file:///Users/calebcoverdale/code/aurorion/teams/astro-teams/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:47858:21)
+      at handleInvoke (file:///Users/calebcoverdale/code/aurorion/teams/astro-teams/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:38973:28)
+      at EventEmitter.listenerForInvokeHandler (file:///Users/calebcoverdale/code/aurorion/teams/astro-teams/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:39046:25)
+      at EventEmitter.emit (node:events:507:28)
+      at Object.send (file:///Users/calebcoverdale/code/aurorion/teams/astro-teams/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:25190:40)
+      at Object.invoke (file:///Users/calebcoverdale/code/aurorion/teams/astro-teams/node_modules/vite/dist/node/module-runner.js:621:34)
+      at Object.invoke (file:///Users/calebcoverdale/code/aurorion/teams/astro-teams/node_modules/vite/dist/node/module-runner.js:682:34)
+      at SSRCompatModuleRunner.getModuleInformation (file:///Users/calebcoverdale/code/aurorion/teams/astro-teams/node_modules/vite/dist/node/module-runner.js:1205:94)
+[astro] Unable to load your Astro config
+
+01:31:41 [ERROR] [config] Cannot find module 'astro-icon' imported from '/Users/calebcoverdale/code/aurorion/teams/astro-teams/astro.config.mjs'
+  Stack trace:
+    at fetchModule (file:///Users/calebcoverdale/code/aurorion/teams/astro-teams/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:46813:19)
+    [...] See full stack trace in the browser, or rerun with --verbose.
+
+01:31:41 [ERROR] Continuing with previous valid configuration
+
+01:40:56 Configuration file updated. Restarting...
+01:40:56 [vite] Re-optimizing dependencies because lockfile has changed
+01:40:56 [content] Syncing content
+01:40:56 [content] Synced content
+01:40:56 [types] Generated 128ms
+01:40:56 [vite] Re-optimizing dependencies because vite config has changed
+01:40:56 [vite] Port 4321 is in use, trying another one...

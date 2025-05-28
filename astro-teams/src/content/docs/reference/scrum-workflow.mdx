@@ -1,0 +1,233 @@
+---
+title: "Scrum Master Workflow"
+description: "Comprehensive Scrum workflow for managing sprints, git cleanup, production readiness, and team coordination with defined metrics and success criteria"
+category: "reference"
+tags: ["scrum", "project-management", "workflow", "git", "deployment", "metrics", "agile"]
+priority: "high"
+status: "active"
+lastUpdated: 2025-05-27
+author: "Aurorion Teams"
+relatedDocs: ["reference/scrum-analytics", "guides/cloudflare-deployment"]
+---
+
+# Scrum Master Workflow
+
+## Sprint Management Framework
+
+### 🎯 Sprint Goal Definition
+Establish clear, measurable objectives for each sprint with specific deliverables and success criteria.
+
+**Example Sprint Goals:**
+- Clean up git graph, consolidate commits, and establish production-ready workflow
+- Implement feature flag system for A/B testing capability
+- Establish monitoring and performance baseline metrics
+
+## 📋 Sprint Backlog Management
+
+### Priority Framework
+
+#### 🔴 High Priority (Current Sprint)
+- **Git Graph Cleanup**: Squash commits into logical units
+- **Branch Consolidation**: Remove stale feature branches  
+- **Production Deployment**: Merge clean history to main
+- **Feature Validation**: Verify critical functionality works
+
+#### 🟡 Medium Priority (Next Sprint)
+- **Release Process**: Document deployment workflow
+- **Monitoring Setup**: Production health checks
+- **Performance Baseline**: Establish metrics
+
+#### 🟢 Low Priority (Future Sprints)
+- **Feature Flag System**: A/B testing capability
+- **Enhanced Analytics**: Advanced tracking
+- **Automated Testing**: CI/CD pipeline enhancements
+
+## 📊 Current State Analysis Framework
+
+### Git Branch Health Assessment
+```
+staging (current) - ✅ Current working branch
+├── main - ⚠️ X commits behind staging  
+├── feature/name - ⚠️ Feature branch status
+├── historical-branch - ⚠️ Historical branch
+└── old-feature - ⚠️ Old feature branch
+```
+
+### Commit Analysis Strategy
+Track commits that need consolidation:
+1. Feature implementation commits
+2. Configuration fixes
+3. Documentation updates
+4. Bug fixes
+5. Infrastructure changes
+
+## 🔧 Git Cleanup Strategy
+
+### Phase 1: Commit Squashing
+**Goal**: Consolidate commits into logical units
+
+**Proposed Squash Groups**:
+1. **Infrastructure & Deployment**
+   - Migration commits + deployment fixes + automation
+
+2. **Repository & Documentation**
+   - Configuration changes + documentation + policy updates
+
+3. **Feature Implementation**
+   - Keep feature commits as standalone logical units
+
+### Phase 2: Branch Cleanup
+**Branches to Delete**:
+- Merged feature branches
+- Outdated branches
+- Historical migration branches
+
+**Branches to Keep**:
+- `main` (production)
+- `staging` (current development)
+- Active feature branches (review needed)
+
+### Phase 3: Production Sync
+1. Merge clean staging to main
+2. Tag production release
+3. Deploy to production
+4. Verify critical functionality
+
+## 📅 Sprint Schedule Framework
+
+### Daily Standup Questions
+1. **What did we complete yesterday?**
+2. **What are we working on today?**
+3. **What blockers do we have?**
+4. **Are we on track for sprint goal?**
+
+### Regular Check-ins
+- **Every 30 min during cleanup**: Progress review
+- **After each phase**: Validation checkpoint
+- **End of session**: Sprint retrospective
+
+## 🎖️ Definition of Done
+
+### For Git Cleanup
+- [ ] History reduced to logical, atomic commits
+- [ ] All stale branches removed
+- [ ] Clean linear history on main branch
+- [ ] All changes deployed to production
+
+### For Feature Completion
+- [ ] Code reviewed and tested
+- [ ] Documentation updated
+- [ ] Deployed to staging
+- [ ] Verified in production
+- [ ] Performance impact measured
+
+## 🚀 Action Items Template
+
+### Immediate (Next 15 min)
+1. **Commit current changes**
+2. **Start planned work**
+3. **First checkpoint** - Review progress
+
+### Mid-Sprint (Next 30 min)
+1. **Complete main objectives**
+2. **Address blockers**
+3. **Validate intermediate results**
+
+### Final Sprint (Last 15 min)
+1. **Deploy to production**
+2. **Test critical functionality**
+3. **Sprint retrospective**
+
+## 📈 Success Metrics
+
+### Git Health Metrics
+- **Commit Count**: Reduce to logical units
+- **Branch Count**: Maintain minimal active branches
+- **History Clarity**: Linear, logical progression
+
+### Production Readiness Metrics
+- **Deployment Success**: Clean deploy without errors
+- **Feature Functionality**: All critical features working
+- **Performance**: No regression in metrics
+
+### Team Velocity Metrics
+- **Sprint Goal Achievement**: Percentage of objectives completed
+- **Cycle Time**: Time from feature start to production
+- **Lead Time**: Time from idea to delivery
+
+## 🔄 Next Sprint Planning
+
+### Backlog Refinement
+1. **Feature Priority Assessment**
+2. **Technical Debt Evaluation**
+3. **Capacity Planning**
+4. **Risk Assessment**
+
+### Upcoming Features Framework
+1. **Enhanced Analytics Dashboard**
+2. **A/B Testing Framework** 
+3. **Automated Workflows**
+4. **Advanced User Management**
+
+### Technical Debt Management
+1. **Test Coverage Improvements**
+2. **Performance Optimization**
+3. **Security Audit**
+4. **Documentation Updates**
+
+## 🏆 Sprint Results Framework
+
+### Success Criteria Assessment
+- **Session Duration**: Planned vs actual
+- **All Objectives**: Achievement percentage
+- **Status**: Production readiness level
+
+### Git Cleanup Results
+- **Commits**: Before and after count
+- **Branches**: Cleanup effectiveness
+- **History**: Quality assessment
+- **Tags**: Release management
+
+### Infrastructure Status
+- **Production**: Deployment success
+- **Critical Features**: Functionality verification
+- **Performance**: Baseline establishment
+- **Testing**: Coverage and automation
+
+### Next Sprint Readiness
+- **Foundation**: Architecture assessment
+- **Documentation**: Completeness check
+- **Team Workflow**: Process maturity
+- **Development**: Feature readiness
+
+## 🛠️ Implementation Checklist
+
+### Sprint Setup
+- [ ] Define clear sprint goal
+- [ ] Prioritize backlog items
+- [ ] Assess current state
+- [ ] Plan cleanup strategy
+
+### Sprint Execution
+- [ ] Follow daily standup process
+- [ ] Execute planned phases
+- [ ] Monitor progress regularly
+- [ ] Address blockers promptly
+
+### Sprint Completion
+- [ ] Verify all objectives
+- [ ] Deploy to production
+- [ ] Validate functionality
+- [ ] Conduct retrospective
+
+### Continuous Improvement
+- [ ] Analyze velocity trends
+- [ ] Refine processes
+- [ ] Update documentation
+- [ ] Plan next sprint
+
+---
+
+**Maintained by**: Aurorion Teams  
+**Process Owner**: Scrum Master  
+**Last Updated**: May 27, 2025

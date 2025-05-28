@@ -1,0 +1,126 @@
+CREATE TABLE `activity_logs` (
+	`id` text PRIMARY KEY NOT NULL,
+	`type` text NOT NULL,
+	`member_id` text,
+	`project_id` text,
+	`action` text NOT NULL,
+	`description` text,
+	`metadata` text,
+	`duration` integer,
+	`quality_score` integer,
+	`impact` text DEFAULT 'medium',
+	`timestamp` text DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY (`member_id`) REFERENCES `team_members`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON UPDATE no action ON DELETE no action
+);
+--> statement-breakpoint
+CREATE TABLE `agent_sessions` (
+	`id` text PRIMARY KEY NOT NULL,
+	`agent_role` text NOT NULL,
+	`member_id` text,
+	`status` text NOT NULL,
+	`start_time` text DEFAULT CURRENT_TIMESTAMP,
+	`end_time` text,
+	`duration` integer,
+	`task` text,
+	`input` text,
+	`output` text,
+	`handoff_to` text,
+	`tokens_used` integer DEFAULT 0,
+	`model_used` text,
+	`error_count` integer DEFAULT 0,
+	`success_rate` real DEFAULT 100,
+	`metadata` text,
+	`created_at` text DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY (`member_id`) REFERENCES `team_members`(`id`) ON UPDATE no action ON DELETE no action
+);
+--> statement-breakpoint
+CREATE TABLE `metrics` (
+	`id` text PRIMARY KEY NOT NULL,
+	`type` text NOT NULL,
+	`member_id` text,
+	`project_id` text,
+	`tasks_completed` integer DEFAULT 0,
+	`hours_worked` real DEFAULT 0,
+	`quality_average` real DEFAULT 0,
+	`collaboration_events` integer DEFAULT 0,
+	`velocity` real DEFAULT 0,
+	`efficiency` real DEFAULT 0,
+	`satisfaction` integer DEFAULT 75,
+	`start_date` text NOT NULL,
+	`end_date` text NOT NULL,
+	`created_at` text DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY (`member_id`) REFERENCES `team_members`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON UPDATE no action ON DELETE no action
+);
+--> statement-breakpoint
+CREATE TABLE `project_members` (
+	`id` text PRIMARY KEY NOT NULL,
+	`project_id` text NOT NULL,
+	`member_id` text NOT NULL,
+	`contribution` integer DEFAULT 0,
+	`specialization` text,
+	`start_date` text,
+	`status` text DEFAULT 'active',
+	`achievements` text,
+	`created_at` text DEFAULT CURRENT_TIMESTAMP,
+	`updated_at` text DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`member_id`) REFERENCES `team_members`(`id`) ON UPDATE no action ON DELETE no action
+);
+--> statement-breakpoint
+CREATE TABLE `projects` (
+	`id` text PRIMARY KEY NOT NULL,
+	`name` text NOT NULL,
+	`slug` text NOT NULL,
+	`description` text,
+	`status` text DEFAULT 'active' NOT NULL,
+	`priority` text DEFAULT 'medium',
+	`start_date` text,
+	`end_date` text,
+	`last_activity` text,
+	`progress` integer DEFAULT 0,
+	`tasks_total` integer DEFAULT 0,
+	`tasks_completed` integer DEFAULT 0,
+	`tags` text,
+	`category` text,
+	`repository` text,
+	`created_at` text DEFAULT CURRENT_TIMESTAMP,
+	`updated_at` text DEFAULT CURRENT_TIMESTAMP
+);
+--> statement-breakpoint
+CREATE UNIQUE INDEX `projects_slug_unique` ON `projects` (`slug`);--> statement-breakpoint
+CREATE TABLE `team_members` (
+	`id` text PRIMARY KEY NOT NULL,
+	`name` text NOT NULL,
+	`role` text NOT NULL,
+	`avatar` text,
+	`bio` text,
+	`status` text DEFAULT 'active' NOT NULL,
+	`join_date` text NOT NULL,
+	`email` text,
+	`linkedin` text,
+	`slack` text,
+	`skills` text,
+	`specializations` text,
+	`timezone` text DEFAULT 'America/New_York',
+	`start_hour` integer DEFAULT 9,
+	`end_hour` integer DEFAULT 17,
+	`work_days` text DEFAULT '[1,2,3,4,5]',
+	`communication_style` text DEFAULT 'collaborative',
+	`autonomy_level` integer DEFAULT 75,
+	`risk_tolerance` integer DEFAULT 50,
+	`creativity` integer DEFAULT 75,
+	`precision` integer DEFAULT 75,
+	`collaboration` integer DEFAULT 75,
+	`response_speed` integer DEFAULT 5,
+	`authority_level` text DEFAULT 'member',
+	`permissions` text,
+	`escalation_path` text,
+	`tasks_completed` integer DEFAULT 0,
+	`average_completion_time` real DEFAULT 0,
+	`quality_score` integer DEFAULT 75,
+	`collaboration_rating` real DEFAULT 4,
+	`created_at` text DEFAULT CURRENT_TIMESTAMP,
+	`updated_at` text DEFAULT CURRENT_TIMESTAMP
+);

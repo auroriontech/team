@@ -1,0 +1,8 @@
+name = "astro-teams"
+compatibility_date = "2024-01-15"
+pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "aurorion-teams"
+database_id = "main_database"

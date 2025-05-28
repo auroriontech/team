@@ -1,0 +1,27 @@
+# Development Dockerfile for Astro Teams
+FROM node:20-alpine
+
+# Install curl and wget for healthchecks
+RUN apk add --no-cache curl wget
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files first for better caching
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci --only=production=false
+
+# Copy source code
+COPY . .
+
+# Expose port
+EXPOSE 4321
+
+# Health check
+HEALTHCHECK --interval=15s --timeout=5s --start-period=30s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://localhost:4321/ || exit 1
+
+# Start development server
+CMD ["npm", "run", "dev"]

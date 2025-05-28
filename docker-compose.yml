@@ -1,0 +1,68 @@
+services:
+  proxy:
+    image: caddy:2-alpine
+    container_name: proxy
+    restart: unless-stopped
+    ports:
+      - "80"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+    networks:
+      - tunnel
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - team
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/"] 
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./Caddyfile
+          target: /etc/caddy/Caddyfile
+
+  team:
+    build:
+      context: ./astro-teams
+      dockerfile: Dockerfile.dev
+    container_name: team
+    restart: unless-stopped
+    ports:
+      - "4321:4321"
+    volumes:
+      - ./astro-teams:/app
+      - /app/node_modules
+    networks:
+      - tunnel
+    environment:
+      - NODE_ENV=development
+      - HOST=0.0.0.0
+      - PORT=4321
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:4321/"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    develop:
+      watch:
+        # Restart on package.json changes for dependency updates
+        - action: rebuild
+          path: ./astro-teams/package.json
+        # Restart on Astro config changes
+        - action: rebuild
+          path: ./astro-teams/astro.config.mjs
+        # Restart on TypeScript config changes  
+        - action: rebuild
+          path: ./astro-teams/tsconfig.json
+        # Restart on Dockerfile changes
+        - action: rebuild
+          path: ./astro-teams/Dockerfile.dev
+
+networks:
+  tunnel:
+    external: true

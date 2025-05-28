@@ -1,0 +1,80 @@
+---
+title: "Aurorion Teams MCP Implementation Backlog"
+description: "Complete project roadmap for deploying Aurorion Teams as locally-hosted MCP agents"
+category: "planning"
+priority: "high"
+lastUpdated: 2024-01-15
+status: "active"
+tags: ["mcp", "implementation", "roadmap", "sprint-planning"]
+---
+
+# Aurorion Teams MCP Implementation Backlog
+
+## Project Vision
+Deploy Aurorion Teams as locally-hosted MCP agents on Mac Mini M4 Pro with proper endpoints and model assignments.
+
+## Sprint 1: Foundation Setup (Priority 1)
+
+### Epic: Basic Infrastructure
+- [ ] **SETUP-001**: Install and configure Ollama with initial models
+- [ ] **SETUP-002**: Create basic MCP server structure for one agent (proof of concept)
+- [ ] **SETUP-003**: Verify Mac Mini can host multiple concurrent agents
+- [ ] **SETUP-004**: Document basic deployment workflow
+
+### Epic: Model Selection & Testing
+- [x] **MODEL-000**: Created models management page at `/models` with live Ollama API integration
+- [ ] **MODEL-001**: Download and test DeepSeek-R1 7B for Architect-Engineer
+- [ ] **MODEL-002**: Download and test Gemma 3 27B for Tester-Reviewer  
+- [ ] **MODEL-003**: Performance benchmark with 2-3 agents running simultaneously
+- [ ] **MODEL-004**: Memory usage analysis and optimization
+
+**Current Status**: No models currently installed. Use `/models` page to download recommended models.
+
+## Sprint 2: Core Agent Development (Priority 2)
+
+### Epic: MCP Agent Implementation
+- [ ] **AGENT-001**: Convert Architect-Engineer instruction set to MCP endpoint
+- [ ] **AGENT-002**: Convert Tester-Reviewer instruction set to MCP endpoint
+- [ ] **AGENT-003**: Implement standardized handoff protocol between agents
+- [ ] **AGENT-004**: Create agent coordination/routing system
+
+### Epic: Local Hosting Framework
+- [ ] **HOST-001**: Choose and implement Docker vs native hosting approach
+- [ ] **HOST-002**: Set up reverse proxy/gateway for agent endpoints
+- [ ] **HOST-003**: Implement basic monitoring and health checks
+- [ ] **HOST-004**: Create startup/shutdown automation scripts
+
+## Sprint 3: Full Team Deployment (Priority 3)
+
+### Epic: Remaining Agents
+- [ ] **AGENT-005**: Deploy Optimizer-Watchdog agent
+- [ ] **AGENT-006**: Deploy Scrum-Knowledge agent  
+- [ ] **AGENT-007**: Deploy Morale-Catalyst agent
+- [ ] **AGENT-008**: Deploy Technical Enablement agent
+- [ ] **AGENT-009**: Deploy Standup Facilitator agent
+
+### Epic: Integration & Testing
+- [ ] **INT-001**: End-to-end workflow testing
+- [ ] **INT-002**: Performance optimization under full load
+- [ ] **INT-003**: Error handling and recovery procedures
+- [ ] **INT-004**: Documentation and user guide creation
+
+## Definition of Done
+- [ ] All agents accessible via MCP endpoints
+- [ ] Mac Mini hosting stable under normal load
+- [ ] Handoff protocols working between agents
+- [ ] Basic monitoring and health checks operational
+- [ ] Documentation complete for setup and usage
+
+## Blockers & Dependencies
+- **BLOCKER-001**: Need to choose MCP framework before agent development
+- **BLOCKER-002**: Model performance testing required before agent assignments
+- **DEPENDENCY-001**: Docker/hosting decision affects all agent development
+
+## Next Immediate Actions
+1. **SETUP-001**: Install Ollama and test first model
+2. **Choose MCP Framework**: Select from research options
+3. **Create proof-of-concept**: Single agent MCP endpoint
+
+---
+**Process Control**: No new features or research until Sprint 1 tasks are completed.

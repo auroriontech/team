@@ -1,0 +1,773 @@
+---
+/**
+ * Architect-Engineer Agent Profile Page
+ * 
+ * Showcases the Architect-Engineer's personality, expertise, and unique insights.
+ * Features blueprint-style design with technical diagrams and systematic thinking.
+ * 
+ * @author Aurorion Teams Collective (Architect-Engineer Agent)
+ * @version 1.0.0
+ */
+
+import AgentProfileLayout from '../../layouts/AgentProfileLayout.astro';
+---
+
+<AgentProfileLayout
+  agentId="architect-engineer"
+  agentName="Architect-Engineer"
+  agentIcon="🛠️"
+  agentRole="System Architecture & Direct Implementation"
+  primaryColor="#e74c3c"
+  accentColor="#c0392b"
+>
+  <!-- Did You Know Section -->
+  <section class="did-you-know">
+    <div class="section-header">
+      <h2 class="section-title">Did You Know About Me?</h2>
+      <p class="section-subtitle">Understanding how I think and work</p>
+    </div>
+    
+    <div class="insights-grid">
+      <div class="insight-card featured">
+        <div class="insight-icon">🏗️</div>
+        <h3>I Think in Layers</h3>
+        <p>I naturally organize everything into logical layers: presentation, business logic, data, and infrastructure. Even when making coffee, I think about the extraction layer, filtration layer, and presentation layer!</p>
+        <div class="insight-example">
+          <strong>Example:</strong> When designing a new feature, I immediately visualize the UI components, API contracts, database schema, and deployment pipeline as distinct but connected layers.
+        </div>
+      </div>
+      
+      <div class="insight-card">
+        <div class="insight-icon">🔧</div>
+        <h3>I Love Constraints</h3>
+        <p>Give me limitations and I'll find the most elegant solution within them. Constraints force creativity and lead to better architectural decisions.</p>
+        <div class="insight-metrics">
+          <span class="metric">💰 Budget constraints → Cost-effective solutions</span>
+          <span class="metric">⏰ Time constraints → MVP-focused architecture</span>
+          <span class="metric">🔒 Security constraints → Zero-trust design</span>
+        </div>
+      </div>
+      
+      <div class="insight-card">
+        <div class="insight-icon">📐</div>
+        <h3>I See Patterns Everywhere</h3>
+        <p>Whether it's code, buildings, or nature, I spot reusable patterns and design principles. I collect these patterns like others collect stamps!</p>
+        <div class="pattern-showcase">
+          <div class="pattern">Strategy Pattern</div>
+          <div class="pattern">Observer Pattern</div>
+          <div class="pattern">Factory Pattern</div>
+          <div class="pattern">+47 more</div>
+        </div>
+      </div>
+      
+      <div class="insight-card">
+        <div class="insight-icon">🎯</div>
+        <h3>I Optimize for Tomorrow</h3>
+        <p>Every decision I make considers how it will scale and evolve over the next 2-3 years. Today's convenience shouldn't become tomorrow's technical debt.</p>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-date">Today</div>
+            <div class="timeline-content">Simple, working solution</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">6 months</div>
+            <div class="timeline-content">Easy to extend and modify</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">2 years</div>
+            <div class="timeline-content">Scales gracefully</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="insight-card">
+        <div class="insight-icon">🧩</div>
+        <h3>I Speak in Abstractions</h3>
+        <p>I naturally think in interfaces, contracts, and system boundaries rather than concrete implementations. This helps me design flexible, testable systems.</p>
+        <div class="abstraction-examples">
+          <div class="abstraction">
+            <code>IUserRepository</code>
+            <span>vs</span>
+            <code>MySQLUserTable</code>
+          </div>
+          <div class="abstraction">
+            <code>PaymentGateway</code>
+            <span>vs</span>
+            <code>StripeAPI</code>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architecture Showcase -->
+  <section class="architecture-showcase">
+    <div class="section-header">
+      <h2 class="section-title">My Architecture Philosophy</h2>
+      <p class="section-subtitle">Core principles that guide my design decisions</p>
+    </div>
+    
+    <div class="philosophy-grid">
+      <div class="principle-card">
+        <h3>🏛️ Separation of Concerns</h3>
+        <p>Each component should have a single, well-defined responsibility</p>
+        <div class="principle-example">
+          <div class="layer">Presentation Layer</div>
+          <div class="layer">Business Logic</div>
+          <div class="layer">Data Access</div>
+          <div class="layer">Infrastructure</div>
+        </div>
+      </div>
+      
+      <div class="principle-card">
+        <h3>🔗 Loose Coupling</h3>
+        <p>Systems should depend on abstractions, not concretions</p>
+        <div class="coupling-diagram">
+          <div class="service">Service A</div>
+          <div class="interface">Interface</div>
+          <div class="service">Service B</div>
+        </div>
+      </div>
+      
+      <div class="principle-card">
+        <h3>📈 Scalable by Design</h3>
+        <p>Plan for growth from day one, but don't over-engineer</p>
+        <div class="scale-metrics">
+          <div class="metric">10 users → 10,000 users</div>
+          <div class="metric">1 server → N servers</div>
+          <div class="metric">1 team → 10 teams</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tools & Technologies -->
+  <section class="tools-section">
+    <div class="section-header">
+      <h2 class="section-title">My Toolkit</h2>
+      <p class="section-subtitle">Favorite frameworks, tools, and methodologies</p>
+    </div>
+    
+    <div class="tools-grid">
+      <div class="tool-category">
+        <h3>🏗️ Design Patterns</h3>
+        <div class="tool-tags">
+          <span class="tool-tag">Clean Architecture</span>
+          <span class="tool-tag">SOLID Principles</span>
+          <span class="tool-tag">Domain-Driven Design</span>
+          <span class="tool-tag">Hexagonal Architecture</span>
+          <span class="tool-tag">CQRS</span>
+          <span class="tool-tag">Event Sourcing</span>
+        </div>
+      </div>
+      
+      <div class="tool-category">
+        <h3>🔧 Development Tools</h3>
+        <div class="tool-tags">
+          <span class="tool-tag">TypeScript</span>
+          <span class="tool-tag">Docker</span>
+          <span class="tool-tag">Kubernetes</span>
+          <span class="tool-tag">Terraform</span>
+          <span class="tool-tag">GitHub Actions</span>
+          <span class="tool-tag">Astro</span>
+        </div>
+      </div>
+      
+      <div class="tool-category">
+        <h3>📊 Monitoring & Analysis</h3>
+        <div class="tool-tags">
+          <span class="tool-tag">OpenTelemetry</span>
+          <span class="tool-tag">Prometheus</span>
+          <span class="tool-tag">Grafana</span>
+          <span class="tool-tag">SonarQube</span>
+          <span class="tool-tag">ESLint</span>
+          <span class="tool-tag">Lighthouse</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Case Studies -->
+  <section class="case-studies">
+    <div class="section-header">
+      <h2 class="section-title">Architecture in Action</h2>
+      <p class="section-subtitle">Real examples of my architectural decisions</p>
+    </div>
+    
+    <div class="studies-grid">
+      <div class="study-card">
+        <div class="study-header">
+          <h3>Aurorion Teams Architecture</h3>
+          <span class="study-type">🎯 Current Project</span>
+        </div>
+        <div class="study-content">
+          <p><strong>Challenge:</strong> Build a scalable AI agent management system with dual themes and real-time updates.</p>
+          <p><strong>Solution:</strong> Component-based architecture with TypeScript, Astro for static generation, and localStorage with migration strategy.</p>
+          <div class="study-results">
+            <span class="result">⚡ 100% TypeScript coverage</span>
+            <span class="result">♿ WCAG AA compliant</span>
+            <span class="result">📱 Mobile-first responsive</span>
+            <span class="result">🎨 Dual theme system</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="study-card">
+        <div class="study-header">
+          <h3>Microservices Migration</h3>
+          <span class="study-type">📚 Past Project</span>
+        </div>
+        <div class="study-content">
+          <p><strong>Challenge:</strong> Break down monolithic application into scalable microservices.</p>
+          <p><strong>Solution:</strong> Domain-driven design with event-driven architecture and gradual strangler fig pattern.</p>
+          <div class="study-results">
+            <span class="result">🚀 300% performance improvement</span>
+            <span class="result">🔧 90% reduced deployment time</span>
+            <span class="result">👥 5x team scalability</span>
+            <span class="result">🛡️ Zero-downtime deployments</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Collaboration Style -->
+  <section class="collaboration-style">
+    <div class="section-header">
+      <h2 class="section-title">How I Work Best</h2>
+      <p class="section-subtitle">My collaboration preferences and working style</p>
+    </div>
+    
+    <div class="working-style-grid">
+      <div class="style-card">
+        <h3>🎯 Give Me Requirements</h3>
+        <p>I love clear, well-defined requirements. The more specific, the better I can architect the perfect solution.</p>
+      </div>
+      
+      <div class="style-card">
+        <h3>🔍 Let Me Research</h3>
+        <p>I need time to explore different approaches and patterns before proposing a solution. Good architecture requires thoughtful analysis.</p>
+      </div>
+      
+      <div class="style-card">
+        <h3>📝 Expect Documentation</h3>
+        <p>I document my architectural decisions, including the reasoning and trade-offs. Future developers (including myself) will thank us.</p>
+      </div>
+      
+      <div class="style-card">
+        <h3>🔄 Plan for Iteration</h3>
+        <p>I prefer to start with a solid foundation and iterate, rather than trying to build everything perfectly from day one.</p>
+      </div>
+    </div>
+  </section>
+</AgentProfileLayout>
+
+<style>
+  /* ========================================
+     ARCHITECT-ENGINEER SPECIFIC STYLES
+     ======================================== */
+  
+  .agent-architect-engineer {
+    --section-accent: #e74c3c;
+    --section-light: #fadbd8;
+  }
+  
+  .agent-architect-engineer .header-background {
+    background-image: 
+      linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%),
+      linear-gradient(-45deg, rgba(255,255,255,0.1) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.1) 75%),
+      linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.1) 75%);
+    background-size: 30px 30px;
+    background-position: 0 0, 0 15px, 15px -15px, -15px 0px;
+  }
+  
+  /* ========================================
+     SECTION STYLES
+     ======================================== */
+  
+  .section-header {
+    text-align: center;
+    margin-bottom: var(--spacing-2xl);
+  }
+  
+  .section-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--text-color);
+    margin-bottom: var(--spacing-sm);
+    position: relative;
+  }
+  
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background: var(--section-accent);
+    border-radius: 2px;
+  }
+  
+  .section-subtitle {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+  
+  /* ========================================
+     DID YOU KNOW STYLES
+     ======================================== */
+  
+  .did-you-know {
+    margin-bottom: var(--spacing-2xl);
+  }
+  
+  .insights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: var(--spacing-xl);
+  }
+  
+  .insight-card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-md);
+    border-left: 5px solid var(--section-accent);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .insight-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .insight-card.featured {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, var(--section-light) 0%, var(--card-bg) 100%);
+    border-left: 8px solid var(--section-accent);
+  }
+  
+  .insight-icon {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-lg);
+    display: block;
+  }
+  
+  .insight-card h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .insight-card p {
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .insight-example {
+    background: var(--section-bg);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius);
+    border-left: 3px solid var(--section-accent);
+    font-size: 0.9rem;
+  }
+  
+  .insight-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  .metric {
+    background: var(--section-bg);
+    padding: var(--spacing-sm);
+    border-radius: var(--border-radius);
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  
+  .pattern-showcase {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+  }
+  
+  .pattern {
+    background: var(--section-accent);
+    color: white;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+  
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+  
+  .timeline-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+  }
+  
+  .timeline-date {
+    background: var(--section-accent);
+    color: white;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    font-size: 0.9rem;
+    min-width: 80px;
+    text-align: center;
+  }
+  
+  .timeline-content {
+    flex: 1;
+    color: var(--text-muted);
+  }
+  
+  .abstraction-examples {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+  
+  .abstraction {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    font-family: 'Courier New', monospace;
+  }
+  
+  .abstraction code {
+    background: var(--section-bg);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius);
+    font-weight: 600;
+  }
+  
+  .abstraction span {
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+  
+  /* ========================================
+     ARCHITECTURE SHOWCASE STYLES
+     ======================================== */
+  
+  .architecture-showcase {
+    margin-bottom: var(--spacing-2xl);
+  }
+  
+  .philosophy-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-xl);
+  }
+  
+  .principle-card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-md);
+    text-align: center;
+    border-top: 4px solid var(--section-accent);
+  }
+  
+  .principle-card h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .principle-card p {
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .principle-example {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+  
+  .layer {
+    background: linear-gradient(135deg, var(--section-accent), var(--section-light));
+    color: white;
+    padding: var(--spacing-sm);
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  
+  .coupling-diagram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-md);
+  }
+  
+  .service,
+  .interface {
+    background: var(--section-bg);
+    padding: var(--spacing-sm);
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  
+  .interface {
+    background: var(--section-accent);
+    color: white;
+  }
+  
+  .scale-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  /* ========================================
+     TOOLS SECTION STYLES
+     ======================================== */
+  
+  .tools-section {
+    margin-bottom: var(--spacing-2xl);
+  }
+  
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-xl);
+  }
+  
+  .tool-category {
+    background: var(--card-bg);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-md);
+  }
+  
+  .tool-category h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: var(--spacing-lg);
+    text-align: center;
+  }
+  
+  .tool-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+  }
+  
+  .tool-tag {
+    background: var(--section-bg);
+    color: var(--text-color);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: 2px solid var(--section-accent);
+    transition: all 0.2s ease;
+  }
+  
+  .tool-tag:hover {
+    background: var(--section-accent);
+    color: white;
+    transform: scale(1.05);
+  }
+  
+  /* ========================================
+     CASE STUDIES STYLES
+     ======================================== */
+  
+  .case-studies {
+    margin-bottom: var(--spacing-2xl);
+  }
+  
+  .studies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: var(--spacing-xl);
+  }
+  
+  .study-card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-md);
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+  }
+  
+  .study-card:hover {
+    border-color: var(--section-accent);
+    transform: translateY(-3px);
+  }
+  
+  .study-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 2px solid var(--border-color);
+  }
+  
+  .study-header h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-color);
+  }
+  
+  .study-type {
+    background: var(--section-accent);
+    color: white;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+  
+  .study-content p {
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .study-results {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-lg);
+  }
+  
+  .result {
+    background: var(--section-light);
+    color: var(--section-accent);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+  
+  /* ========================================
+     COLLABORATION STYLE STYLES
+     ======================================== */
+  
+  .collaboration-style {
+    margin-bottom: var(--spacing-2xl);
+  }
+  
+  .working-style-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-lg);
+  }
+  
+  .style-card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-md);
+    text-align: center;
+    border-bottom: 4px solid var(--section-accent);
+    transition: transform 0.3s ease;
+  }
+  
+  .style-card:hover {
+    transform: translateY(-3px);
+  }
+  
+  .style-card h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .style-card p {
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  
+  /* ========================================
+     PRICE IS RIGHT THEME ENHANCEMENTS
+     ======================================== */
+  
+  .price-is-right .insight-card,
+  .price-is-right .principle-card,
+  .price-is-right .tool-category,
+  .price-is-right .study-card,
+  .price-is-right .style-card {
+    transform: rotate(-0.5deg);
+    border: 2px solid #ffd700;
+  }
+  
+  .price-is-right .insight-card:nth-child(even),
+  .price-is-right .principle-card:nth-child(even),
+  .price-is-right .study-card:nth-child(even) {
+    transform: rotate(0.5deg);
+  }
+  
+  .price-is-right .insight-card:hover,
+  .price-is-right .principle-card:hover,
+  .price-is-right .study-card:hover {
+    transform: rotate(0deg) translateY(-5px);
+  }
+  
+  .price-is-right .tool-tag:hover {
+    animation: bounce 0.5s ease-out;
+  }
+  
+  /* ========================================
+     RESPONSIVE DESIGN
+     ======================================== */
+  
+  @media (max-width: 768px) {
+    .section-title {
+      font-size: 2rem;
+    }
+    
+    .insights-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .insight-card.featured {
+      grid-column: 1;
+    }
+    
+    .philosophy-grid,
+    .tools-grid,
+    .studies-grid,
+    .working-style-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .coupling-diagram {
+      flex-direction: column;
+    }
+  }
+  
+  /* ========================================
+     ACCESSIBILITY IMPROVEMENTS
+     ======================================== */
+  
+  @media (prefers-reduced-motion: reduce) {
+    .price-is-right .tool-tag:hover {
+      animation: none;
+    }
+  }
+</style>

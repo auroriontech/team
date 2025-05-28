@@ -1,0 +1,620 @@
+---
+title: "API Design Patterns"
+description: "Reusable API design patterns and best practices for REST APIs, GraphQL, and serverless functions"
+category: "reference"
+priority: "high"
+lastUpdated: 2024-05-27
+status: "active"
+tags: ["tool-api", "rest", "patterns", "endpoints", "design", "reusable"]
+authors: ["Aurorion Teams"]
+---
+
+# API Design Patterns
+
+## Overview
+
+Comprehensive guide for designing REST APIs, GraphQL endpoints, and serverless functions with consistent patterns and best practices.
+
+## API Architecture Patterns
+
+### REST API Design
+
+#### Resource-Based URLs
+```
+GET    /api/users              # List users
+GET    /api/users/{id}         # Get specific user
+POST   /api/users              # Create user
+PUT    /api/users/{id}         # Update user (full)
+PATCH  /api/users/{id}         # Update user (partial)
+DELETE /api/users/{id}         # Delete user
+```
+
+#### Nested Resources
+```
+GET    /api/users/{id}/posts          # Get user's posts
+POST   /api/users/{id}/posts          # Create post for user
+GET    /api/posts/{id}/comments       # Get post comments
+POST   /api/posts/{id}/comments       # Add comment to post
+```
+
+#### Query Parameters
+```
+GET /api/users?page=1&limit=20&sort=created_at&order=desc
+GET /api/posts?category=tech&status=published&author=123
+GET /api/search?q=javascript&type=posts&limit=10
+```
+
+### Status Codes
+
+#### Success Codes
+- **200 OK**: Standard success response
+- **201 Created**: Resource successfully created
+- **202 Accepted**: Request accepted for processing
+- **204 No Content**: Success with no response body
+
+#### Client Error Codes
+- **400 Bad Request**: Invalid request data
+- **401 Unauthorized**: Authentication required
+- **403 Forbidden**: Access denied
+- **404 Not Found**: Resource not found
+- **409 Conflict**: Resource conflict (duplicate)
+- **422 Unprocessable Entity**: Validation errors
+
+#### Server Error Codes
+- **500 Internal Server Error**: Generic server error
+- **502 Bad Gateway**: Upstream service error
+- **503 Service Unavailable**: Temporary service outage
+
+### Response Formats
+
+#### Standard Success Response
+```json
+{
+  "status": "success",
+  "data": {
+    "id": 123,
+    "email": "user@example.com",
+    "created_at": "2024-05-27T10:00:00Z"
+  },
+  "meta": {
+    "timestamp": "2024-05-27T10:00:00Z",
+    "version": "1.0.0"
+  }
+}
+```
+
+#### Paginated Response
+```json
+{
+  "status": "success",
+  "data": [
+    { "id": 1, "title": "Post 1" },
+    { "id": 2, "title": "Post 2" }
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 20,
+    "total": 100,
+    "pages": 5,
+    "has_next": true,
+    "has_prev": false
+  }
+}
+```
+
+#### Error Response
+```json
+{
+  "status": "error",
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Invalid email format",
+    "details": {
+      "field": "email",
+      "value": "invalid-email",
+      "constraint": "Must be valid email address"
+    }
+  },
+  "meta": {
+    "timestamp": "2024-05-27T10:00:00Z",
+    "request_id": "req_123456"
+  }
+}
+```
+
+## Authentication Patterns
+
+### API Key Authentication
+```typescript
+// Header-based API key
+Authorization: Bearer api_key_here
+
+// Query parameter (less secure)
+GET /api/users?api_key=api_key_here
+```
+
+### JWT Authentication
+```typescript
+// JWT in Authorization header
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+// JWT validation middleware
+export async function validateJWT(token: string) {
+  try {
+    const payload = await jwt.verify(token, JWT_SECRET);
+    return { valid: true, user: payload };
+  } catch (error) {
+    return { valid: false, error: error.message };
+  }
+}
+```
+
+### Session-Based Authentication
+```typescript
+// Session cookie
+Cookie: session_id=abc123; HttpOnly; Secure; SameSite=Strict
+
+// Session validation
+export async function validateSession(sessionId: string, db: D1Database) {
+  const session = await db.prepare(
+    "SELECT * FROM sessions WHERE id = ? AND expires_at > ?"
+  ).bind(sessionId, new Date().toISOString()).first();
+  
+  return session ? session.user_id : null;
+}
+```
+
+## Request Validation
+
+### Input Validation
+```typescript
+import { z } from 'zod';
+
+const CreateUserSchema = z.object({
+  email: z.string().email(),
+  username: z.string().min(3).max(50),
+  password: z.string().min(8),
+  age: z.number().min(13).optional()
+});
+
+export async function validateRequest(request: Request) {
+  try {
+    const body = await request.json();
+    const validData = CreateUserSchema.parse(body);
+    return { valid: true, data: validData };
+  } catch (error) {
+    return { valid: false, errors: error.errors };
+  }
+}
+```
+
+### Rate Limiting
+```typescript
+// Simple in-memory rate limiter
+const rateLimiter = new Map();
+
+export function checkRateLimit(ip: string, limit = 100, window = 3600000) {
+  const now = Date.now();
+  const windowStart = now - window;
+  
+  if (!rateLimiter.has(ip)) {
+    rateLimiter.set(ip, []);
+  }
+  
+  const requests = rateLimiter.get(ip);
+  const recentRequests = requests.filter(time => time > windowStart);
+  
+  if (recentRequests.length >= limit) {
+    return { allowed: false, remaining: 0 };
+  }
+  
+  recentRequests.push(now);
+  rateLimiter.set(ip, recentRequests);
+  
+  return { allowed: true, remaining: limit - recentRequests.length };
+}
+```
+
+## CORS Configuration
+
+### Basic CORS Setup
+```typescript
+export function setCORSHeaders(response: Response, origin?: string) {
+  const allowedOrigins = [
+    'https://yourdomain.com',
+    'https://www.yourdomain.com',
+    'http://localhost:3000',
+    'http://localhost:4321'
+  ];
+  
+  if (origin && allowedOrigins.includes(origin)) {
+    response.headers.set('Access-Control-Allow-Origin', origin);
+  }
+  
+  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  response.headers.set('Access-Control-Max-Age', '86400');
+  
+  return response;
+}
+```
+
+### Preflight Handling
+```typescript
+export async function handlePreflight(request: Request) {
+  if (request.method === 'OPTIONS') {
+    return new Response(null, {
+      status: 200,
+      headers: {
+        'Access-Control-Allow-Origin': request.headers.get('Origin') || '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        'Access-Control-Max-Age': '86400'
+      }
+    });
+  }
+}
+```
+
+## Error Handling
+
+### Centralized Error Handler
+```typescript
+export class APIError extends Error {
+  constructor(
+    public statusCode: number,
+    public code: string,
+    message: string,
+    public details?: any
+  ) {
+    super(message);
+    this.name = 'APIError';
+  }
+}
+
+export function handleAPIError(error: unknown): Response {
+  if (error instanceof APIError) {
+    return new Response(JSON.stringify({
+      status: 'error',
+      error: {
+        code: error.code,
+        message: error.message,
+        details: error.details
+      }
+    }), {
+      status: error.statusCode,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+  
+  // Generic server error
+  return new Response(JSON.stringify({
+    status: 'error',
+    error: {
+      code: 'INTERNAL_ERROR',
+      message: 'An unexpected error occurred'
+    }
+  }), {
+    status: 500,
+    headers: { 'Content-Type': 'application/json' }
+  });
+}
+```
+
+### Validation Error Response
+```typescript
+export function validationError(errors: any[]): Response {
+  return new Response(JSON.stringify({
+    status: 'error',
+    error: {
+      code: 'VALIDATION_ERROR',
+      message: 'Request validation failed',
+      details: errors.map(err => ({
+        field: err.path?.join('.'),
+        message: err.message,
+        code: err.code
+      }))
+    }
+  }), {
+    status: 422,
+    headers: { 'Content-Type': 'application/json' }
+  });
+}
+```
+
+## Database Integration
+
+### Repository Pattern
+```typescript
+export class UserRepository {
+  constructor(private db: D1Database) {}
+  
+  async create(userData: CreateUserData): Promise<User> {
+    const result = await this.db.prepare(`
+      INSERT INTO users (email, username, password_hash)
+      VALUES (?, ?, ?)
+      RETURNING id, email, username, created_at
+    `).bind(
+      userData.email,
+      userData.username,
+      userData.passwordHash
+    ).first();
+    
+    if (!result) {
+      throw new APIError(500, 'DB_ERROR', 'Failed to create user');
+    }
+    
+    return result as User;
+  }
+  
+  async findByEmail(email: string): Promise<User | null> {
+    return await this.db.prepare(
+      "SELECT id, email, username, created_at FROM users WHERE email = ?"
+    ).bind(email).first() as User | null;
+  }
+  
+  async update(id: number, updates: Partial<User>): Promise<User> {
+    const setClause = Object.keys(updates)
+      .map(key => `${key} = ?`)
+      .join(', ');
+    
+    const values = Object.values(updates);
+    values.push(id);
+    
+    const result = await this.db.prepare(`
+      UPDATE users SET ${setClause}, updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+      RETURNING id, email, username, updated_at
+    `).bind(...values).first();
+    
+    if (!result) {
+      throw new APIError(404, 'USER_NOT_FOUND', 'User not found');
+    }
+    
+    return result as User;
+  }
+}
+```
+
+### Transaction Handling
+```typescript
+export async function withTransaction<T>(
+  db: D1Database,
+  callback: (db: D1Database) => Promise<T>
+): Promise<T> {
+  // Note: D1 doesn't support transactions yet, but this pattern
+  // can be used with other databases
+  try {
+    await db.exec("BEGIN TRANSACTION");
+    const result = await callback(db);
+    await db.exec("COMMIT");
+    return result;
+  } catch (error) {
+    await db.exec("ROLLBACK");
+    throw error;
+  }
+}
+```
+
+## Testing Patterns
+
+### API Endpoint Testing
+```typescript
+import { describe, it, expect, beforeEach } from 'vitest';
+
+describe('User API', () => {
+  let testDB: D1Database;
+  
+  beforeEach(async () => {
+    // Setup test database
+    testDB = await setupTestDB();
+  });
+  
+  it('should create user with valid data', async () => {
+    const userData = {
+      email: 'test@example.com',
+      username: 'testuser',
+      password: 'password123'
+    };
+    
+    const response = await POST('/api/users', {
+      body: JSON.stringify(userData),
+      headers: { 'Content-Type': 'application/json' }
+    });
+    
+    expect(response.status).toBe(201);
+    
+    const result = await response.json();
+    expect(result.status).toBe('success');
+    expect(result.data.email).toBe(userData.email);
+  });
+  
+  it('should return validation error for invalid email', async () => {
+    const userData = {
+      email: 'invalid-email',
+      username: 'testuser',
+      password: 'password123'
+    };
+    
+    const response = await POST('/api/users', {
+      body: JSON.stringify(userData)
+    });
+    
+    expect(response.status).toBe(422);
+    
+    const result = await response.json();
+    expect(result.error.code).toBe('VALIDATION_ERROR');
+  });
+});
+```
+
+### Mock API Responses
+```typescript
+export const mockAPIResponses = {
+  users: {
+    list: {
+      status: 'success',
+      data: [
+        { id: 1, email: 'user1@example.com', username: 'user1' },
+        { id: 2, email: 'user2@example.com', username: 'user2' }
+      ],
+      pagination: { page: 1, limit: 20, total: 2 }
+    },
+    create: {
+      status: 'success',
+      data: { id: 3, email: 'new@example.com', username: 'newuser' }
+    },
+    notFound: {
+      status: 'error',
+      error: { code: 'USER_NOT_FOUND', message: 'User not found' }
+    }
+  }
+};
+```
+
+## Performance Optimization
+
+### Response Caching
+```typescript
+export function cacheResponse(
+  response: Response,
+  maxAge: number = 3600
+): Response {
+  response.headers.set('Cache-Control', `public, max-age=${maxAge}`);
+  response.headers.set('ETag', generateETag(response));
+  return response;
+}
+
+function generateETag(response: Response): string {
+  // Simple ETag generation based on content
+  return `"${btoa(response.body || '').slice(0, 16)}"`;
+}
+```
+
+### Database Query Optimization
+```typescript
+// Use indexes effectively
+const indexedQuery = `
+  SELECT id, email, username 
+  FROM users 
+  WHERE status = ? AND created_at > ?
+  ORDER BY created_at DESC 
+  LIMIT ?
+`;
+
+// Batch operations
+export async function batchCreate(items: any[], batchSize = 100) {
+  const results = [];
+  
+  for (let i = 0; i < items.length; i += batchSize) {
+    const batch = items.slice(i, i + batchSize);
+    const batchResults = await Promise.all(
+      batch.map(item => createItem(item))
+    );
+    results.push(...batchResults);
+  }
+  
+  return results;
+}
+```
+
+## Security Best Practices
+
+### Input Sanitization
+```typescript
+import DOMPurify from 'isomorphic-dompurify';
+
+export function sanitizeInput(input: string): string {
+  return DOMPurify.sanitize(input, { 
+    ALLOWED_TAGS: [],
+    ALLOWED_ATTR: []
+  });
+}
+
+export function validateAndSanitize(data: any): any {
+  // Recursive sanitization for nested objects
+  if (typeof data === 'string') {
+    return sanitizeInput(data);
+  }
+  
+  if (Array.isArray(data)) {
+    return data.map(validateAndSanitize);
+  }
+  
+  if (typeof data === 'object' && data !== null) {
+    const sanitized: any = {};
+    for (const [key, value] of Object.entries(data)) {
+      sanitized[key] = validateAndSanitize(value);
+    }
+    return sanitized;
+  }
+  
+  return data;
+}
+```
+
+### SQL Injection Prevention
+```typescript
+// Always use parameterized queries
+const safeQuery = db.prepare(
+  "SELECT * FROM users WHERE email = ? AND status = ?"
+).bind(email, status);
+
+// Never use string concatenation
+// ❌ DANGEROUS
+const unsafeQuery = `SELECT * FROM users WHERE email = '${email}'`;
+```
+
+## Documentation Standards
+
+### OpenAPI/Swagger Specification
+```yaml
+openapi: 3.0.0
+info:
+  title: Your API
+  version: 1.0.0
+  description: API documentation
+
+paths:
+  /users:
+    get:
+      summary: List users
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserListResponse'
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+          format: email
+        username:
+          type: string
+```
+
+## Related Documentation
+
+- [Database Design Patterns](/docs/tools/database-design)
+- [Testing Strategies](/docs/tools/testing-strategies)
+- [Cloudflare Platform Guide](/docs/platforms/cloudflare)
+- [Security Best Practices](/docs/guides/security)
