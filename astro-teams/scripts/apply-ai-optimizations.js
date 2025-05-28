@@ -51,11 +51,19 @@ class AIOptimizationEngine {
   getOptimizationTargets(analysisData) {
     const { optimizations } = analysisData;
     
-    // Prioritize immediate and cost-saving optimizations
-    const immediateTargets = optimizations.immediate.slice(0, 3);
-    const costSavingTargets = optimizations.costSaving.slice(0, 2);
+    // Process more optimization categories in this run
+    const immediateTargets = optimizations.immediate.slice(0, 5);
+    const costSavingTargets = optimizations.costSaving || [];
+    const performanceTargets = optimizations.performance.slice(0, 8);
+    const shortTermTargets = optimizations.shortTerm.slice(0, 3);
     
-    return [...immediateTargets, ...costSavingTargets];
+    console.log(`📊 Available optimizations:`);
+    console.log(`   🔥 Immediate: ${immediateTargets.length}`);
+    console.log(`   💰 Cost Saving: ${costSavingTargets.length}`);
+    console.log(`   ⚡ Performance: ${performanceTargets.length}`);
+    console.log(`   📋 Short Term: ${shortTermTargets.length}\n`);
+    
+    return [...immediateTargets, ...costSavingTargets, ...performanceTargets, ...shortTermTargets];
   }
 
   async optimizeFile(target) {
@@ -139,8 +147,7 @@ class AIOptimizationEngine {
   }
 
   extractOptimizedCode(originalContent, aiAnalysis, suggestion) {
-    // If AI provided specific code suggestions, extract them
-    // This is a simplified version - in practice, you'd parse the AI response more carefully
+    // Enhanced optimization detection with more patterns
     
     if (suggestion.includes('Replace "any" types')) {
       return this.replaceAnyTypes(originalContent);
@@ -155,13 +162,25 @@ class AIOptimizationEngine {
     }
     
     if (suggestion.includes('splitting large file')) {
-      // For large files, we'd suggest but not automatically split
+      // For large files, suggest but don't automatically split
       console.log('📝 Large file detected - manual review recommended');
       return originalContent;
     }
     
-    if (suggestion.includes('for...of loops')) {
+    if (suggestion.includes('for...of loops') || suggestion.includes('better performance')) {
       return this.optimizeLoops(originalContent);
+    }
+    
+    if (suggestion.includes('wildcard imports') || suggestion.includes('named imports')) {
+      return this.optimizeImports(originalContent);
+    }
+    
+    if (suggestion.includes('console.log') || suggestion.includes('remove')) {
+      return this.removeConsoleStatements(originalContent);
+    }
+    
+    if (suggestion.includes('JSDoc') || suggestion.includes('documentation')) {
+      return this.addDocumentation(originalContent);
     }
     
     return originalContent;
@@ -180,8 +199,20 @@ class AIOptimizationEngine {
       return this.addErrorHandling(content);
     }
     
-    if (suggestion.includes('for...of loops')) {
+    if (suggestion.includes('for...of loops') || suggestion.includes('better performance')) {
       return this.optimizeLoops(content);
+    }
+    
+    if (suggestion.includes('wildcard imports') || suggestion.includes('named imports')) {
+      return this.optimizeImports(content);
+    }
+    
+    if (suggestion.includes('console.log') || suggestion.includes('remove')) {
+      return this.removeConsoleStatements(content);
+    }
+    
+    if (suggestion.includes('JSDoc') || suggestion.includes('documentation')) {
+      return this.addDocumentation(content);
     }
     
     return content;
@@ -296,6 +327,73 @@ const aiCache = new LRUCache<string, any>({
     }
     
     return optimized;
+  }
+
+  optimizeImports(content) {
+    // Replace wildcard imports with named imports
+    let optimized = content.replace(
+      /import\s+\*\s+as\s+(\w+)\s+from\s+['"`]([^'"`]+)['"`]/g,
+      '// AI Optimization: Consider using named imports instead of wildcard\n// import { specificFunction } from \'$2\''
+    );
+    
+    if (optimized !== content) {
+      optimized = '// AI Optimization: Wildcard imports replaced with named import suggestions\n' + optimized;
+    }
+    
+    return optimized;
+  }
+
+  removeConsoleStatements(content) {
+    // Remove console.log statements (except in scripts)
+    if (content.includes('console.log') && !content.includes('#!/usr/bin/env')) {
+      let optimized = content.replace(
+        /^\s*console\.log\([^)]*\);\s*$/gm,
+        '// AI Optimization: console.log removed for production'
+      );
+      
+      if (optimized !== content) {
+        optimized = '// AI Optimization: Removed console.log statements for production\n' + optimized;
+        return optimized;
+      }
+    }
+    
+    return content;
+  }
+
+  addDocumentation(content) {
+    // Add JSDoc comments to functions that don't have them
+    const lines = content.split('\n');
+    const optimized = [];
+    let hasChanges = false;
+    
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      
+      // Check if this is a function declaration without JSDoc
+      if (line.match(/^(export\s+)?(async\s+)?function\s+\w+/) && 
+          !lines[i-1]?.includes('/**') && 
+          !lines[i-1]?.includes('//')) {
+        
+        const functionMatch = line.match(/function\s+(\w+)/);
+        const functionName = functionMatch ? functionMatch[1] : 'function';
+        
+        optimized.push('/**');
+        optimized.push(` * AI Optimization: Added JSDoc documentation for ${functionName}`);
+        optimized.push(' * @description TODO: Add function description');
+        optimized.push(' * @param {...any} params - TODO: Add parameter descriptions');
+        optimized.push(' * @returns {any} TODO: Add return type description');
+        optimized.push(' */');
+        hasChanges = true;
+      }
+      
+      optimized.push(line);
+    }
+    
+    if (hasChanges) {
+      return '// AI Optimization: Added JSDoc documentation stubs\n' + optimized.join('\n');
+    }
+    
+    return content;
   }
 
   generateOptimizationSummary() {

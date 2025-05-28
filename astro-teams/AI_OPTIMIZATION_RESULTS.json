@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-05-28T23:16:32.595Z",
+  "timestamp": "2025-05-28T23:19:33.366Z",
   "results": [
     {
       "file": ".astro/collections/projects.schema.json",
@@ -20,21 +20,21 @@
       "reason": "AI determined no changes needed"
     },
     {
-      "file": "OPTIMAL_AI_MODELS_2025.md",
-      "suggestion": "Add caching for AI operations to reduce costs",
-      "status": "applied",
-      "backup": "OPTIMAL_AI_MODELS_2025.md.backup"
+      "file": "AI_INTEGRATION_STATUS.md",
+      "suggestion": "Add comprehensive error handling for async operations",
+      "status": "no_changes",
+      "reason": "AI determined no changes needed"
     },
     {
-      "file": "src/utils/aiManager.ts",
-      "suggestion": "Add caching for AI operations to reduce costs",
-      "status": "applied",
-      "backup": "src/utils/aiManager.ts.backup"
+      "file": "CLAUDE_WORKFLOW_PROMPTS.md",
+      "suggestion": "Consider splitting large file into smaller modules",
+      "status": "no_changes",
+      "reason": "AI determined no changes needed"
     }
   ],
   "summary": {
-    "applied": 2,
+    "applied": 0,
     "failed": 0,
-    "noChanges": 3
+    "noChanges": 5
   }
 }
