@@ -4,5 +4,18 @@ pages_build_output_dir = "dist"
 
 [[d1_databases]]
 binding = "DB"
-database_name = "aurorion-teams"
-database_id = "main_database"
+database_name = "aurorion-teams-local"
+database_id = "local_database"
+
+[vars]
+WEBAUTHN_RP_NAME = "Aurorion Teams"
+WEBAUTHN_RP_ID = "team.homedevenv.com"
+WEBAUTHN_ORIGIN = "https://team.homedevenv.com"
+SITE_URL = "team.homedevenv.com"
+
+# Environment-specific overrides
+[env.local]
+vars = { WEBAUTHN_RP_ID = "localhost", WEBAUTHN_ORIGIN = "http://localhost:3000", SITE_URL = "localhost:3000" }
+
+[env.development]
+vars = { WEBAUTHN_RP_ID = "localhost", WEBAUTHN_ORIGIN = "http://localhost:3000", SITE_URL = "localhost:3000" }

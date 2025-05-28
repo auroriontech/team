@@ -172,7 +172,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       margin: 0 auto;
       padding: 2rem;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh;
+      min-height: calc(100vh - 200px);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-lg);
     }
 
     .dashboard-header {

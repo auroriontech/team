@@ -1,6 +1,7 @@
 import eslintPluginAstro from 'eslint-plugin-astro';
 import typescriptParser from '@typescript-eslint/parser';
 import typescriptPlugin from '@typescript-eslint/eslint-plugin';
+import a11yPlugin from 'eslint-plugin-jsx-a11y';
 
 export default [
   // Astro component linting
@@ -67,6 +68,9 @@ export default [
   // General JavaScript/TypeScript rules
   {
     files: ['**/*.js', '**/*.ts', '**/*.astro'],
+    plugins: {
+      'jsx-a11y': a11yPlugin
+    },
     rules: {
       // Code quality rules
       'no-console': 'warn',

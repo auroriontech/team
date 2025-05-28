@@ -2,12 +2,10 @@
 /**
  * Login Page
  * 
- * Provides authentication interface for Aurorion Teams application
- * Supports both organizational and individual user authentication
- * Integrates with ID management system for organizationId, userId, agentId
+ * Full WebAuthn passkey authentication page
  * 
  * @author Aurorion Teams Collective
- * @version 1.0.0
+ * @version 2.1.0
  */
 
 import BaseLayout from '../layouts/BaseLayout.astro';
@@ -96,6 +94,25 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <div class="spinner"></div>
           </div>
         </button>
+
+        <!-- Passkey Authentication -->
+        <div class="passkey-section">
+          <div class="divider">
+            <span class="divider-text">or</span>
+          </div>
+          
+          <button type="button" class="passkey-button" id="passkeyButton">
+            <span class="passkey-icon">🔐</span>
+            <span class="passkey-text">Sign in with Passkey</span>
+            <div class="button-spinner" style="display: none;">
+              <div class="spinner"></div>
+            </div>
+          </button>
+          
+          <div class="passkey-hint">
+            Use your fingerprint, face, or security key to sign in
+          </div>
+        </div>
 
         <!-- Form Status -->
         <div class="form-status" id="formStatus"></div>
@@ -429,6 +446,88 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   }
 
   /* ========================================
+     PASSKEY STYLES
+     ======================================== */
+
+  .passkey-section {
+    margin-top: var(--space-6);
+  }
+
+  .divider {
+    position: relative;
+    text-align: center;
+    margin: var(--space-6) 0;
+  }
+
+  .divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--color-border);
+  }
+
+  .divider-text {
+    background: var(--color-surface);
+    padding: 0 var(--space-4);
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+  }
+
+  .passkey-button {
+    width: 100%;
+    background: var(--color-surface-secondary);
+    color: var(--color-text);
+    border: 2px solid var(--color-border);
+    padding: var(--button-padding-base);
+    border-radius: var(--button-border-radius);
+    font-size: var(--text-base);
+    font-weight: var(--button-font-weight);
+    font-family: var(--font-primary);
+    cursor: pointer;
+    transition: var(--transition-base);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+  }
+
+  .passkey-button:hover:not(:disabled) {
+    background: var(--color-surface-hover);
+    border-color: var(--color-primary);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .passkey-button:active {
+    transform: translateY(0);
+  }
+
+  .passkey-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .passkey-icon {
+    font-size: var(--text-xl);
+  }
+
+  .passkey-text {
+    flex: 1;
+  }
+
+  .passkey-hint {
+    text-align: center;
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    margin-top: var(--space-2);
+    line-height: var(--leading-relaxed);
+  }
+
+  /* ========================================
      FORM STATUS
      ======================================== */
 
@@ -624,6 +723,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   const passwordToggle = document.getElementById('passwordToggle');
   const passwordInput = document.getElementById('password');
   const demoButton = document.getElementById('demoButton');
+  const passkeyButton = document.getElementById('passkeyButton');
+  const passkeyText = passkeyButton.querySelector('.passkey-text');
+  const passkeySpinner = passkeyButton.querySelector('.button-spinner');
 
   // Form validation
   function validateEmail(email) {
@@ -654,6 +756,140 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   function hideFormStatus() {
     formStatus.className = 'form-status';
   }
+
+  // Passkey Authentication Functions
+  async function authenticateWithPasskey() {
+    try {
+      // Show loading state
+      passkeyButton.disabled = true;
+      passkeyText.style.display = 'none';
+      passkeySpinner.style.display = 'flex';
+      hideFormStatus();
+
+      // Start authentication process
+      const startResponse = await fetch('/api/auth/webauthn-authentication-start', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!startResponse.ok) {
+        throw new Error('Failed to start authentication');
+      }
+
+      const { success, options, challengeId, error } = await startResponse.json();
+
+      if (!success) {
+        throw new Error(error || 'Failed to start authentication');
+      }
+
+      // Import WebAuthn browser functions
+      const { startAuthentication } = await import('@simplewebauthn/browser');
+      
+      // Start the authentication ceremony
+      const authResponse = await startAuthentication(options);
+
+      // Verify the authentication
+      const verifyResponse = await fetch('/api/auth/webauthn-authentication-verify', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          credential: authResponse,
+          challengeId,
+        }),
+      });
+
+      if (!verifyResponse.ok) {
+        throw new Error('Authentication verification failed');
+      }
+
+      const verifyResult = await verifyResponse.json();
+
+      if (!verifyResult.success) {
+        throw new Error(verifyResult.error || 'Authentication failed');
+      }
+
+      // Store user session (compatible with existing system)
+      const sessionData = {
+        ...verifyResult.user,
+        authMethod: 'webauthn',
+        loginTime: new Date().toISOString(),
+        rememberMe: true // Passkeys are inherently persistent
+      };
+
+      localStorage.setItem('aurorion-user-session', JSON.stringify(sessionData));
+
+      // Update app state
+      const appState = window.dataManager?.loadAppState() || {};
+      appState.userId = sessionData.userId;
+      appState.organizationId = sessionData.organizationId;
+      
+      if (window.dataManager?.saveAppState) {
+        window.dataManager.saveAppState(appState);
+      }
+
+      // Show success and redirect
+      showFormStatus('Passkey authentication successful! Redirecting...', 'success');
+      
+      setTimeout(() => {
+        window.location.href = '/dashboard';
+      }, 1500);
+
+    } catch (error) {
+      console.error('Passkey authentication error:', error);
+      
+      let errorMessage = 'Passkey authentication failed.';
+      
+      if (error.name === 'NotAllowedError') {
+        errorMessage = 'Passkey authentication was cancelled or timed out.';
+      } else if (error.name === 'InvalidStateError') {
+        errorMessage = 'No passkey found for this device. Please use password login or register a new passkey.';
+      } else if (error.name === 'NotSupportedError') {
+        errorMessage = 'Passkeys are not supported on this device/browser.';
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      showFormStatus(errorMessage);
+    } finally {
+      // Reset button state
+      passkeyButton.disabled = false;
+      passkeyText.style.display = 'inline';
+      passkeySpinner.style.display = 'none';
+    }
+  }
+
+  // Check passkey support
+  function checkPasskeySupport() {
+    const isSupported = window.PublicKeyCredential && 
+                       typeof window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable === 'function';
+    
+    if (!isSupported) {
+      passkeyButton.style.display = 'none';
+      return false;
+    }
+    
+    // Check for platform authenticator availability
+    window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable()
+      .then(available => {
+        if (!available) {
+          passkeyButton.style.opacity = '0.6';
+          passkeyButton.title = 'No passkey authenticator available on this device';
+        }
+      })
+      .catch(() => {
+        // If check fails, keep button available but with reduced opacity
+        passkeyButton.style.opacity = '0.8';
+      });
+    
+    return true;
+  }
+
+  // Passkey button click handler
+  passkeyButton.addEventListener('click', authenticateWithPasskey);
 
   // Password visibility toggle
   passwordToggle.addEventListener('click', () => {
@@ -813,6 +1049,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   // Initialize page
   checkExistingSession();
+  checkPasskeySupport();
 
-  console.log('Login page initialized');
+  console.log('Login page initialized with passkey support');
 </script>

@@ -28,17 +28,22 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <span class="title-subtitle">AI Agent Management</span>
           </h1>
           <p class="hero-description">
-            Experience the future of AI team coordination with our glass-designed dashboard
+            Streamline AI agent team coordination with intelligent workflows and real-time insights
           </p>
           <div class="hero-actions">
-            <a href="/login" class="glass-button primary">
-              <span class="button-icon">🚀</span>
-              Get Started
-            </a>
+            <button class="glass-button primary" id="passkeyLoginButton">
+              <span class="button-icon">🔐</span>
+              Sign in with Passkey
+            </button>
             <button class="glass-button secondary" id="demoButton">
               <span class="button-icon">👁️</span>
-              View Demo
+              Try Demo
             </button>
+          </div>
+          <div class="hero-footer">
+            <p class="hero-note">
+              New user? <button class="link-button" id="createPasskeyButton">Create account with passkey</button>
+            </p>
           </div>
         </div>
       </div>
@@ -270,7 +275,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
      ======================================== */
 
   .dashboard-container {
-    min-height: calc(100vh - 200px);
+    min-height: 100vh;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     position: relative;
     overflow: hidden;
@@ -358,24 +363,57 @@ import BaseLayout from '../layouts/BaseLayout.astro';
      ======================================== */
 
   .guest-landing {
-    position: relative;
-    z-index: 2;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
     height: 100vh;
+    width: 100vw;
     display: flex;
     align-items: center;
     justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    overflow: hidden;
+  }
+
+  .guest-landing::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+      radial-gradient(circle at 40% 80%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
+    animation: backgroundMove 20s ease-in-out infinite;
+  }
+
+  /* Hide navigation and footer when guest landing is visible */
+  body:has(.guest-landing:not([style*="display: none"])) .nav-header,
+  body:has(.guest-landing:not([style*="display: none"])) .app-footer {
+    display: none;
   }
 
   .glass-hero {
     position: relative;
     text-align: center;
     padding: 60px 40px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
-    border-radius: 32px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    max-width: 600px;
+    width: 100%;
+    max-width: none;
+    background: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-radius: 0;
+    border: none;
+  }
+
+  .hero-content {
+    max-width: 800px;
+    margin: 0 auto;
   }
 
   .hero-title {
@@ -412,6 +450,41 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     gap: 16px;
     justify-content: center;
     flex-wrap: wrap;
+    margin-bottom: 24px;
+    padding: 32px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    max-width: 500px;
+    margin: 0 auto 24px auto;
+  }
+
+  .hero-footer {
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 24px;
+  }
+
+  .hero-note {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+    margin: 0;
+  }
+
+  .link-button {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+  }
+
+  .link-button:hover {
+    color: white;
   }
 
   /* ========================================
@@ -895,6 +968,23 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .agent-status.online {
     animation: pulse 2s infinite;
   }
+
+  /* Modal animations */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Input styles for modals */
+  input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  input:focus {
+    outline: none;
+    border-color: rgba(59, 130, 246, 0.6);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  }
 </style>
 
 <script>
@@ -1043,6 +1133,213 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     }
   }
 
+  // WebAuthn Passkey Functions
+  async function handlePasskeyLogin() {
+    try {
+      showNotification('Starting passkey authentication...', 'info');
+      
+      // Check if WebAuthn is supported
+      if (!window.PublicKeyCredential) {
+        showNotification('Passkeys are not supported in this browser', 'error');
+        return;
+      }
+
+      // Import WebAuthn client
+      const { startAuthentication } = await import('@simplewebauthn/browser');
+
+      // Start authentication
+      const response = await fetch('/api/auth/webauthn-authentication-start', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to start authentication');
+      }
+
+      const { options, challengeId } = await response.json();
+
+      // Perform authentication
+      const credential = await startAuthentication(options);
+
+      // Verify authentication
+      const verifyResponse = await fetch('/api/auth/webauthn-authentication-verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ credential, challengeId }),
+      });
+
+      if (!verifyResponse.ok) {
+        const error = await verifyResponse.json();
+        throw new Error(error.error || 'Authentication failed');
+      }
+
+      const { user } = await verifyResponse.json();
+
+      // Store session
+      localStorage.setItem('aurorion-user-session', JSON.stringify(user));
+      
+      showNotification('Authentication successful! 🎉', 'success');
+      
+      // Reload to show dashboard
+      setTimeout(() => location.reload(), 1000);
+
+    } catch (error) {
+      console.error('Passkey login error:', error);
+      if (error.name === 'NotAllowedError') {
+        showNotification('Authentication cancelled', 'info');
+      } else {
+        showNotification('Login failed: ' + error.message, 'error');
+      }
+    }
+  }
+
+  async function handlePasskeyRegistration() {
+    try {
+      // Check if WebAuthn is supported
+      if (!window.PublicKeyCredential) {
+        showNotification('Passkeys are not supported in this browser', 'error');
+        return;
+      }
+
+      // Show onboarding modal to collect user info
+      const userInfo = await showOnboardingModal();
+      if (!userInfo) {
+        return; // User cancelled
+      }
+
+      showNotification('Creating your passkey...', 'info');
+
+      // Import WebAuthn client
+      const { startRegistration } = await import('@simplewebauthn/browser');
+
+      // Start registration
+      const response = await fetch('/api/auth/webauthn-registration-start', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to start registration');
+      }
+
+      const { options, challengeId } = await response.json();
+
+      // Perform registration
+      const credential = await startRegistration(options);
+
+      // Verify registration
+      const verifyResponse = await fetch('/api/auth/webauthn-registration-verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ credential, challengeId, userInfo }),
+      });
+
+      if (!verifyResponse.ok) {
+        const error = await verifyResponse.json();
+        throw new Error(error.error || 'Registration failed');
+      }
+
+      const { userId } = await verifyResponse.json();
+      
+      showNotification('Account created successfully! 🎉', 'success');
+      
+      // Auto-login after registration
+      setTimeout(() => handlePasskeyLogin(), 1500);
+
+    } catch (error) {
+      console.error('Passkey registration error:', error);
+      if (error.name === 'NotAllowedError') {
+        showNotification('Registration cancelled', 'info');
+      } else {
+        showNotification('Registration failed: ' + error.message, 'error');
+      }
+    }
+  }
+
+  function showOnboardingModal() {
+    return new Promise((resolve) => {
+      // Create modal
+      const modal = document.createElement('div');
+      modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(10px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        animation: fadeIn 0.3s ease-out;
+      `;
+
+      modal.innerHTML = `
+        <div class="glass-card" style="padding: 40px; max-width: 400px; width: 90%; margin: 20px;">
+          <h2 style="color: white; margin-bottom: 24px; text-align: center;">Create Your Account</h2>
+          <form id="onboardingForm">
+            <div style="margin-bottom: 20px;">
+              <label style="color: rgba(255,255,255,0.8); display: block; margin-bottom: 8px;">First Name *</label>
+              <input type="text" id="firstName" required style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white; backdrop-filter: blur(10px);" placeholder="Enter your first name">
+            </div>
+            <div style="margin-bottom: 20px;">
+              <label style="color: rgba(255,255,255,0.8); display: block; margin-bottom: 8px;">Last Name *</label>
+              <input type="text" id="lastName" required style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white; backdrop-filter: blur(10px);" placeholder="Enter your last name">
+            </div>
+            <div style="margin-bottom: 20px;">
+              <label style="color: rgba(255,255,255,0.8); display: block; margin-bottom: 8px;">Email (optional)</label>
+              <input type="email" id="email" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white; backdrop-filter: blur(10px);" placeholder="Enter your email">
+            </div>
+            <div style="margin-bottom: 30px;">
+              <label style="color: rgba(255,255,255,0.8); display: block; margin-bottom: 8px;">Phone Number (optional)</label>
+              <input type="tel" id="phoneNumber" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white; backdrop-filter: blur(10px);" placeholder="Enter your phone number">
+            </div>
+            <div style="display: flex; gap: 12px; justify-content: flex-end;">
+              <button type="button" id="cancelButton" class="glass-button secondary">Cancel</button>
+              <button type="submit" class="glass-button primary">Create Passkey</button>
+            </div>
+          </form>
+        </div>
+      `;
+
+      document.body.appendChild(modal);
+
+      // Handle form submission
+      const form = modal.querySelector('#onboardingForm');
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const firstName = modal.querySelector('#firstName').value.trim();
+        const lastName = modal.querySelector('#lastName').value.trim();
+        const email = modal.querySelector('#email').value.trim();
+        const phoneNumber = modal.querySelector('#phoneNumber').value.trim();
+
+        if (!firstName || !lastName) {
+          showNotification('First and last name are required', 'error');
+          return;
+        }
+
+        document.body.removeChild(modal);
+        resolve({ firstName, lastName, email, phoneNumber });
+      });
+
+      // Handle cancel
+      modal.querySelector('#cancelButton').addEventListener('click', () => {
+        document.body.removeChild(modal);
+        resolve(null);
+      });
+
+      // Handle click outside
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          document.body.removeChild(modal);
+          resolve(null);
+        }
+      });
+    });
+  }
+
   // Add dashboard event listeners
   function addDashboardEventListeners() {
     // Refresh dashboard
@@ -1098,6 +1395,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       localStorage.setItem('aurorion-user-session-temp', JSON.stringify(demoUser));
       location.reload();
+    });
+
+    // Passkey Login button
+    document.getElementById('passkeyLoginButton')?.addEventListener('click', async () => {
+      await handlePasskeyLogin();
+    });
+
+    // Create Passkey button
+    document.getElementById('createPasskeyButton')?.addEventListener('click', async () => {
+      await handlePasskeyRegistration();
     });
   }
 
@@ -1181,6 +1488,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     @keyframes slideOutNotification {
       from { transform: translateX(0); opacity: 1; }
       to { transform: translateX(100%); opacity: 0; }
+    }
+    .notification.success {
+      border-color: rgba(34, 197, 94, 0.6) !important;
+    }
+    .notification.error {
+      border-color: rgba(239, 68, 68, 0.6) !important;
+    }
+    .notification.info {
+      border-color: rgba(59, 130, 246, 0.6) !important;
     }
   `;
   document.head.appendChild(notificationStyles);

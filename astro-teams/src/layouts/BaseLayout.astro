@@ -106,8 +106,7 @@ const { title, description = 'Aurorion Teams - AI Agent Team Management' } = Ast
         
         <!-- Theme Switcher -->
         <div class="theme-switcher">
-          <label for="theme-toggle" class="sr-only">Switch between Professional and Price is Right themes</label>
-          <div class="theme-toggle" id="theme-toggle" role="button" tabindex="0" aria-label="Toggle theme">
+          <div class="theme-toggle" id="theme-toggle" role="button" tabindex="0" aria-label="Switch between Professional and Price is Right themes">
             <div class="toggle-slider"></div>
             <span class="toggle-label-left">🎪</span>
             <span class="toggle-label-right">💼</span>
@@ -386,6 +385,12 @@ const { title, description = 'Aurorion Teams - AI Agent Team Management' } = Ast
     .main-content {
       min-height: calc(100vh - 200px);
       padding: var(--spacing-xl) 0;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--spacing-md);
     }
     
     /* ========================================

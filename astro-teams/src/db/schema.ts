@@ -301,20 +301,86 @@ export const performanceMetrics = sqliteTable('performance_metrics', {
   timestamp: text('timestamp').default(sql`CURRENT_TIMESTAMP`),
 });
 
+// User Profiles Table - for authenticated users
+export const userProfiles = sqliteTable('user_profiles', {
+  userId: text('user_id').primaryKey(),
+  displayName: text('display_name'),
+  email: text('email').unique(),
+  subscriptionLevel: text('subscription_level').default('free'),
+  expiresAt: text('expires_at'),
+  subscriptionUpdatedAt: text('subscription_updated_at'),
+  selectedGuideId: text('selected_guide_id'),
+  preferredLanguage: text('preferred_language').default('en'),
+  
+  // Profile info from onboarding
+  firstName: text('first_name'),
+  lastName: text('last_name'),
+  phoneNumber: text('phone_number'),
+  
+  // WebAuthn preferences
+  enablePasskeys: integer('enable_passkeys').default(1), // boolean
+  lastPasskeyLogin: text('last_passkey_login'),
+  
+  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
+});
+
+// WebAuthn Credentials Table - for passkey storage
+export const webauthnCredentials = sqliteTable('webauthn_credentials', {
+  id: text('id').primaryKey(), // credential ID from WebAuthn
+  userId: text('user_id').notNull().references(() => userProfiles.userId, { onDelete: 'cascade' }),
+  
+  // WebAuthn credential data
+  credentialPublicKey: text('credential_public_key').notNull(), // base64 encoded
+  counter: integer('counter').notNull().default(0),
+  credentialDeviceType: text('credential_device_type').notNull(), // 'singleDevice' | 'multiDevice'
+  credentialBackedUp: integer('credential_backed_up').notNull().default(0), // boolean
+  
+  // User-friendly metadata
+  friendlyName: text('friendly_name'), // e.g., "iPhone 15 Pro", "MacBook Pro"
+  userAgent: text('user_agent'),
+  lastUsed: text('last_used'),
+  
+  // Security tracking
+  signCount: integer('sign_count').default(0),
+  transports: text('transports'), // JSON array: ['usb', 'nfc', 'ble', 'internal']
+  
+  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
+});
+
+// WebAuthn Challenges Table - for temporary challenge storage
+export const webauthnChallenges = sqliteTable('webauthn_challenges', {
+  id: text('id').primaryKey(),
+  challenge: text('challenge').notNull().unique(),
+  type: text('type').notNull(), // 'registration' | 'authentication'
+  userId: text('user_id'), // null for initial registration
+  
+  // Request metadata
+  ipAddress: text('ip_address'),
+  userAgent: text('user_agent'),
+  
+  // Expiration (challenges expire quickly)
+  expiresAt: text('expires_at').notNull(),
+  
+  createdAt: text('created_at').default(sql`CURRENT_TIMESTAMP`),
+});
+
 // Audit Logs Table - for comprehensive activity tracking
 export const auditLogs = sqliteTable('audit_logs', {
   id: text('id').primaryKey(),
   
   // Context
-  entityType: text('entity_type').notNull(), // 'team_member', 'project', 'founder', 'system'
+  entityType: text('entity_type').notNull(), // 'team_member', 'project', 'founder', 'system', 'user_profile'
   entityId: text('entity_id').notNull(),
   teamRole: text('team_role'),
   founderId: text('founder_id').references(() => founders.id),
   memberId: text('member_id').references(() => teamMembers.id),
   projectId: text('project_id').references(() => projects.id),
+  userId: text('user_id').references(() => userProfiles.userId),
   
   // Event details
-  eventType: text('event_type').notNull(), // 'create', 'update', 'delete', 'decision', 'handoff', 'founder_action'
+  eventType: text('event_type').notNull(), // 'create', 'update', 'delete', 'decision', 'handoff', 'founder_action', 'auth'
   action: text('action').notNull(),
   description: text('description'),
   
@@ -326,7 +392,7 @@ export const auditLogs = sqliteTable('audit_logs', {
   // Security and compliance
   securityLevel: text('security_level').default('standard'), // 'low', 'standard', 'high', 'critical'
   complianceFlags: text('compliance_flags'), // JSON array
-  accessMethod: text('access_method'), // 'web', 'api', 'mcp', 'system'
+  accessMethod: text('access_method'), // 'web', 'api', 'mcp', 'system', 'webauthn'
   ipAddress: text('ip_address'),
   userAgent: text('user_agent'),
   

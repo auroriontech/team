@@ -8,6 +8,38 @@ export function getDb(d1: D1Database) {
   return drizzle(d1, { schema });
 }
 
+// Development/production database connection
+export const db = globalThis.DB 
+  ? drizzle(globalThis.DB, { schema })
+  : createMockDb();
+
+function createMockDb() {
+  console.warn('Using mock database - run `npm run db:local` to set up local D1');
+  // Mock database for development/testing when D1 is not available
+  return {
+    select: () => ({ 
+      from: () => ({ 
+        where: () => Promise.resolve([]),
+        execute: () => Promise.resolve([])
+      }) 
+    }),
+    insert: () => ({ 
+      values: () => Promise.resolve({ success: true }),
+      execute: () => Promise.resolve({ success: true })
+    }),
+    update: () => ({ 
+      set: () => ({ 
+        where: () => Promise.resolve({ success: true }),
+        execute: () => Promise.resolve({ success: true })
+      }) 
+    }),
+    delete: () => ({ 
+      where: () => Promise.resolve({ success: true }),
+      execute: () => Promise.resolve({ success: true })
+    })
+  };
+}
+
 // Types
 export type Database = ReturnType<typeof getDb>;
 

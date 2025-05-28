@@ -671,7 +671,7 @@ if (!fs.existsSync(indexPath)) {
 
 console.log(`\\n✅ Project documentation generated successfully!`);
 console.log(`📁 Location: ${projectDocsPath}`);
-console.log(`🌐 Web access: http://team.homedevenv.com/docs/projects/${projectSlug}`);
+console.log(`🌐 Web access: https://${process.env.SITE_URL || 'team.homedevenv.com'}/docs/projects/${projectSlug}`);
 console.log(`\\n📚 Generated files:`);
 templates.forEach(template => console.log(`   - ${template.filename}`));
 console.log(`   - index.mdx`);
