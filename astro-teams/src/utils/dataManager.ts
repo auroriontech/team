@@ -73,13 +73,22 @@ export function saveAppState(state: AppState): void {
  * Create a new repository
  * @param name - Repository name
  * @param description - Repository description
+ * @param organizationId - Optional organization ID
+ * @param userId - Optional user ID
  * @returns Repository - New repository object
  */
-export function createRepository(name: string, description: string): Repository {
+export function createRepository(
+  name: string, 
+  description: string, 
+  organizationId?: string, 
+  userId?: string
+): Repository {
   const now = new Date();
   
   return {
     id: `repo-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+    organizationId,
+    userId,
     name: name.trim(),
     description: description.trim(),
     createdAt: now,
@@ -207,4 +216,28 @@ export function importRepository(jsonData: string, state: AppState): AppState {
  */
 export function generateTeamMemberId(): string {
   return `member-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+}
+
+/**
+ * Generate a unique organization ID
+ * @returns string - Unique organization ID
+ */
+export function generateOrganizationId(): string {
+  return `org-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+}
+
+/**
+ * Generate a unique agent ID
+ * @returns string - Unique agent ID
+ */
+export function generateAgentId(): string {
+  return `agent-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+}
+
+/**
+ * Generate a unique user ID
+ * @returns string - Unique user ID
+ */
+export function generateUserId(): string {
+  return `user-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 }

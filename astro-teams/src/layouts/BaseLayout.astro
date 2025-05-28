@@ -58,13 +58,32 @@ const { title, description = 'Aurorion Teams - AI Agent Team Management' } = Ast
       
       <!-- Navigation Links -->
       <div class="nav-links">
-        <a href="/" class="nav-link">Home</a>
-        <a href="/team-builder" class="nav-link">Team Builder</a>
-        <a href="/agents" class="nav-link">Agent Profiles</a>
-        <a href="/projects" class="nav-link">Projects</a>
-        <a href="/team-members" class="nav-link">Team Members</a>
+        <a href="/agents" class="nav-link">Agents</a>
         <a href="/models" class="nav-link">Models</a>
         <a href="/docs" class="nav-link">Documentation</a>
+      </div>
+
+      <!-- User Menu -->
+      <div class="user-menu" id="userMenu">
+        <!-- Authenticated User Menu -->
+        <div class="auth-user-menu" id="authUserMenu" style="display: none;">
+          <div class="user-info">
+            <span class="user-email" id="userEmail"></span>
+            <span class="user-org" id="userOrg"></span>
+          </div>
+          <div class="user-actions">
+            <a href="/" class="user-link">Dashboard</a>
+            <a href="/team-builder" class="user-link">Team Builder</a>
+            <a href="/projects" class="user-link">Projects</a>
+            <a href="/team-members" class="user-link">Team Members</a>
+            <button class="logout-button" id="logoutButton">Logout</button>
+          </div>
+        </div>
+        
+        <!-- Guest Menu -->
+        <div class="guest-menu" id="guestMenu">
+          <a href="/login" class="nav-link login-link">Sign In</a>
+        </div>
       </div>
     </div>
   </nav>
@@ -121,6 +140,7 @@ const { title, description = 'Aurorion Teams - AI Agent Team Management' } = Ast
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: var(--spacing-lg);
     }
     
     .nav-brand {
@@ -173,6 +193,121 @@ const { title, description = 'Aurorion Teams - AI Agent Team Management' } = Ast
       font-size: 0.875rem;
       color: var(--text-muted);
       font-weight: 500;
+    }
+
+    /* ========================================
+       USER MENU STYLES
+       ======================================== */
+    
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+    }
+
+    .auth-user-menu {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-lg);
+      padding: var(--spacing-sm) var(--spacing-md);
+      background: var(--background-secondary);
+      border-radius: var(--border-radius-lg);
+      border: 1px solid var(--border-color);
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: var(--spacing-xs);
+    }
+
+    .user-email {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-color);
+    }
+
+    .user-org {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .user-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      flex-wrap: wrap;
+    }
+
+    .user-link {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.875rem;
+      padding: var(--spacing-xs) var(--spacing-sm);
+      border-radius: var(--border-radius);
+      transition: all 0.2s ease;
+    }
+
+    .user-link:hover {
+      background: var(--primary-color);
+      color: white;
+    }
+
+    .logout-button {
+      background: var(--color-error-600);
+      color: white;
+      border: none;
+      padding: var(--spacing-xs) var(--spacing-sm);
+      border-radius: var(--border-radius);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .logout-button:hover {
+      background: var(--color-error-700);
+      transform: translateY(-1px);
+    }
+
+    .guest-menu {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+    }
+
+    .login-link {
+      background: var(--primary-color);
+      color: white !important;
+      padding: var(--spacing-sm) var(--spacing-md);
+      border-radius: var(--border-radius);
+      transition: all 0.2s ease;
+    }
+
+    .login-link:hover {
+      background: var(--primary-color-hover);
+      transform: translateY(-1px);
+    }
+
+    .register-link {
+      border: 2px solid var(--primary-color);
+      color: var(--primary-color) !important;
+      padding: var(--spacing-sm) var(--spacing-md);
+      border-radius: var(--border-radius);
+      transition: all 0.2s ease;
+    }
+
+    .register-link:hover {
+      background: var(--primary-color);
+      color: white !important;
+    }
+
+    /* Navigation styling optimizations */
+    .nav-links {
+      flex-shrink: 0;
     }
     
     /* ========================================
@@ -353,6 +488,36 @@ const { title, description = 'Aurorion Teams - AI Agent Team Management' } = Ast
       .theme-toggle.professional .toggle-slider {
         transform: translateX(60px);
       }
+
+      .user-menu {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        align-items: center;
+      }
+
+      .auth-user-menu {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        padding: var(--spacing-sm);
+        text-align: center;
+      }
+
+      .user-info {
+        align-items: center;
+      }
+
+      .user-actions {
+        flex-direction: column;
+        gap: var(--spacing-xs);
+        width: 100%;
+      }
+
+      .user-link, .logout-button {
+        width: 100%;
+        text-align: center;
+        font-size: 0.875rem;
+        padding: var(--spacing-xs) var(--spacing-sm);
+      }
     }
   </style>
 
@@ -528,6 +693,115 @@ const { title, description = 'Aurorion Teams - AI Agent Team Management' } = Ast
     };
     
     console.log('DataManager initialized successfully');
+
+    // Initialize authentication system
+    const initializeAuth = () => {
+      const userMenuElement = document.getElementById('userMenu');
+      const authUserMenu = document.getElementById('authUserMenu');
+      const guestMenu = document.getElementById('guestMenu');
+      const userEmail = document.getElementById('userEmail');
+      const userOrg = document.getElementById('userOrg');
+      const logoutButton = document.getElementById('logoutButton');
+
+      // Check for existing session
+      const checkSession = () => {
+        const persistentSession = localStorage.getItem('aurorion-user-session');
+        const temporarySession = localStorage.getItem('aurorion-user-session-temp');
+        const sessionData = persistentSession || temporarySession;
+
+        if (sessionData) {
+          try {
+            const session = JSON.parse(sessionData);
+            const loginTime = new Date(session.loginTime).getTime();
+            const now = Date.now();
+            const maxAge = session.rememberMe ? (30 * 24 * 60 * 60 * 1000) : (24 * 60 * 60 * 1000);
+
+            // Check if session is still valid
+            if ((now - loginTime) < maxAge) {
+              showAuthenticatedState(session);
+              return session;
+            } else {
+              // Session expired, clear it
+              clearSession();
+            }
+          } catch (error) {
+            console.error('Failed to parse session data:', error);
+            clearSession();
+          }
+        }
+
+        showGuestState();
+        return null;
+      };
+
+      const showAuthenticatedState = (session) => {
+        if (authUserMenu && guestMenu && userEmail) {
+          authUserMenu.style.display = 'flex';
+          guestMenu.style.display = 'none';
+          userEmail.textContent = session.email;
+          
+          if (userOrg) {
+            userOrg.textContent = session.organizationId ? `Org: ${session.organizationId}` : 'Personal Account';
+          }
+
+          // Update auth-required links
+          updateAuthRequiredLinks(true);
+        }
+      };
+
+      const showGuestState = () => {
+        if (authUserMenu && guestMenu) {
+          authUserMenu.style.display = 'none';
+          guestMenu.style.display = 'flex';
+
+          // Update auth-required links
+          updateAuthRequiredLinks(false);
+        }
+      };
+
+      const updateAuthRequiredLinks = (isAuthenticated) => {
+        // Auth-required functionality now handled by user menu visibility
+        // Main navigation is now public-focused
+        console.log('Auth state updated:', isAuthenticated ? 'authenticated' : 'guest');
+      };
+
+      const clearSession = () => {
+        localStorage.removeItem('aurorion-user-session');
+        localStorage.removeItem('aurorion-user-session-temp');
+        localStorage.removeItem('aurorion-auth-state');
+      };
+
+      const logout = () => {
+        clearSession();
+        showGuestState();
+        
+        // Redirect to home page
+        window.location.href = '/';
+      };
+
+      // Event listeners
+      if (logoutButton) {
+        logoutButton.addEventListener('click', logout);
+      }
+
+      // Initialize auth state
+      const currentSession = checkSession();
+
+      // Expose auth utilities globally
+      window.authUtils = {
+        getCurrentSession: () => currentSession,
+        isAuthenticated: () => currentSession !== null,
+        logout: logout,
+        checkSession: checkSession
+      };
+    };
+
+    // Initialize authentication after DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initializeAuth);
+    } else {
+      initializeAuth();
+    }
   </script>
 </body>
 </html>

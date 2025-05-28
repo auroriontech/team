@@ -1,5 +1,6 @@
 export interface AgentRole {
   id: string;
+  organizationId?: string;
   name: string;
   icon: string;
   description: string;
@@ -31,6 +32,9 @@ export interface AIModel {
 
 export interface TeamMember {
   id: string;
+  agentId?: string;
+  userId?: string;
+  organizationId?: string;
   roleId: string;
   customizations: {
     businessCulture?: string;
@@ -44,6 +48,8 @@ export interface TeamMember {
 
 export interface Repository {
   id: string;
+  organizationId?: string;
+  userId?: string;
   name: string;
   description: string;
   createdAt: Date;
@@ -54,6 +60,8 @@ export interface Repository {
 
 export interface AppState {
   currentRepo?: string;
+  organizationId?: string;
+  userId?: string;
   repositories: Repository[];
   agentRoles: AgentRole[];
   theme: 'professional' | 'price-is-right';
