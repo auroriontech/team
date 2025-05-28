@@ -92,7 +92,7 @@ test.describe('Passkey Authentication', () => {
           options: {
             challenge: 'mock-challenge',
             timeout: 60000,
-            rpId: 'localhost',
+            rpId: 'team.homedevenv.com',
             allowCredentials: []
           },
           challengeId: 'mock-challenge-id'

@@ -1,0 +1,40 @@
+{
+  "timestamp": "2025-05-28T23:16:32.595Z",
+  "results": [
+    {
+      "file": ".astro/collections/projects.schema.json",
+      "suggestion": "Consider splitting large file into smaller modules",
+      "status": "no_changes",
+      "reason": "AI determined no changes needed"
+    },
+    {
+      "file": ".astro/data-store.json",
+      "suggestion": "Consider splitting large file into smaller modules",
+      "status": "no_changes",
+      "reason": "AI determined no changes needed"
+    },
+    {
+      "file": ".astro/integrations/astro_db/db.d.ts",
+      "suggestion": "Consider splitting large file into smaller modules",
+      "status": "no_changes",
+      "reason": "AI determined no changes needed"
+    },
+    {
+      "file": "OPTIMAL_AI_MODELS_2025.md",
+      "suggestion": "Add caching for AI operations to reduce costs",
+      "status": "applied",
+      "backup": "OPTIMAL_AI_MODELS_2025.md.backup"
+    },
+    {
+      "file": "src/utils/aiManager.ts",
+      "suggestion": "Add caching for AI operations to reduce costs",
+      "status": "applied",
+      "backup": "src/utils/aiManager.ts.backup"
+    }
+  ],
+  "summary": {
+    "applied": 2,
+    "failed": 0,
+    "noChanges": 3
+  }
+}

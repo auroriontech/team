@@ -1,8 +1,7 @@
 import type { APIRoute } from 'astro';
 import { verifyAuthenticationResponse } from '@simplewebauthn/server';
-import { db } from '../../../db/index.js';
-import { webauthnChallenges, webauthnCredentials, userProfiles, auditLogs } from '../../../db/schema.js';
-import { eq, and } from 'drizzle-orm';
+import { db, WebAuthnChallenges, WebAuthnCredentials, UserProfiles, ActivityLogs } from 'astro:db';
+import { eq, and } from 'astro:db';
 import { nanoid } from 'nanoid';
 
 // WebAuthn configuration
@@ -25,10 +24,10 @@ export const POST: APIRoute = async ({ request }) => {
 
     // Retrieve the challenge from database
     const challenges = await db.select()
-      .from(webauthnChallenges)
+      .from(WebAuthnChallenges)
       .where(and(
-        eq(webauthnChallenges.id, challengeId),
-        eq(webauthnChallenges.type, 'authentication')
+        eq(WebAuthnChallenges.id, challengeId),
+        eq(WebAuthnChallenges.type, 'authentication')
       ));
 
     if (challenges.length === 0) {
@@ -46,8 +45,8 @@ export const POST: APIRoute = async ({ request }) => {
     // Check if challenge has expired
     if (new Date() > new Date(challenge.expiresAt)) {
       // Clean up expired challenge
-      await db.delete(webauthnChallenges)
-        .where(eq(webauthnChallenges.id, challengeId));
+      await db.delete(WebAuthnChallenges)
+        .where(eq(WebAuthnChallenges.id, challengeId));
       
       return new Response(JSON.stringify({
         success: false,
@@ -61,13 +60,13 @@ export const POST: APIRoute = async ({ request }) => {
     // Get the credential from database
     const credentialId = Buffer.from(credential.id, 'base64url').toString('base64url');
     const storedCredentials = await db.select()
-      .from(webauthnCredentials)
-      .where(eq(webauthnCredentials.id, credentialId));
+      .from(WebAuthnCredentials)
+      .where(eq(WebAuthnCredentials.id, credentialId));
 
     if (storedCredentials.length === 0) {
       // Clean up challenge
-      await db.delete(webauthnChallenges)
-        .where(eq(webauthnChallenges.id, challengeId));
+      await db.delete(WebAuthnChallenges)
+        .where(eq(WebAuthnChallenges.id, challengeId));
       
       return new Response(JSON.stringify({
         success: false,
@@ -82,8 +81,8 @@ export const POST: APIRoute = async ({ request }) => {
 
     // Get user profile
     const userProfiles_result = await db.select()
-      .from(userProfiles)
-      .where(eq(userProfiles.userId, storedCredential.userId));
+      .from(UserProfiles)
+      .where(eq(UserProfiles.userId, storedCredential.userId));
 
     if (userProfiles_result.length === 0) {
       return new Response(JSON.stringify({
@@ -114,8 +113,8 @@ export const POST: APIRoute = async ({ request }) => {
 
     if (!verification.verified) {
       // Clean up challenge
-      await db.delete(webauthnChallenges)
-        .where(eq(webauthnChallenges.id, challengeId));
+      await db.delete(WebAuthnChallenges)
+        .where(eq(WebAuthnChallenges.id, challengeId));
       
       return new Response(JSON.stringify({
         success: false,
@@ -129,29 +128,29 @@ export const POST: APIRoute = async ({ request }) => {
     const now = new Date().toISOString();
 
     // Update credential counter and last used
-    await db.update(webauthnCredentials)
+    await db.update(WebAuthnCredentials)
       .set({
         counter: verification.authenticationInfo.newCounter,
         signCount: storedCredential.signCount + 1,
         lastUsed: now,
         updatedAt: now,
       })
-      .where(eq(webauthnCredentials.id, credentialId));
+      .where(eq(WebAuthnCredentials.id, credentialId));
 
     // Update user's last passkey login
-    await db.update(userProfiles)
+    await db.update(UserProfiles)
       .set({
         lastPasskeyLogin: now,
         updatedAt: now,
       })
-      .where(eq(userProfiles.userId, user.userId));
+      .where(eq(UserProfiles.userId, user.userId));
 
     // Clean up the challenge
     await db.delete(webauthnChallenges)
       .where(eq(webauthnChallenges.id, challengeId));
 
     // Log the authentication
-    await db.insert(auditLogs).values({
+    await db.insert(ActivityLogs).values({
       id: nanoid(),
       entityType: 'user_profile',
       entityId: user.userId,

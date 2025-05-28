@@ -1,0 +1,63 @@
+---
+import { db, TeamMembers, Projects } from 'astro:db';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Fetch data from Astro DB
+const teamMembers = await db.select().from(TeamMembers).limit(5);
+const projects = await db.select().from(Projects);
+---
+
+<BaseLayout title="Database Test">
+  <main class="container mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-6">Astro DB Test Page</h1>
+    
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">Team Members ({teamMembers.length})</h2>
+      <div class="grid gap-4">
+        {teamMembers.map((member) => (
+          <div class="border rounded-lg p-4">
+            <h3 class="font-bold">{member.name}</h3>
+            <p class="text-gray-600">{member.role}</p>
+            <p class="text-sm text-gray-500">{member.bio}</p>
+            <div class="mt-2">
+              <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                Authority: {member.authorityLevel}
+              </span>
+              <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded ml-2">
+                Autonomy: {member.autonomyLevel}%
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-semibold mb-4">Projects ({projects.length})</h2>
+      <div class="grid gap-4">
+        {projects.map((project) => (
+          <div class="border rounded-lg p-4">
+            <h3 class="font-bold">{project.name}</h3>
+            <p class="text-gray-600">{project.description}</p>
+            <div class="mt-2 flex gap-2">
+              <span class="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded">
+                {project.status}
+              </span>
+              <span class="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded">
+                {project.priority}
+              </span>
+              <span class="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded">
+                Progress: {project.progress}%
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <div class="mt-8 p-4 bg-green-50 border border-green-200 rounded-lg">
+      <h3 class="font-semibold text-green-800">✅ Astro DB Integration Status</h3>
+      <p class="text-green-700">Database connection successful! Schema synced and data populated.</p>
+    </div>
+  </main>
+</BaseLayout>
