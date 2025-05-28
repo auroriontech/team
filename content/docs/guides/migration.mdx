@@ -1,0 +1,648 @@
+---
+title: "Migration Best Practices"
+description: "Comprehensive guide for migrating between platforms, frameworks, and deployment strategies"
+category: "guides"
+priority: "high"
+lastUpdated: 2024-05-27
+status: "active"
+tags: ["guide", "migration", "platforms", "frameworks", "best-practices"]
+authors: ["Aurorion Teams"]
+---
+
+# Migration Best Practices
+
+## Overview
+
+Comprehensive guide for migrating between platforms, frameworks, and deployment strategies with minimal downtime and maximum reliability.
+
+## Migration Planning
+
+### Pre-Migration Assessment
+1. **Current State Analysis**
+   - Document existing architecture and dependencies
+   - Identify performance bottlenecks and limitations
+   - Catalog all integrations and external services
+   - Assess team knowledge and skill gaps
+
+2. **Migration Goals**
+   - Define success criteria and measurable outcomes
+   - Identify must-have vs nice-to-have features
+   - Set realistic timeline and resource requirements
+   - Plan rollback strategies for each phase
+
+3. **Risk Assessment**
+   - Identify potential breaking changes
+   - Plan data migration and backup strategies
+   - Consider SEO and user experience impacts
+   - Prepare contingency plans for critical issues
+
+## Platform Migrations
+
+### Cloudflare Pages to Workers
+
+#### Why Migrate?
+- **Enhanced Features**: Access to edge functions and advanced routing
+- **Better Performance**: Improved cold start times and global distribution  
+- **Integrated Platform**: Seamless integration with D1, KV, and other Cloudflare services
+- **Deployment Reliability**: More consistent deployment success rates
+
+#### Migration Steps
+
+**1. Configuration Changes**
+```jsonc
+// Before (Pages) - wrangler.json
+{
+  "name": "my-pages-app",
+  "pages_build_output_dir": "./dist"
+}
+
+// After (Workers) - wrangler.toml  
+name = "my-workers-app"
+compatibility_date = "2024-05-01"
+main = "./dist/_worker.js"
+
+[assets]
+directory = "./dist"
+not_found_handling = "single-page-application"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "my-database"
+database_id = "your-database-id"
+```
+
+**2. Astro Configuration Updates**
+```typescript
+// astro.config.mjs
+import { defineConfig } from 'astro/config';
+import cloudflare from '@astrojs/cloudflare';
+
+export default defineConfig({
+  output: 'server', // or 'hybrid'
+  adapter: cloudflare({
+    platformProxy: {
+      enabled: true
+    }
+  }),
+  vite: {
+    define: {
+      'process.env.NODE_ENV': '"production"'
+    }
+  }
+});
+```
+
+**3. Environment Variable Migration**
+```bash
+# Set in Cloudflare Workers dashboard or via CLI
+wrangler secret put RESEND_API_KEY
+wrangler secret put DATABASE_URL
+wrangler secret put PUBLIC_ANALYTICS_ID
+
+# For development
+echo "RESEND_API_KEY=your_key" >> .dev.vars
+echo "DATABASE_URL=your_url" >> .dev.vars
+```
+
+**4. Deployment Script Updates**
+```json
+// package.json
+{
+  "scripts": {
+    "dev": "wrangler dev",
+    "build": "astro build",
+    "deploy": "wrangler deploy",
+    "deploy:staging": "wrangler deploy --env staging"
+  }
+}
+```
+
+### Next.js to Astro Migration
+
+#### Why Migrate?
+- **Better Performance**: Superior Core Web Vitals and loading speeds
+- **Simplified Architecture**: Islands architecture for selective hydration
+- **Edge-First**: Built for edge deployment and global distribution
+- **Content Focus**: Excellent for content-heavy and marketing sites
+
+#### Migration Steps
+
+**1. Project Structure Mapping**
+```
+Next.js Structure → Astro Structure
+pages/             → src/pages/
+components/        → src/components/
+public/           → public/
+styles/           → src/styles/
+api/              → src/pages/api/
+_app.js           → src/layouts/Layout.astro
+```
+
+**2. Component Migration**
+```tsx
+// Before (Next.js React Component)
+import { useState } from 'react';
+import styles from './Component.module.css';
+
+export default function MyComponent({ title }) {
+  const [count, setCount] = useState(0);
+  
+  return (
+    <div className={styles.container}>
+      <h1>{title}</h1>
+      <button onClick={() => setCount(count + 1)}>
+        Count: {count}
+      </button>
+    </div>
+  );
+}
+
+// After (Astro Component with React Island)
+---
+// src/components/MyComponent.astro
+export interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<div class="container">
+  <h1>{title}</h1>
+  <CounterButton client:load />
+</div>
+
+<style>
+  .container {
+    /* styles here */
+  }
+</style>
+
+// src/components/CounterButton.tsx (React Island)
+import { useState } from 'react';
+
+export default function CounterButton() {
+  const [count, setCount] = useState(0);
+  
+  return (
+    <button onClick={() => setCount(count + 1)}>
+      Count: {count}
+    </button>
+  );
+}
+```
+
+**3. API Route Migration**
+```typescript
+// Before (Next.js API Route)
+// pages/api/subscribe.js
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+  
+  const { email } = req.body;
+  // Handle subscription logic
+  res.status(200).json({ success: true });
+}
+
+// After (Astro API Route)
+// src/pages/api/subscribe.ts
+import type { APIRoute } from 'astro';
+
+export const POST: APIRoute = async ({ request, locals }) => {
+  const { email } = await request.json();
+  
+  // Handle subscription logic with D1 database
+  const db = locals.runtime?.env.DB;
+  const result = await db.prepare(
+    "INSERT INTO subscribers (email) VALUES (?) RETURNING id"
+  ).bind(email).first();
+  
+  return new Response(JSON.stringify({ success: true, id: result.id }), {
+    status: 200,
+    headers: { 'Content-Type': 'application/json' }
+  });
+};
+```
+
+**4. Static Generation Migration**
+```typescript
+// Before (Next.js)
+export async function getStaticProps() {
+  const posts = await fetchPosts();
+  return { props: { posts } };
+}
+
+export async function getStaticPaths() {
+  const posts = await fetchPosts();
+  const paths = posts.map(post => ({ params: { slug: post.slug } }));
+  return { paths, fallback: false };
+}
+
+// After (Astro)
+---
+// src/pages/blog/[slug].astro
+export async function getStaticPaths() {
+  const posts = await fetchPosts();
+  
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post }
+  }));
+}
+
+const { post } = Astro.props;
+---
+
+<Layout title={post.title}>
+  <h1>{post.title}</h1>
+  <div set:html={post.content} />
+</Layout>
+```
+
+## Database Migrations
+
+### SQL Database Migration Patterns
+
+#### Schema Versioning
+```sql
+-- migrations/001_initial_schema.sql
+CREATE TABLE schema_migrations (
+  version INTEGER PRIMARY KEY,
+  applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  description TEXT
+);
+
+INSERT INTO schema_migrations (version, description) 
+VALUES (1, 'Initial schema creation');
+
+CREATE TABLE users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  email TEXT UNIQUE NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+#### Safe Column Additions
+```sql
+-- migrations/002_add_user_preferences.sql
+-- Safe: Adding nullable columns
+ALTER TABLE users ADD COLUMN phone TEXT;
+ALTER TABLE users ADD COLUMN preferences TEXT; -- JSON data
+
+-- Safe: Adding columns with defaults
+ALTER TABLE users ADD COLUMN status TEXT DEFAULT 'active';
+ALTER TABLE users ADD COLUMN email_verified BOOLEAN DEFAULT FALSE;
+
+INSERT INTO schema_migrations (version, description) 
+VALUES (2, 'Added user preferences and status columns');
+```
+
+#### Data Migration Scripts
+```sql
+-- migrations/003_migrate_user_data.sql
+-- Migrate existing data to new format
+UPDATE users 
+SET status = 'active' 
+WHERE status IS NULL AND created_at < datetime('now', '-30 days');
+
+UPDATE users 
+SET email_verified = TRUE 
+WHERE email LIKE '%@company.com';
+
+-- Create indexes for performance
+CREATE INDEX idx_users_status ON users(status);
+CREATE INDEX idx_users_email_verified ON users(email_verified);
+
+INSERT INTO schema_migrations (version, description) 
+VALUES (3, 'Migrated user status and verification data');
+```
+
+### NoSQL to SQL Migration
+
+#### Data Structure Mapping
+```typescript
+// Before (MongoDB/NoSQL)
+{
+  _id: ObjectId("..."),
+  email: "user@example.com",
+  profile: {
+    name: "John Doe",
+    preferences: {
+      theme: "dark",
+      notifications: true
+    }
+  },
+  subscriptions: [
+    { type: "newsletter", active: true },
+    { type: "updates", active: false }
+  ]
+}
+
+// After (SQL Tables)
+-- users table
+CREATE TABLE users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  email TEXT UNIQUE NOT NULL,
+  name TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- user_preferences table
+CREATE TABLE user_preferences (
+  user_id INTEGER,
+  preference_key TEXT,
+  preference_value TEXT,
+  PRIMARY KEY (user_id, preference_key),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- subscriptions table
+CREATE TABLE subscriptions (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER,
+  type TEXT,
+  active BOOLEAN DEFAULT TRUE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+```
+
+#### Migration Script
+```typescript
+// migrate-nosql-to-sql.ts
+import { MongoClient } from 'mongodb';
+import { Database } from 'd1';
+
+async function migrateData() {
+  const mongo = new MongoClient(process.env.MONGODB_URL);
+  const db = process.env.D1_DATABASE;
+  
+  await mongo.connect();
+  const collection = mongo.db('app').collection('users');
+  
+  const users = await collection.find({}).toArray();
+  
+  for (const user of users) {
+    // Insert user
+    const result = await db.prepare(`
+      INSERT INTO users (email, name) 
+      VALUES (?, ?) 
+      RETURNING id
+    `).bind(user.email, user.profile?.name).first();
+    
+    const userId = result.id;
+    
+    // Insert preferences
+    if (user.profile?.preferences) {
+      for (const [key, value] of Object.entries(user.profile.preferences)) {
+        await db.prepare(`
+          INSERT INTO user_preferences (user_id, preference_key, preference_value)
+          VALUES (?, ?, ?)
+        `).bind(userId, key, JSON.stringify(value)).run();
+      }
+    }
+    
+    // Insert subscriptions
+    if (user.subscriptions) {
+      for (const sub of user.subscriptions) {
+        await db.prepare(`
+          INSERT INTO subscriptions (user_id, type, active)
+          VALUES (?, ?, ?)
+        `).bind(userId, sub.type, sub.active).run();
+      }
+    }
+  }
+  
+  await mongo.close();
+}
+```
+
+## Deployment Strategy
+
+### Blue-Green Deployment
+
+#### Setup
+```yaml
+# .github/workflows/blue-green-deploy.yml
+name: Blue-Green Deployment
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Deploy to Blue Environment
+        run: |
+          wrangler deploy --env blue
+          
+      - name: Health Check Blue
+        run: |
+          curl -f https://blue.example.com/health || exit 1
+          
+      - name: Run Integration Tests
+        run: |
+          npm run test:integration -- --baseUrl=https://blue.example.com
+          
+      - name: Switch Traffic to Blue
+        if: success()
+        run: |
+          # Update DNS or load balancer to point to blue
+          wrangler route update --env production --worker blue-worker
+          
+      - name: Cleanup Green Environment
+        if: success()
+        run: |
+          wrangler delete --env green
+```
+
+### Canary Deployment
+```typescript
+// canary-deployment.ts
+export async function canaryDeploy(request: Request, env: Env) {
+  const userId = getUserId(request);
+  const isCanaryUser = await isInCanaryGroup(userId, env.KV);
+  
+  if (isCanaryUser) {
+    // Route to new version
+    return fetch(request.url, {
+      ...request,
+      headers: {
+        ...request.headers,
+        'X-Version': 'canary'
+      }
+    });
+  }
+  
+  // Route to stable version
+  return fetch(request.url);
+}
+```
+
+## Testing During Migration
+
+### Migration Testing Strategy
+```typescript
+// tests/migration/migration.spec.ts
+import { test, expect } from '@playwright/test';
+
+test.describe('Migration Validation', () => {
+  test('should maintain data integrity', async ({ request }) => {
+    // Test data before migration
+    const beforeData = await request.get('/api/users/test@example.com');
+    expect(beforeData.status()).toBe(200);
+    
+    // Run migration
+    await runMigration();
+    
+    // Test data after migration
+    const afterData = await request.get('/api/users/test@example.com');
+    expect(afterData.status()).toBe(200);
+    
+    const before = await beforeData.json();
+    const after = await afterData.json();
+    
+    expect(after.email).toBe(before.email);
+    expect(after.created_at).toBe(before.created_at);
+  });
+  
+  test('should maintain API compatibility', async ({ request }) => {
+    const endpoints = [
+      '/api/users',
+      '/api/subscriptions',
+      '/api/health'
+    ];
+    
+    for (const endpoint of endpoints) {
+      const response = await request.get(endpoint);
+      expect(response.status()).toBeLessThan(400);
+      
+      const data = await response.json();
+      expect(data).toHaveProperty('status');
+    }
+  });
+});
+```
+
+### Performance Comparison
+```typescript
+// tests/migration/performance.spec.ts
+import { test, expect } from '@playwright/test';
+
+test.describe('Performance Comparison', () => {
+  test('should maintain or improve response times', async ({ page }) => {
+    const startTime = Date.now();
+    
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
+    
+    const loadTime = Date.now() - startTime;
+    
+    // Should load within acceptable time
+    expect(loadTime).toBeLessThan(3000);
+    
+    // Check Core Web Vitals
+    const vitals = await page.evaluate(() => {
+      return {
+        fcp: performance.getEntriesByName('first-contentful-paint')[0]?.startTime,
+        lcp: performance.getEntriesByType('largest-contentful-paint')[0]?.startTime
+      };
+    });
+    
+    expect(vitals.fcp).toBeLessThan(1800); // Good FCP
+    expect(vitals.lcp).toBeLessThan(2500); // Good LCP
+  });
+});
+```
+
+## Rollback Strategies
+
+### Automated Rollback
+```yaml
+# .github/workflows/rollback.yml
+name: Emergency Rollback
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to rollback to'
+        required: true
+
+jobs:
+  rollback:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Rollback Deployment
+        run: |
+          wrangler rollback --version ${{ github.event.inputs.version }}
+          
+      - name: Verify Rollback
+        run: |
+          curl -f https://example.com/health || exit 1
+          
+      - name: Notify Team
+        uses: 8398a7/action-slack@v3
+        with:
+          status: custom
+          custom_payload: |
+            {
+              text: "🚨 Emergency rollback completed to version ${{ github.event.inputs.version }}"
+            }
+```
+
+### Database Rollback
+```sql
+-- rollback-migration.sql
+-- Always test rollbacks in staging first!
+
+-- Rollback schema changes (reverse order)
+ALTER TABLE users DROP COLUMN new_column;
+DROP INDEX idx_users_new_column;
+
+-- Rollback data changes
+UPDATE users SET status = NULL WHERE migrated_in_version = 3;
+
+-- Update migration version
+DELETE FROM schema_migrations WHERE version = 3;
+```
+
+## Post-Migration Checklist
+
+### Validation Steps
+- [ ] All critical user flows working
+- [ ] Database integrity verified
+- [ ] Performance metrics acceptable
+- [ ] Error rates within normal range
+- [ ] Third-party integrations functional
+- [ ] SEO rankings maintained
+- [ ] Analytics tracking continued
+
+### Monitoring Setup
+- [ ] Error tracking configured
+- [ ] Performance monitoring active
+- [ ] Uptime checks enabled
+- [ ] Alert thresholds set
+- [ ] Dashboard updated
+- [ ] Team notifications configured
+
+### Documentation Updates
+- [ ] Architecture diagrams updated
+- [ ] API documentation revised
+- [ ] Deployment procedures documented
+- [ ] Rollback procedures tested
+- [ ] Team knowledge transferred
+- [ ] Lessons learned documented
+
+## Related Documentation
+
+- [Cloudflare Platform Guide](/docs/platforms/cloudflare)
+- [Database Design Patterns](/docs/tools/database-design)
+- [Testing Strategies](/docs/tools/testing-strategies)
+- [Deployment Best Practices](/docs/guides/deployment)

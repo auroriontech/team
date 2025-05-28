@@ -1,0 +1,539 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Daily Dashboard - Aurorion Teams">
+  <div class="dashboard-container">
+    <!-- Header Section -->
+    <header class="dashboard-header">
+      <h1>Daily Team Dashboard</h1>
+      <div class="date-time">
+        <span id="current-date"></span>
+        <span id="current-time"></span>
+      </div>
+    </header>
+
+    <!-- Status Grid -->
+    <div class="status-grid">
+      <!-- Team Health -->
+      <div class="widget team-health">
+        <h2>🏥 Team Health</h2>
+        <div class="health-metrics">
+          <div class="metric">
+            <span class="label">Overall Morale</span>
+            <span class="value" id="team-morale">8.5/10</span>
+          </div>
+          <div class="metric">
+            <span class="label">Active Agents</span>
+            <span class="value" id="active-agents">7/7</span>
+          </div>
+          <div class="metric">
+            <span class="label">Loop Prevention</span>
+            <span class="value status-good">Active</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sprint Progress -->
+      <div class="widget sprint-progress">
+        <h2>🎯 Sprint Progress</h2>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: 65%"></div>
+          <span class="progress-text">65% Complete</span>
+        </div>
+        <div class="sprint-metrics">
+          <div class="metric">
+            <span class="label">Story Points</span>
+            <span class="value">26/40</span>
+          </div>
+          <div class="metric">
+            <span class="label">Days Remaining</span>
+            <span class="value">3</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Agent Status -->
+      <div class="widget agent-status">
+        <h2>🤖 Agent Status</h2>
+        <div class="agent-list">
+          <div class="agent-item">
+            <span class="agent-name">Architect-Engineer</span>
+            <span class="status status-active">Working</span>
+          </div>
+          <div class="agent-item">
+            <span class="agent-name">Tester-Reviewer</span>
+            <span class="status status-active">Ready</span>
+          </div>
+          <div class="agent-item">
+            <span class="agent-name">Optimizer-Watchdog</span>
+            <span class="status status-monitoring">Monitoring</span>
+          </div>
+          <div class="agent-item">
+            <span class="agent-name">Scrum-Knowledge</span>
+            <span class="status status-active">Documenting</span>
+          </div>
+          <div class="agent-item">
+            <span class="agent-name">Morale-Catalyst</span>
+            <span class="status status-good">Healthy</span>
+          </div>
+          <div class="agent-item">
+            <span class="agent-name">Technical Enablement</span>
+            <span class="status status-active">Provisioning</span>
+          </div>
+          <div class="agent-item">
+            <span class="agent-name">Standup Facilitator</span>
+            <span class="status status-ready">Ready</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analytics Overview -->
+      <div class="widget analytics-overview">
+        <h2>📊 Analytics Overview</h2>
+        <div class="analytics-metrics">
+          <div class="metric">
+            <span class="label">Conversion Rate</span>
+            <span class="value">2.3%</span>
+          </div>
+          <div class="metric">
+            <span class="label">Daily Users</span>
+            <span class="value" id="daily-users">Loading...</span>
+          </div>
+          <div class="metric">
+            <span class="label">Performance Score</span>
+            <span class="value status-good">95/100</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="widget recent-activity">
+        <h2>📋 Recent Activity</h2>
+        <div class="activity-list" id="activity-feed">
+          <div class="activity-item">
+            <span class="timestamp">09:15</span>
+            <span class="message">Standup Facilitator initiated daily sync</span>
+          </div>
+          <div class="activity-item">
+            <span class="timestamp">09:12</span>
+            <span class="message">Architect-Engineer completed feature design</span>
+          </div>
+          <div class="activity-item">
+            <span class="timestamp">09:08</span>
+            <span class="message">Tester-Reviewer validated test cases</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Key Metrics -->
+      <div class="widget key-metrics">
+        <h2>🎯 Key Metrics</h2>
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <h3>Velocity</h3>
+            <span class="big-number">6.5</span>
+            <span class="unit">pts/day</span>
+          </div>
+          <div class="metric-card">
+            <h3>Quality</h3>
+            <span class="big-number">98%</span>
+            <span class="unit">pass rate</span>
+          </div>
+          <div class="metric-card">
+            <h3>Uptime</h3>
+            <span class="big-number">99.9%</span>
+            <span class="unit">availability</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <button class="action-btn primary" onclick="initiateStandup()">
+        🎤 Start Daily Standup
+      </button>
+      <button class="action-btn secondary" onclick="viewAnalytics()">
+        📊 View Analytics
+      </button>
+      <button class="action-btn secondary" onclick="checkTeamHealth()">
+        🏥 Check Team Health
+      </button>
+      <button class="action-btn secondary" onclick="generateReport()">
+        📄 Generate Report
+      </button>
+    </div>
+  </div>
+
+  <style>
+    .dashboard-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 1.5rem;
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+    }
+
+    .dashboard-header h1 {
+      color: white;
+      margin: 0;
+      font-size: 2.5rem;
+      font-weight: 700;
+    }
+
+    .date-time {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: end;
+    }
+
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .widget {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .widget h2 {
+      margin: 0 0 1rem 0;
+      color: #2d3748;
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+
+    .health-metrics, .sprint-metrics, .analytics-metrics {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .metric {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #edf2f7;
+    }
+
+    .metric:last-child {
+      border-bottom: none;
+    }
+
+    .label {
+      color: #4a5568;
+      font-weight: 500;
+    }
+
+    .value {
+      font-weight: 700;
+      color: #2d3748;
+    }
+
+    .progress-bar {
+      position: relative;
+      height: 24px;
+      background: #edf2f7;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #48bb78, #38a169);
+      transition: width 0.3s ease;
+    }
+
+    .progress-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #2d3748;
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+
+    .agent-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .agent-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem;
+      background: #f7fafc;
+      border-radius: 8px;
+    }
+
+    .agent-name {
+      font-weight: 500;
+      color: #2d3748;
+    }
+
+    .status {
+      padding: 0.25rem 0.75rem;
+      border-radius: 16px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .status-active {
+      background: #c6f6d5;
+      color: #22543d;
+    }
+
+    .status-good {
+      background: #bee3f8;
+      color: #2a4365;
+    }
+
+    .status-monitoring {
+      background: #fed7d7;
+      color: #742a2a;
+    }
+
+    .status-ready {
+      background: #e9d8fd;
+      color: #44337a;
+    }
+
+    .activity-list {
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .activity-item {
+      display: flex;
+      gap: 1rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #edf2f7;
+    }
+
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+
+    .timestamp {
+      color: #718096;
+      font-size: 0.875rem;
+      font-weight: 500;
+      min-width: 3rem;
+    }
+
+    .message {
+      color: #2d3748;
+      font-size: 0.875rem;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .metric-card {
+      text-align: center;
+      padding: 1rem;
+      background: #f7fafc;
+      border-radius: 8px;
+    }
+
+    .metric-card h3 {
+      margin: 0 0 0.5rem 0;
+      color: #4a5568;
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .big-number {
+      display: block;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #2d3748;
+      line-height: 1;
+    }
+
+    .unit {
+      color: #718096;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .quick-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .action-btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .action-btn.primary {
+      background: #4299e1;
+      color: white;
+    }
+
+    .action-btn.primary:hover {
+      background: #3182ce;
+      transform: translateY(-2px);
+    }
+
+    .action-btn.secondary {
+      background: rgba(255, 255, 255, 0.9);
+      color: #2d3748;
+    }
+
+    .action-btn.secondary:hover {
+      background: white;
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-container {
+        padding: 1rem;
+      }
+      
+      .dashboard-header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+      
+      .status-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .metrics-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .quick-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+
+  <script>
+    // Update date and time
+    function updateDateTime() {
+      const now = new Date();
+      const dateElement = document.getElementById('current-date');
+      const timeElement = document.getElementById('current-time');
+      
+      if (dateElement) {
+        dateElement.textContent = now.toLocaleDateString('en-US', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+      }
+      
+      if (timeElement) {
+        timeElement.textContent = now.toLocaleTimeString('en-US', {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
+        });
+      }
+    }
+
+    // Initialize dashboard
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+
+    // Simulate real-time activity updates
+    function addActivity(message) {
+      const activityFeed = document.getElementById('activity-feed');
+      if (activityFeed) {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('en-US', {
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+        
+        const activityItem = document.createElement('div');
+        activityItem.className = 'activity-item';
+        activityItem.innerHTML = `
+          <span class="timestamp">${timeString}</span>
+          <span class="message">${message}</span>
+        `;
+        
+        activityFeed.insertBefore(activityItem, activityFeed.firstChild);
+        
+        // Keep only the last 10 activities
+        while (activityFeed.children.length > 10) {
+          activityFeed.removeChild(activityFeed.lastChild);
+        }
+      }
+    }
+
+    // Quick action functions
+    function initiateStandup() {
+      addActivity('Standup Facilitator: Initiating daily standup...');
+      alert('Daily standup initiated! All agents will provide status updates.');
+    }
+
+    function viewAnalytics() {
+      window.open('/docs/tools/analytics-implementation', '_blank');
+    }
+
+    function checkTeamHealth() {
+      addActivity('Morale-Catalyst: Performing team health check...');
+      alert('Team health check initiated. All systems green!');
+    }
+
+    function generateReport() {
+      addActivity('Scrum-Knowledge: Generating daily report...');
+      alert('Daily report generated successfully!');
+    }
+
+    // Simulate some activity
+    setTimeout(() => addActivity('Optimizer-Watchdog: Performance monitoring active'), 2000);
+    setTimeout(() => addActivity('Technical Enablement: MCP tools provisioned'), 5000);
+    setTimeout(() => addActivity('Architect-Engineer: Design review completed'), 8000);
+
+    // Analytics integration (if PostHog is available)
+    if (typeof posthog !== 'undefined') {
+      posthog.capture('dashboard_viewed', {
+        timestamp: new Date(),
+        user_type: 'team_member'
+      });
+    }
+  </script>
+</BaseLayout>

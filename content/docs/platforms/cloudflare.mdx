@@ -1,0 +1,278 @@
+---
+title: "Cloudflare Platform Guide"
+description: "Complete guide for deploying applications on Cloudflare Workers, Pages, and D1 database"
+category: "reference"
+priority: "high"
+lastUpdated: 2024-05-27
+status: "active"
+tags: ["platform-cloudflare", "deployment", "workers", "pages", "d1", "guide"]
+authors: ["Aurorion Teams"]
+---
+
+# Cloudflare Platform Guide
+
+## Overview
+
+Comprehensive guide for deploying applications on the Cloudflare platform, including Workers, Pages, and D1 database integration.
+
+## Platform Components
+
+### Cloudflare Workers
+- **Purpose**: Serverless compute platform
+- **Use Cases**: API endpoints, edge functions, full applications
+- **Runtime**: V8 JavaScript engine at edge locations
+
+### Cloudflare Pages  
+- **Purpose**: Static site hosting with edge deployment
+- **Use Cases**: Frontend applications, documentation sites
+- **Features**: Git integration, preview deployments, custom domains
+
+### Cloudflare D1
+- **Purpose**: Serverless SQLite database
+- **Use Cases**: Application data storage, session management
+- **Features**: Edge replication, SQL compatibility, binding to Workers
+
+## Prerequisites
+
+### Account Setup
+1. Cloudflare account with Workers plan
+2. Domain registered (optional for custom domains)
+3. GitHub repository for CI/CD
+
+### Required Credentials
+```bash
+CLOUDFLARE_API_TOKEN=your_api_token_here
+CLOUDFLARE_ACCOUNT_ID=your_account_id_here
+```
+
+## Workers Deployment
+
+### Project Structure
+```
+project/
+├── src/
+│   ├── index.ts          # Worker entry point
+│   └── handlers/         # Route handlers
+├── wrangler.toml         # Worker configuration
+└── package.json
+```
+
+### Configuration (wrangler.toml)
+```toml
+name = "my-app"
+main = "src/index.ts"
+compatibility_date = "2024-05-01"
+
+[env.staging]
+name = "my-app-staging"
+
+[env.production]  
+name = "my-app"
+route = "example.com/*"
+
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "my-database"
+database_id = "your-database-id"
+```
+
+### Environment Variables
+Set in Cloudflare dashboard or via CLI:
+```bash
+# Email service
+RESEND_API_KEY=your_resend_key
+
+# Analytics (optional)
+PUBLIC_POSTHOG_KEY=phc_your_key
+PUBLIC_POSTHOG_HOST=https://eu.i.posthog.com
+```
+
+## Pages Deployment
+
+### Framework Support
+- **Astro**: Full support with SSR
+- **Next.js**: Edge runtime support  
+- **React**: Static and SSR modes
+- **Vue**: Static and SSR modes
+
+### Build Configuration
+```yaml
+# .github/workflows/deploy.yml
+name: Deploy to Cloudflare Pages
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: npm ci
+      - run: npm run build
+      - uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: my-project
+          directory: dist
+```
+
+## D1 Database
+
+### Database Creation
+```bash
+# Create database
+wrangler d1 create my-database
+
+# Get database ID for wrangler.toml
+wrangler d1 info my-database
+```
+
+### Schema Management
+```sql
+-- schema.sql
+CREATE TABLE users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  email TEXT UNIQUE NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_users_email ON users(email);
+```
+
+### Apply Schema
+```bash
+# Local development
+wrangler d1 execute my-database --local --file=schema.sql
+
+# Production
+wrangler d1 execute my-database --file=schema.sql
+```
+
+### Usage in Workers
+```typescript
+export interface Env {
+  DB: D1Database;
+}
+
+export default {
+  async fetch(request: Request, env: Env): Promise<Response> {
+    const { results } = await env.DB.prepare(
+      "SELECT * FROM users WHERE email = ?"
+    ).bind("user@example.com").all();
+    
+    return Response.json(results);
+  }
+};
+```
+
+## Custom Domains
+
+### Setup Process
+1. Add domain to Cloudflare DNS
+2. Configure routes in wrangler.toml or dashboard
+3. Set up SSL certificates (automatic)
+
+### DNS Configuration
+```
+Type: AAAA
+Name: api
+Content: 100::
+Proxy: Enabled (orange cloud)
+```
+
+## Monitoring & Analytics
+
+### Built-in Metrics
+- Request volume and latency
+- Error rates and status codes
+- Geographic distribution
+- CPU and memory usage
+
+### Custom Analytics
+```typescript
+// Track custom events
+await env.ANALYTICS.writeDataPoint({
+  blobs: ["user-signup"],
+  doubles: [1],
+  indexes: ["email:user@example.com"]
+});
+```
+
+## Security
+
+### Authentication
+- Use Cloudflare Access for admin routes
+- Implement JWT validation for API endpoints
+- Rate limiting via Cloudflare rules
+
+### Best Practices
+- Validate all inputs
+- Use environment variables for secrets
+- Enable CORS properly
+- Implement CSP headers
+
+## Troubleshooting
+
+### Common Issues
+
+**Build Failures**
+- Check Node.js version compatibility
+- Verify all dependencies are installed
+- Review build logs in GitHub Actions
+
+**Runtime Errors**
+- Check Worker logs in Cloudflare dashboard
+- Verify environment variables are set
+- Test locally with `wrangler dev`
+
+**Database Connection Issues**
+- Confirm D1 binding in wrangler.toml
+- Check database ID matches
+- Verify schema is applied
+
+### Debugging Tools
+```bash
+# Local development
+wrangler dev --local
+
+# View logs
+wrangler tail my-worker
+
+# Test database locally
+wrangler d1 execute my-database --local --command="SELECT * FROM users"
+```
+
+## Cost Optimization
+
+### Free Tier Limits
+- **Workers**: 100,000 requests/day
+- **Pages**: Unlimited static requests
+- **D1**: 5 million reads/month, 100,000 writes/month
+
+### Optimization Strategies
+- Implement caching where appropriate
+- Use edge-side includes for static content
+- Optimize database queries
+- Monitor usage via dashboard
+
+## Migration Strategies
+
+### From Other Platforms
+- **Vercel → Workers**: Similar serverless model
+- **Netlify → Pages**: Direct static site migration
+- **Traditional hosting → Cloudflare**: Gradual migration with DNS
+
+### Workers Migration
+See the [Migration Guide](/docs/guides/migration) for platform-specific migration strategies.
+
+## Related Documentation
+
+- [API Design Patterns](/docs/tools/api-design)
+- [Database Design](/docs/tools/database-design)
+- [Testing Strategies](/docs/tools/testing-strategies)
+- [Deployment Guide](/docs/guides/deployment)

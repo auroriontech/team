@@ -1,0 +1,533 @@
+---
+/**
+ * Base Layout Component
+ * 
+ * Provides the foundational layout structure for all pages including:
+ * - HTML document structure
+ * - Global styles and theme management
+ * - Navigation header with theme switcher
+ * - Responsive design framework
+ * 
+ * @props title - Page title for <title> tag
+ * @props description - Meta description for SEO
+ * 
+ * @author Aurorion Teams Collective
+ * @version 1.0.0
+ */
+
+export interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'Aurorion Teams - AI Agent Team Management' } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content={description}>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>{title}</title>
+  
+  <!-- Preload fonts for better performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- Global styles -->
+  <style>
+    @import '../styles/design-system.css';
+    @import '../styles/globals.css';
+  </style>
+</head>
+
+<body id="app-body">
+  <!-- Navigation Header -->
+  <nav class="nav-header">
+    <div class="nav-container">
+      <!-- Logo and Brand -->
+      <div class="nav-brand">
+        <a href="/" class="brand-link">
+          <span class="nav-logo">🤖</span>
+          <h1 class="nav-title">Aurorion Teams</h1>
+          <span class="nav-subtitle">AI Agent Management</span>
+        </a>
+      </div>
+      
+      <!-- Navigation Links -->
+      <div class="nav-links">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/team-builder" class="nav-link">Team Builder</a>
+        <a href="/agents" class="nav-link">Agent Profiles</a>
+        <a href="/projects" class="nav-link">Projects</a>
+        <a href="/team-members" class="nav-link">Team Members</a>
+        <a href="/models" class="nav-link">Models</a>
+        <a href="/docs" class="nav-link">Documentation</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Area -->
+  <main class="main-content">
+    <div class="container">
+      <slot />
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="container">
+      <div class="footer-content">
+        <p class="footer-text">
+          Built with ❤️ by the Aurorion Teams collective | 
+          <span class="theme-indicator">Current theme: <span id="current-theme">Professional</span></span>
+        </p>
+        
+        <!-- Theme Switcher -->
+        <div class="theme-switcher">
+          <label for="theme-toggle" class="sr-only">Switch between Professional and Price is Right themes</label>
+          <div class="theme-toggle" id="theme-toggle" role="button" tabindex="0" aria-label="Toggle theme">
+            <div class="toggle-slider"></div>
+            <span class="toggle-label-left">🎪</span>
+            <span class="toggle-label-right">💼</span>
+          </div>
+          <span class="theme-label">Theme</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <style>
+    /* ========================================
+       NAVIGATION STYLES
+       ======================================== */
+    
+    .nav-header {
+      background: var(--nav-bg);
+      border-bottom: 2px solid var(--border-color);
+      padding: var(--spacing-md) 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--spacing-md);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+    
+    .brand-link {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      text-decoration: none;
+      color: inherit;
+    }
+    
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-lg);
+    }
+    
+    .nav-link {
+      color: var(--text-color);
+      text-decoration: none;
+      font-weight: 500;
+      padding: var(--spacing-sm) var(--spacing-md);
+      border-radius: var(--border-radius);
+      transition: all 0.2s ease;
+    }
+    
+    .nav-link:hover {
+      background: var(--background-hover);
+      color: var(--primary-color);
+    }
+    
+    .nav-logo {
+      font-size: 2rem;
+      animation: bounce 2s infinite;
+    }
+    
+    .nav-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-color);
+      margin: 0;
+    }
+    
+    .nav-subtitle {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    
+    /* ========================================
+       THEME SWITCHER STYLES
+       ======================================== */
+    
+    .theme-switcher {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+    }
+    
+    .theme-toggle {
+      position: relative;
+      width: 120px;
+      height: 50px;
+      background: var(--toggle-bg);
+      border-radius: 25px;
+      cursor: pointer;
+      border: 3px solid var(--primary-color);
+      overflow: hidden;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 var(--spacing-sm);
+    }
+    
+    .theme-toggle:hover {
+      transform: scale(1.05);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .toggle-slider {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 44px;
+      height: 44px;
+      background: var(--primary-color);
+      border-radius: 50%;
+      transition: all 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+      box-shadow: var(--shadow-md);
+      z-index: 10;
+    }
+    
+    .theme-toggle.professional .toggle-slider {
+      transform: translateX(70px);
+    }
+    
+    .toggle-label-left,
+    .toggle-label-right {
+      font-size: 1.5rem;
+      z-index: 5;
+      transition: all 0.3s ease;
+    }
+    
+    .theme-toggle:not(.professional) .toggle-label-left {
+      transform: scale(1.2);
+    }
+    
+    .theme-toggle.professional .toggle-label-right {
+      transform: scale(1.2);
+    }
+    
+    .theme-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    
+    /* ========================================
+       MAIN CONTENT STYLES
+       ======================================== */
+    
+    .main-content {
+      min-height: calc(100vh - 200px);
+      padding: var(--spacing-xl) 0;
+    }
+    
+    /* ========================================
+       FOOTER STYLES
+       ======================================== */
+    
+    .app-footer {
+      background: var(--section-bg);
+      border-top: 1px solid var(--border-color);
+      padding: var(--spacing-lg) 0;
+    }
+    
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--spacing-lg);
+    }
+    
+    .footer-text {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      margin: 0;
+    }
+    
+    .theme-indicator {
+      font-weight: 600;
+    }
+    
+    /* ========================================
+       PRICE IS RIGHT THEME ENHANCEMENTS
+       ======================================== */
+    
+    .price-is-right .nav-header {
+      background: var(--nav-bg);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .price-is-right .nav-header::before {
+      content: '🎉🎊🎈';
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 1.5rem;
+      animation: bounce 1.5s infinite;
+    }
+    
+    .price-is-right .nav-logo {
+      animation: sparkle 2s infinite;
+    }
+    
+    .price-is-right .theme-toggle {
+      border: 3px solid #ffd700;
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    }
+    
+    /* ========================================
+       RESPONSIVE DESIGN
+       ======================================== */
+    
+    @media (max-width: 768px) {
+      .nav-container {
+        flex-direction: column;
+        gap: var(--spacing-md);
+      }
+      
+      .nav-brand {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .nav-links {
+        gap: var(--spacing-md);
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      .footer-content {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--spacing-md);
+      }
+      
+      .theme-switcher {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+      }
+      
+      .theme-toggle {
+        width: 100px;
+        height: 40px;
+      }
+      
+      .toggle-slider {
+        width: 34px;
+        height: 34px;
+      }
+      
+      .theme-toggle.professional .toggle-slider {
+        transform: translateX(60px);
+      }
+    }
+  </style>
+
+  <!-- Theme Switcher JavaScript -->
+  <script>
+    /**
+     * Theme Management System
+     * Handles switching between Professional and Price is Right themes
+     * Persists theme preference in localStorage
+     */
+    
+    // Theme management
+    const THEME_STORAGE_KEY = 'aurorion-teams-theme';
+    
+    // Get DOM elements
+    const body = document.getElementById('app-body');
+    const themeToggle = document.getElementById('theme-toggle');
+    const currentThemeSpan = document.getElementById('current-theme');
+    
+    // Load saved theme or default to professional
+    let currentTheme = localStorage.getItem(THEME_STORAGE_KEY) || 'professional';
+    
+    /**
+     * Apply theme to the page
+     * @param theme - 'professional' or 'price-is-right'
+     */
+    function applyTheme(theme) {
+      // Remove existing theme classes
+      body.classList.remove('professional', 'price-is-right');
+      themeToggle.classList.remove('professional', 'price-is-right');
+      
+      // Add new theme class
+      if (theme === 'professional') {
+        body.classList.add('professional');
+        themeToggle.classList.add('professional');
+        currentThemeSpan.textContent = 'Professional';
+      } else {
+        body.classList.add('price-is-right');
+        themeToggle.classList.add('price-is-right');
+        currentThemeSpan.textContent = 'Price is Right';
+      }
+      
+      // Save theme preference
+      localStorage.setItem(THEME_STORAGE_KEY, theme);
+      currentTheme = theme;
+      
+      // Dispatch custom event for other components
+      window.dispatchEvent(new CustomEvent('themeChange', { 
+        detail: { theme } 
+      }));
+    }
+    
+    /**
+     * Toggle between themes
+     */
+    function toggleTheme() {
+      const newTheme = currentTheme === 'professional' ? 'price-is-right' : 'professional';
+      applyTheme(newTheme);
+      
+      // Add celebration effect for Price is Right theme
+      if (newTheme === 'price-is-right') {
+        showCelebration();
+      }
+    }
+    
+    /**
+     * Show celebration animation when switching to Price is Right theme
+     */
+    function showCelebration() {
+      // Create temporary celebration element
+      const celebration = document.createElement('div');
+      celebration.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 4rem;
+        z-index: 1000;
+        animation: celebration 2s ease-out forwards;
+        pointer-events: none;
+      `;
+      celebration.textContent = '🎉 PRICE IS RIGHT! 🎉';
+      
+      // Add celebration animation
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes celebration {
+          0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+          50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+          100% { opacity: 0; transform: translate(-50%, -50%) scale(1) translateY(-100px); }
+        }
+      `;
+      
+      document.head.appendChild(style);
+      document.body.appendChild(celebration);
+      
+      // Clean up after animation
+      setTimeout(() => {
+        document.body.removeChild(celebration);
+        document.head.removeChild(style);
+      }, 2000);
+    }
+    
+    // Event listeners
+    themeToggle.addEventListener('click', toggleTheme);
+    themeToggle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleTheme();
+      }
+    });
+    
+    // Initialize theme on page load
+    applyTheme(currentTheme);
+    
+    // Export for use by other scripts
+    window.themeManager = {
+      getCurrentTheme: () => currentTheme,
+      setTheme: applyTheme,
+      toggleTheme
+    };
+    
+    // Initialize basic dataManager functionality
+    const STORAGE_KEY = 'aurorion-teams-data';
+    const STORAGE_VERSION = '1.0.0';
+    
+    const defaultState = {
+      repositories: [],
+      agentRoles: [],
+      theme: 'professional'
+    };
+    
+    const loadAppState = () => {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (!stored) return defaultState;
+        
+        const parsed = JSON.parse(stored);
+        
+        // Version compatibility check
+        if (parsed.version !== STORAGE_VERSION) {
+          console.warn('Data version mismatch. Using default state.');
+          return defaultState;
+        }
+        
+        return { ...defaultState, ...parsed.data };
+      } catch (error) {
+        console.error('Failed to load app state:', error);
+        return defaultState;
+      }
+    };
+    
+    const saveAppState = (state) => {
+      try {
+        const dataToSave = {
+          version: STORAGE_VERSION,
+          timestamp: new Date().toISOString(),
+          data: state
+        };
+        
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
+        return true;
+      } catch (error) {
+        console.error('Failed to save app state:', error);
+        return false;
+      }
+    };
+    
+    // Export dataManager globally
+    window.dataManager = {
+      loadAppState,
+      saveAppState
+    };
+    
+    console.log('DataManager initialized successfully');
+  </script>
+</body>
+</html>

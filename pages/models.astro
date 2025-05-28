@@ -1,0 +1,355 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Ollama Models">
+  <div class="max-w-4xl mx-auto px-4 py-8">
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">Ollama Models</h1>
+      <p class="text-gray-600">Manage and monitor your local AI models</p>
+    </div>
+
+    <!-- Status Indicators -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <div class="bg-white rounded-lg border p-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm text-gray-500">AI Provider Status</p>
+            <p id="ollama-status" class="text-lg font-semibold">Checking...</p>
+          </div>
+          <div id="status-indicator" class="w-3 h-3 rounded-full bg-gray-300"></div>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-lg border p-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm text-gray-500">Total Models</p>
+            <p id="model-count" class="text-lg font-semibold">0</p>
+          </div>
+          <div class="text-blue-500">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-lg border p-4">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm text-gray-500">Total Size</p>
+            <p id="total-size" class="text-lg font-semibold">0 GB</p>
+          </div>
+          <div class="text-green-500">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 1.79 4 4 4h8c2.21 0 4-1.79 4-4V7c0-2.21-1.79-4-4-4H8c-2.21 0-4 1.79-4 4z"></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex gap-4 mb-6">
+      <button 
+        id="refresh-btn" 
+        class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+      >
+        Refresh Models
+      </button>
+      <button 
+        id="download-recommended" 
+        class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
+      >
+        Download Recommended Models
+      </button>
+    </div>
+
+    <!-- Models List -->
+    <div class="bg-white rounded-lg border">
+      <div class="px-6 py-4 border-b">
+        <h2 class="text-lg font-semibold">Installed Models</h2>
+      </div>
+      <div id="models-container" class="divide-y">
+        <!-- Models will be loaded here -->
+        <div class="px-6 py-8 text-center text-gray-500">
+          Loading models...
+        </div>
+      </div>
+    </div>
+
+    <!-- Recommended Models -->
+    <div class="bg-white rounded-lg border mt-8">
+      <div class="px-6 py-4 border-b">
+        <h2 class="text-lg font-semibold">Recommended Models for Aurorion Teams</h2>
+      </div>
+      <div class="divide-y">
+        <div class="px-6 py-4 flex items-center justify-between">
+          <div>
+            <h3 class="font-medium">DeepSeek-R1:7b</h3>
+            <p class="text-sm text-gray-500">Architect-Engineer Agent - Excellent reasoning and code generation</p>
+            <p class="text-xs text-gray-400">Size: ~4.1GB</p>
+          </div>
+          <button class="download-model bg-blue-100 text-blue-700 px-3 py-1 rounded text-sm hover:bg-blue-200" data-model="deepseek-r1:7b">
+            Download
+          </button>
+        </div>
+        
+        <div class="px-6 py-4 flex items-center justify-between">
+          <div>
+            <h3 class="font-medium">Gemma2:27b</h3>
+            <p class="text-sm text-gray-500">Tester-Reviewer Agent - High accuracy for quality validation</p>
+            <p class="text-xs text-gray-400">Size: ~16GB</p>
+          </div>
+          <button class="download-model bg-blue-100 text-blue-700 px-3 py-1 rounded text-sm hover:bg-blue-200" data-model="gemma2:27b">
+            Download
+          </button>
+        </div>
+
+        <div class="px-6 py-4 flex items-center justify-between">
+          <div>
+            <h3 class="font-medium">Llama3.2:3b</h3>
+            <p class="text-sm text-gray-500">Lightweight option - Good for testing and development</p>
+            <p class="text-xs text-gray-400">Size: ~2GB</p>
+          </div>
+          <button class="download-model bg-blue-100 text-blue-700 px-3 py-1 rounded text-sm hover:bg-blue-200" data-model="llama3.2:3b">
+            Download
+          </button>
+        </div>
+
+        <div class="px-6 py-4 flex items-center justify-between">
+          <div>
+            <h3 class="font-medium">Qwen2.5:14b</h3>
+            <p class="text-sm text-gray-500">Multi-purpose agent - Balanced performance and efficiency</p>
+            <p class="text-xs text-gray-400">Size: ~8.7GB</p>
+          </div>
+          <button class="download-model bg-blue-100 text-blue-700 px-3 py-1 rounded text-sm hover:bg-blue-200" data-model="qwen2.5:14b">
+            Download
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const OLLAMA_BASE_URL = 'http://ollama.homedevenv.com';
+    const LMSTUDIO_URL = 'http://localhost:1234';
+    
+    let currentProvider = null;
+    let currentBaseUrl = null;
+    
+    async function checkModelProviders() {
+      // Check LM Studio first (port 1234)
+      try {
+        const lmResponse = await fetch(`${LMSTUDIO_URL}/v1/models`);
+        if (lmResponse.ok) {
+          document.getElementById('ollama-status').textContent = 'LM Studio';
+          document.getElementById('status-indicator').className = 'w-3 h-3 rounded-full bg-purple-500';
+          currentProvider = 'lmstudio';
+          currentBaseUrl = LMSTUDIO_URL;
+          return 'lmstudio';
+        }
+      } catch (error) {
+        console.log('LM Studio not available on port 1234');
+      }
+      
+      // Check Ollama external
+      try {
+        const response = await fetch(`${OLLAMA_BASE_URL}/api/version`);
+        if (response.ok) {
+          document.getElementById('ollama-status').textContent = 'Ollama Online';
+          document.getElementById('status-indicator').className = 'w-3 h-3 rounded-full bg-green-500';
+          currentProvider = 'ollama';
+          currentBaseUrl = OLLAMA_BASE_URL;
+          return 'ollama';
+        }
+      } catch (error) {
+        console.log('Ollama not reachable via external URL, trying localhost...');
+      }
+      
+      // Check Ollama localhost
+      try {
+        const localResponse = await fetch('http://localhost:11434/api/version');
+        if (localResponse.ok) {
+          document.getElementById('ollama-status').textContent = 'Ollama Local';
+          document.getElementById('status-indicator').className = 'w-3 h-3 rounded-full bg-yellow-500';
+          currentProvider = 'ollama';
+          currentBaseUrl = 'http://localhost:11434';
+          return 'ollama-local';
+        }
+      } catch (localError) {
+        console.log('Ollama not available locally');
+      }
+      
+      document.getElementById('ollama-status').textContent = 'No Providers';
+      document.getElementById('status-indicator').className = 'w-3 h-3 rounded-full bg-red-500';
+      currentProvider = null;
+      currentBaseUrl = null;
+      return false;
+    }
+
+    async function loadModels() {
+      const container = document.getElementById('models-container');
+      
+      try {
+        const providerStatus = await checkModelProviders();
+        
+        if (!providerStatus) {
+          container.innerHTML = '<div class="px-6 py-8 text-center text-red-500">No model providers (Ollama/LM Studio) are running or accessible</div>';
+          return;
+        }
+
+        let response, data;
+        
+        if (currentProvider === 'lmstudio') {
+          // LM Studio uses OpenAI-compatible API
+          response = await fetch(`${currentBaseUrl}/v1/models`);
+          const lmData = await response.json();
+          
+          // Convert LM Studio format to Ollama-like format
+          data = {
+            models: lmData.data.map(model => ({
+              name: model.id,
+              size: 0, // LM Studio doesn't provide size in API
+              modified: new Date().toISOString(),
+              digest: 'lmstudio-' + model.id.slice(0, 12)
+            }))
+          };
+        } else {
+          // Ollama API
+          response = await fetch(`${currentBaseUrl}/api/tags`);
+          data = await response.json();
+        }
+        
+        if (!data.models || data.models.length === 0) {
+          container.innerHTML = '<div class="px-6 py-8 text-center text-gray-500">No models installed. Download some recommended models below!</div>';
+          document.getElementById('model-count').textContent = '0';
+          document.getElementById('total-size').textContent = '0 GB';
+          return;
+        }
+
+        document.getElementById('model-count').textContent = data.models.length;
+        
+        // Calculate total size
+        let totalBytes = 0;
+        data.models.forEach(model => {
+          totalBytes += model.size || 0;
+        });
+        const totalGB = (totalBytes / (1024 * 1024 * 1024)).toFixed(1);
+        document.getElementById('total-size').textContent = `${totalGB} GB`;
+
+        // Render models
+        container.innerHTML = data.models.map(model => {
+          const sizeGB = ((model.size || 0) / (1024 * 1024 * 1024)).toFixed(1);
+          const modifiedDate = new Date(model.modified).toLocaleDateString();
+          
+          return `
+            <div class="px-6 py-4 flex items-center justify-between">
+              <div>
+                <h3 class="font-medium">${model.name}</h3>
+                <p class="text-sm text-gray-500">ID: ${model.digest.substring(0, 12)}...</p>
+                <p class="text-xs text-gray-400">Modified: ${modifiedDate} | Size: ${sizeGB} GB</p>
+              </div>
+              <div class="flex gap-2">
+                <button class="test-model bg-green-100 text-green-700 px-3 py-1 rounded text-sm hover:bg-green-200" data-model="${model.name}">
+                  Test
+                </button>
+                <button class="remove-model bg-red-100 text-red-700 px-3 py-1 rounded text-sm hover:bg-red-200" data-model="${model.name}">
+                  Remove
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        // Add event listeners for test and remove buttons
+        container.querySelectorAll('.test-model').forEach(btn => {
+          btn.addEventListener('click', (e) => testModel(e.target.dataset.model));
+        });
+        
+        container.querySelectorAll('.remove-model').forEach(btn => {
+          btn.addEventListener('click', (e) => removeModel(e.target.dataset.model));
+        });
+
+      } catch (error) {
+        console.error('Error loading models:', error);
+        container.innerHTML = '<div class="px-6 py-8 text-center text-red-500">Error loading models</div>';
+      }
+    }
+
+    async function downloadModel(modelName) {
+      const btn = document.querySelector(`[data-model="${modelName}"]`);
+      const originalText = btn.textContent;
+      btn.textContent = 'Downloading...';
+      btn.disabled = true;
+      
+      try {
+        const status = await checkOllamaStatus();
+        let baseUrl = OLLAMA_BASE_URL;
+        if (status === 'localhost') {
+          baseUrl = 'http://localhost:11434';
+        }
+
+        const response = await fetch(`${baseUrl}/api/pull`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ name: modelName })
+        });
+
+        if (response.ok) {
+          btn.textContent = 'Downloaded!';
+          btn.className = 'bg-green-100 text-green-700 px-3 py-1 rounded text-sm';
+          setTimeout(() => {
+            loadModels(); // Refresh the list
+          }, 2000);
+        } else {
+          throw new Error('Download failed');
+        }
+      } catch (error) {
+        btn.textContent = 'Error';
+        btn.className = 'bg-red-100 text-red-700 px-3 py-1 rounded text-sm';
+      }
+      
+      setTimeout(() => {
+        btn.textContent = originalText;
+        btn.disabled = false;
+        btn.className = 'download-model bg-blue-100 text-blue-700 px-3 py-1 rounded text-sm hover:bg-blue-200';
+      }, 3000);
+    }
+
+    async function testModel(modelName) {
+      alert(`Testing ${modelName} - this would send a test prompt to the model`);
+    }
+
+    async function removeModel(modelName) {
+      if (confirm(`Are you sure you want to remove ${modelName}?`)) {
+        alert(`Would remove ${modelName} - implement via ollama delete command`);
+      }
+    }
+
+    // Event listeners
+    document.getElementById('refresh-btn').addEventListener('click', loadModels);
+    
+    document.getElementById('download-recommended').addEventListener('click', () => {
+      if (confirm('Download DeepSeek-R1:7b and Llama3.2:3b for testing?')) {
+        downloadModel('deepseek-r1:7b');
+        setTimeout(() => downloadModel('llama3.2:3b'), 1000);
+      }
+    });
+
+    document.querySelectorAll('.download-model').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        downloadModel(e.target.dataset.model);
+      });
+    });
+
+    // Load models on page load
+    loadModels();
+    
+    // Auto-refresh every 30 seconds
+    setInterval(loadModels, 30000);
+  </script>
+</BaseLayout>

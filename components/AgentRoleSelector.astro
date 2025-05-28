@@ -1,0 +1,1090 @@
+---
+/**
+ * Agent Role Selector Component
+ * 
+ * Provides interface for selecting and configuring AI agents for team composition.
+ * Features role browsing, selection management, and team composition validation.
+ * 
+ * Props:
+ * - selectedRoles: Array of currently selected role IDs
+ * - maxTeamSize: Maximum number of agents allowed (default: 7)
+ * - onSelectionChange: Callback for role selection changes
+ * 
+ * @author Aurorion Teams Collective
+ * @version 1.0.0
+ */
+
+import { defaultAgentRoles } from '../data/agentRoles';
+
+export interface Props {
+  selectedRoles?: string[];
+  maxTeamSize?: number;
+  repositoryId?: string;
+}
+
+const { 
+  selectedRoles = [], 
+  maxTeamSize = 7,
+  repositoryId = ''
+} = Astro.props;
+
+// Calculate team composition metrics
+const selectedCount = selectedRoles.length;
+const remainingSlots = maxTeamSize - selectedCount;
+const isTeamFull = selectedCount >= maxTeamSize;
+
+// Categorize roles by type for better organization
+const coreRoles = defaultAgentRoles.filter(role => 
+  ['architect-engineer', 'tester-reviewer', 'scrum-knowledge'].includes(role.id)
+);
+
+const supportRoles = defaultAgentRoles.filter(role => 
+  ['optimizer-watchdog', 'morale-catalyst', 'technical-enablement', 'standup-facilitator'].includes(role.id)
+);
+---
+
+<!-- Agent Role Selector Container -->
+<div class="agent-role-selector" id="agent-role-selector">
+  <!-- Selection Header -->
+  <div class="selector-header">
+    <div class="header-info">
+      <h2 class="selector-title">Build Your Team</h2>
+      <p class="selector-subtitle">Select AI agents to join your repository team</p>
+    </div>
+    
+    <div class="team-metrics">
+      <div class="metric-item">
+        <span class="metric-value">{selectedCount}</span>
+        <span class="metric-label">Selected</span>
+      </div>
+      <div class="metric-separator">of</div>
+      <div class="metric-item">
+        <span class="metric-value">{maxTeamSize}</span>
+        <span class="metric-label">Maximum</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Team Composition Progress -->
+  <div class="composition-progress">
+    <div class="progress-bar">
+      <div 
+        class="progress-fill" 
+        style={`width: ${(selectedCount / maxTeamSize) * 100}%`}
+      ></div>
+    </div>
+    <div class="progress-label">
+      {remainingSlots > 0 ? `${remainingSlots} slots remaining` : 'Team complete'}
+    </div>
+  </div>
+
+  <!-- Role Categories -->
+  <div class="role-categories">
+    <!-- Core Roles Section -->
+    <div class="role-category">
+      <div class="category-header">
+        <h3 class="category-title">🏗️ Core Roles</h3>
+        <p class="category-description">Essential agents for project foundation</p>
+      </div>
+      
+      <div class="roles-grid">
+        {coreRoles.map((role) => {
+          const isSelected = selectedRoles.includes(role.id);
+          const canSelect = !isTeamFull || isSelected;
+          
+          return (
+            <div class={`role-card ${isSelected ? 'selected' : ''} ${!canSelect ? 'disabled' : ''}`} 
+                 data-role-id={role.id}>
+              <!-- Role Header -->
+              <div class="role-header">
+                <div class="role-icon">{role.icon}</div>
+                <div class="role-info">
+                  <h4 class="role-name">{role.name}</h4>
+                  <p class="role-description">{role.description}</p>
+                </div>
+                <div class="selection-indicator">
+                  {isSelected ? (
+                    <button class="selection-btn selected" aria-label={`Remove ${role.name}`}>
+                      ✓
+                    </button>
+                  ) : (
+                    <button class="selection-btn" aria-label={`Add ${role.name}`} disabled={!canSelect}>
+                      +
+                    </button>
+                  )}
+                </div>
+              </div>
+              
+              <!-- Role Details -->
+              <div class="role-details">
+                <div class="responsibilities">
+                  <h5>Primary Focus:</h5>
+                  <ul>
+                    {role.primaryResponsibilities.slice(0, 2).map(responsibility => (
+                      <li>{responsibility.split(':')[0]}</li>
+                    ))}
+                  </ul>
+                </div>
+                
+                <div class="frameworks">
+                  <h5>Expertise:</h5>
+                  <div class="framework-tags">
+                    {role.frameworks.slice(0, 3).map(framework => (
+                      <span class="framework-tag">{framework}</span>
+                    ))}
+                    {role.frameworks.length > 3 && (
+                      <span class="framework-tag more">+{role.frameworks.length - 3}</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Profile Link -->
+              <div class="role-actions">
+                <a href={`/agents/${role.id}`} class="profile-link" target="_blank">
+                  👁️ View Profile
+                </a>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+
+    <!-- Support Roles Section -->
+    <div class="role-category">
+      <div class="category-header">
+        <h3 class="category-title">🛠️ Support Roles</h3>
+        <p class="category-description">Specialized agents for enhanced capabilities</p>
+      </div>
+      
+      <div class="roles-grid">
+        {supportRoles.map((role) => {
+          const isSelected = selectedRoles.includes(role.id);
+          const canSelect = !isTeamFull || isSelected;
+          
+          return (
+            <div class={`role-card ${isSelected ? 'selected' : ''} ${!canSelect ? 'disabled' : ''}`} 
+                 data-role-id={role.id}>
+              <!-- Role Header -->
+              <div class="role-header">
+                <div class="role-icon">{role.icon}</div>
+                <div class="role-info">
+                  <h4 class="role-name">{role.name}</h4>
+                  <p class="role-description">{role.description}</p>
+                </div>
+                <div class="selection-indicator">
+                  {isSelected ? (
+                    <button class="selection-btn selected" aria-label={`Remove ${role.name}`}>
+                      ✓
+                    </button>
+                  ) : (
+                    <button class="selection-btn" aria-label={`Add ${role.name}`} disabled={!canSelect}>
+                      +
+                    </button>
+                  )}
+                </div>
+              </div>
+              
+              <!-- Role Details -->
+              <div class="role-details">
+                <div class="responsibilities">
+                  <h5>Primary Focus:</h5>
+                  <ul>
+                    {role.primaryResponsibilities.slice(0, 2).map(responsibility => (
+                      <li>{responsibility.split(':')[0]}</li>
+                    ))}
+                  </ul>
+                </div>
+                
+                <div class="frameworks">
+                  <h5>Expertise:</h5>
+                  <div class="framework-tags">
+                    {role.frameworks.slice(0, 3).map(framework => (
+                      <span class="framework-tag">{framework}</span>
+                    ))}
+                    {role.frameworks.length > 3 && (
+                      <span class="framework-tag more">+{role.frameworks.length - 3}</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Profile Link -->
+              <div class="role-actions">
+                <a href={`/agents/${role.id}`} class="profile-link" target="_blank">
+                  👁️ View Profile
+                </a>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+
+  <!-- Selection Summary -->
+  <div class="selection-summary">
+    <div class="summary-header">
+      <h3>Current Team Composition</h3>
+      <button class="btn btn-outline" id="clear-selection-btn">
+        🗑️ Clear All
+      </button>
+    </div>
+    
+    {selectedCount > 0 ? (
+      <div class="selected-roles">
+        {selectedRoles.map(roleId => {
+          const role = defaultAgentRoles.find(r => r.id === roleId);
+          return role ? (
+            <div class="selected-role-item">
+              <span class="selected-role-icon">{role.icon}</span>
+              <span class="selected-role-name">{role.name}</span>
+              <button class="remove-role-btn" data-role-id={roleId} aria-label={`Remove ${role.name}`}>
+                ✕
+              </button>
+            </div>
+          ) : null;
+        })}
+      </div>
+    ) : (
+      <div class="empty-selection">
+        <p>No agents selected. Choose agents from the categories above to build your team.</p>
+      </div>
+    )}
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="selector-actions">
+    <button class="btn btn-secondary" id="cancel-selection-btn">
+      Cancel
+    </button>
+    <button 
+      class="btn btn-primary" 
+      id="confirm-selection-btn"
+      disabled={selectedCount === 0}
+    >
+      {selectedCount > 0 ? `Add ${selectedCount} Agent${selectedCount > 1 ? 's' : ''} to Team` : 'Select Agents First'}
+    </button>
+  </div>
+</div>
+
+<style>
+  /* ========================================
+     AGENT ROLE SELECTOR STYLES
+     ======================================== */
+  
+  .agent-role-selector {
+    background: var(--card-bg);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-lg);
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* ========================================
+     SELECTOR HEADER STYLES
+     ======================================== */
+  
+  .selector-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 2px solid var(--border-color);
+  }
+  
+  .selector-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .selector-subtitle {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+  }
+  
+  .team-metrics {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    background: var(--section-bg);
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius-lg);
+  }
+  
+  .metric-item {
+    text-align: center;
+  }
+  
+  .metric-value {
+    display: block;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--primary-color);
+  }
+  
+  .metric-label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .metric-separator {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+  
+  /* ========================================
+     COMPOSITION PROGRESS STYLES
+     ======================================== */
+  
+  .composition-progress {
+    margin-bottom: var(--spacing-xl);
+  }
+  
+  .progress-bar {
+    width: 100%;
+    height: 12px;
+    background: var(--section-bg);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color), var(--success-color));
+    border-radius: 6px;
+    transition: width 0.3s ease;
+  }
+  
+  .progress-label {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  
+  /* ========================================
+     ROLE CATEGORIES STYLES
+     ======================================== */
+  
+  .role-categories {
+    margin-bottom: var(--spacing-2xl);
+  }
+  
+  .role-category {
+    margin-bottom: var(--spacing-2xl);
+  }
+  
+  .category-header {
+    margin-bottom: var(--spacing-xl);
+    text-align: center;
+  }
+  
+  .category-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .category-description {
+    color: var(--text-muted);
+    font-size: 1rem;
+  }
+  
+  .roles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: var(--spacing-lg);
+  }
+  
+  /* ========================================
+     ROLE CARD STYLES
+     ======================================== */
+  
+  .role-card {
+    background: var(--card-bg);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-lg);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .role-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  .role-card.selected {
+    border-color: var(--success-color);
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, var(--card-bg) 100%);
+  }
+  
+  .role-card.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  .role-card.disabled:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  
+  /* ========================================
+     ROLE HEADER STYLES
+     ======================================== */
+  
+  .role-header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .role-icon {
+    font-size: 2.5rem;
+    flex-shrink: 0;
+  }
+  
+  .role-info {
+    flex: 1;
+  }
+  
+  .role-name {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  .role-description {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+  
+  .selection-indicator {
+    flex-shrink: 0;
+  }
+  
+  .selection-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--border-color);
+    background: var(--card-bg);
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .selection-btn:hover:not(:disabled) {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    transform: scale(1.1);
+  }
+  
+  .selection-btn.selected {
+    background: var(--success-color);
+    border-color: var(--success-color);
+    color: white;
+  }
+  
+  .selection-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  /* ========================================
+     ROLE DETAILS STYLES
+     ======================================== */
+  
+  .role-details {
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .responsibilities,
+  .frameworks {
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .responsibilities h5,
+  .frameworks h5 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .responsibilities ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .responsibilities li {
+    padding: var(--spacing-xs) 0;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    position: relative;
+    padding-left: 15px;
+  }
+  
+  .responsibilities li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--primary-color);
+    font-weight: bold;
+  }
+  
+  .framework-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+  }
+  
+  .framework-tag {
+    background: var(--section-bg);
+    color: var(--text-color);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    border: 1px solid var(--border-color);
+  }
+  
+  .framework-tag.more {
+    background: var(--text-muted);
+    color: white;
+  }
+  
+  /* ========================================
+     ROLE ACTIONS STYLES
+     ======================================== */
+  
+  .role-actions {
+    text-align: center;
+  }
+  
+  .profile-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: color 0.2s ease;
+  }
+  
+  .profile-link:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+  }
+  
+  /* ========================================
+     SELECTION SUMMARY STYLES
+     ======================================== */
+  
+  .selection-summary {
+    background: var(--section-bg);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+  }
+  
+  .summary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .summary-header h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-color);
+  }
+  
+  .selected-roles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+  }
+  
+  .selected-role-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    background: var(--card-bg);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--border-radius);
+    border: 2px solid var(--success-color);
+  }
+  
+  .selected-role-icon {
+    font-size: 1.2rem;
+  }
+  
+  .selected-role-name {
+    font-weight: 600;
+    color: var(--text-color);
+  }
+  
+  .remove-role-btn {
+    background: var(--danger-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+  }
+  
+  .remove-role-btn:hover {
+    transform: scale(1.1);
+  }
+  
+  .empty-selection {
+    text-align: center;
+    color: var(--text-muted);
+    font-style: italic;
+    padding: var(--spacing-lg);
+  }
+  
+  /* ========================================
+     SELECTOR ACTIONS STYLES
+     ======================================== */
+  
+  .selector-actions {
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: flex-end;
+    padding-top: var(--spacing-lg);
+    border-top: 2px solid var(--border-color);
+  }
+  
+  .selector-actions .btn {
+    min-width: 150px;
+  }
+  
+  .selector-actions .btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  /* ========================================
+     PRICE IS RIGHT THEME ENHANCEMENTS
+     ======================================== */
+  
+  .price-is-right .role-card {
+    transform: rotate(-0.5deg);
+    border: 2px solid #ffd700;
+  }
+  
+  .price-is-right .role-card:nth-child(even) {
+    transform: rotate(0.5deg);
+  }
+  
+  .price-is-right .role-card:hover {
+    transform: rotate(0deg) translateY(-3px);
+  }
+  
+  .price-is-right .role-card.selected {
+    animation: gentle-bounce 2s infinite;
+  }
+  
+  .price-is-right .selection-btn {
+    animation: pulse 3s infinite;
+  }
+  
+  .price-is-right .progress-fill {
+    background: linear-gradient(90deg, #ff6b35, #ffd700, #ff1493);
+  }
+  
+  /* ========================================
+     RESPONSIVE DESIGN
+     ======================================== */
+  
+  @media (max-width: 768px) {
+    .selector-header {
+      flex-direction: column;
+      gap: var(--spacing-lg);
+      text-align: center;
+    }
+    
+    .roles-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .role-header {
+      flex-direction: column;
+      text-align: center;
+      gap: var(--spacing-sm);
+    }
+    
+    .summary-header {
+      flex-direction: column;
+      gap: var(--spacing-md);
+      text-align: center;
+    }
+    
+    .selector-actions {
+      flex-direction: column;
+    }
+    
+    .selector-actions .btn {
+      min-width: unset;
+    }
+  }
+  
+  /* ========================================
+     ACCESSIBILITY IMPROVEMENTS
+     ======================================== */
+  
+  @media (prefers-reduced-motion: reduce) {
+    .price-is-right .role-card.selected,
+    .price-is-right .selection-btn {
+      animation: none;
+    }
+  }
+  
+  .role-card:focus-within {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+  }
+</style>
+
+<script>
+  /**
+   * Agent Role Selector Interactive Functionality
+   * 
+   * Handles role selection, team composition validation, and data persistence
+   */
+  
+  class AgentRoleSelectorManager {
+    constructor() {
+      this.selectedRoles = new Set();
+      this.maxTeamSize = 7;
+      this.repositoryId = '';
+      
+      this.initializeEventListeners();
+      this.loadInitialSelection();
+    }
+    
+    /**
+     * Initialize event listeners
+     */
+    initializeEventListeners() {
+      // Role card click handlers
+      document.querySelectorAll('.role-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+          if (!e.target.closest('.selection-btn') && !e.target.closest('.profile-link')) {
+            this.toggleRoleSelection(card);
+          }
+        });
+      });
+      
+      // Selection button handlers
+      document.querySelectorAll('.selection-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const card = e.target.closest('.role-card');
+          this.toggleRoleSelection(card);
+        });
+      });
+      
+      // Remove role button handlers
+      document.querySelectorAll('.remove-role-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const roleId = e.target.getAttribute('data-role-id');
+          this.removeRole(roleId);
+        });
+      });
+      
+      // Clear selection button
+      document.getElementById('clear-selection-btn')?.addEventListener('click', () => {
+        this.clearSelection();
+      });
+      
+      // Confirm selection button
+      document.getElementById('confirm-selection-btn')?.addEventListener('click', () => {
+        this.confirmSelection();
+      });
+      
+      // Cancel button
+      document.getElementById('cancel-selection-btn')?.addEventListener('click', () => {
+        this.cancelSelection();
+      });
+    }
+    
+    /**
+     * Load initial selection from props or storage
+     */
+    loadInitialSelection() {
+      // TODO: Load from component props or localStorage
+      this.updateUI();
+    }
+    
+    /**
+     * Toggle role selection
+     */
+    toggleRoleSelection(card) {
+      if (card.classList.contains('disabled')) return;
+      
+      const roleId = card.getAttribute('data-role-id');
+      
+      if (this.selectedRoles.has(roleId)) {
+        this.removeRole(roleId);
+      } else {
+        this.addRole(roleId);
+      }
+    }
+    
+    /**
+     * Add role to selection
+     */
+    addRole(roleId) {
+      if (this.selectedRoles.size >= this.maxTeamSize) {
+        this.showNotification('Team is full. Remove an agent first.', 'warning');
+        return;
+      }
+      
+      this.selectedRoles.add(roleId);
+      this.updateUI();
+      this.showNotification('Agent added to team', 'success');
+    }
+    
+    /**
+     * Remove role from selection
+     */
+    removeRole(roleId) {
+      this.selectedRoles.delete(roleId);
+      this.updateUI();
+      this.showNotification('Agent removed from team', 'info');
+    }
+    
+    /**
+     * Clear all selections
+     */
+    clearSelection() {
+      this.selectedRoles.clear();
+      this.updateUI();
+      this.showNotification('All selections cleared', 'info');
+    }
+    
+    /**
+     * Confirm selection and close
+     */
+    confirmSelection() {
+      const selectedArray = Array.from(this.selectedRoles);
+      
+      // Save to localStorage for persistence
+      localStorage.setItem('selectedAgentRoles', JSON.stringify(selectedArray));
+      
+      // Dispatch selection event
+      window.dispatchEvent(new CustomEvent('agentRolesSelected', {
+        detail: {
+          selectedRoles: selectedArray,
+          repositoryId: this.repositoryId
+        }
+      }));
+      
+      this.showNotification(`${selectedArray.length} agents confirmed for team`, 'success');
+    }
+    
+    /**
+     * Cancel selection
+     */
+    cancelSelection() {
+      // Dispatch cancel event
+      window.dispatchEvent(new CustomEvent('agentSelectionCancelled'));
+      this.showNotification('Selection cancelled', 'info');
+    }
+    
+    /**
+     * Update UI based on current selection
+     */
+    updateUI() {
+      const selectedCount = this.selectedRoles.size;
+      const isTeamFull = selectedCount >= this.maxTeamSize;
+      
+      // Update role cards
+      document.querySelectorAll('.role-card').forEach(card => {
+        const roleId = card.getAttribute('data-role-id');
+        const isSelected = this.selectedRoles.has(roleId);
+        const canSelect = !isTeamFull || isSelected;
+        
+        // Update card classes
+        card.classList.toggle('selected', isSelected);
+        card.classList.toggle('disabled', !canSelect);
+        
+        // Update selection button
+        const btn = card.querySelector('.selection-btn');
+        if (btn) {
+          btn.textContent = isSelected ? '✓' : '+';
+          btn.classList.toggle('selected', isSelected);
+          btn.disabled = !canSelect;
+        }
+      });
+      
+      // Update metrics
+      const metricValue = document.querySelector('.metric-value');
+      if (metricValue) {
+        metricValue.textContent = selectedCount;
+      }
+      
+      // Update progress bar
+      const progressFill = document.querySelector('.progress-fill');
+      if (progressFill) {
+        progressFill.style.width = `${(selectedCount / this.maxTeamSize) * 100}%`;
+      }
+      
+      // Update progress label
+      const progressLabel = document.querySelector('.progress-label');
+      if (progressLabel) {
+        const remaining = this.maxTeamSize - selectedCount;
+        progressLabel.textContent = remaining > 0 ? `${remaining} slots remaining` : 'Team complete';
+      }
+      
+      // Update confirm button
+      const confirmBtn = document.getElementById('confirm-selection-btn');
+      if (confirmBtn) {
+        confirmBtn.disabled = selectedCount === 0;
+        confirmBtn.textContent = selectedCount > 0 
+          ? `Add ${selectedCount} Agent${selectedCount > 1 ? 's' : ''} to Team`
+          : 'Select Agents First';
+      }
+      
+      // Update selection summary
+      this.updateSelectionSummary();
+    }
+    
+    /**
+     * Update selection summary section
+     */
+    updateSelectionSummary() {
+      const summaryContainer = document.querySelector('.selected-roles');
+      const emptyState = document.querySelector('.empty-selection');
+      
+      if (this.selectedRoles.size === 0) {
+        if (summaryContainer) summaryContainer.style.display = 'none';
+        if (emptyState) emptyState.style.display = 'block';
+        return;
+      }
+      
+      if (summaryContainer) summaryContainer.style.display = 'flex';
+      if (emptyState) emptyState.style.display = 'none';
+      
+      // Recreate selected role items
+      if (summaryContainer) {
+        summaryContainer.innerHTML = '';
+        this.selectedRoles.forEach(roleId => {
+          const roleData = this.getRoleData(roleId);
+          if (roleData) {
+            const item = this.createSelectedRoleItem(roleData);
+            summaryContainer.appendChild(item);
+          }
+        });
+      }
+    }
+    
+    /**
+     * Create selected role item element
+     */
+    createSelectedRoleItem(roleData) {
+      const item = document.createElement('div');
+      item.className = 'selected-role-item';
+      item.innerHTML = `
+        <span class="selected-role-icon">${roleData.icon}</span>
+        <span class="selected-role-name">${roleData.name}</span>
+        <button class="remove-role-btn" data-role-id="${roleData.id}" aria-label="Remove ${roleData.name}">
+          ✕
+        </button>
+      `;
+      
+      // Add remove handler
+      const removeBtn = item.querySelector('.remove-role-btn');
+      removeBtn.addEventListener('click', () => {
+        this.removeRole(roleData.id);
+      });
+      
+      return item;
+    }
+    
+    /**
+     * Get role data by ID
+     */
+    getRoleData(roleId) {
+      // This would normally come from imported data
+      const roleMap = {
+        'architect-engineer': { id: 'architect-engineer', name: 'Architect-Engineer', icon: '🛠️' },
+        'tester-reviewer': { id: 'tester-reviewer', name: 'Tester-Reviewer', icon: '🔍' },
+        'optimizer-watchdog': { id: 'optimizer-watchdog', name: 'Optimizer-Watchdog', icon: '🚦' },
+        'scrum-knowledge': { id: 'scrum-knowledge', name: 'Scrum-Knowledge', icon: '📋' },
+        'morale-catalyst': { id: 'morale-catalyst', name: 'Morale-Catalyst', icon: '🎉' },
+        'technical-enablement': { id: 'technical-enablement', name: 'Technical Enablement', icon: '🧰' },
+        'standup-facilitator': { id: 'standup-facilitator', name: 'Standup Facilitator', icon: '🎤' }
+      };
+      
+      return roleMap[roleId];
+    }
+    
+    /**
+     * Show notification message
+     */
+    showNotification(message, type = 'info') {
+      const notification = document.createElement('div');
+      notification.textContent = message;
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: var(--${type === 'success' ? 'success' : type === 'warning' ? 'warning' : 'primary'}-color);
+        color: white;
+        padding: var(--spacing-lg);
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-lg);
+        z-index: 1002;
+        animation: slideInNotification 0.5s ease-out;
+        max-width: 300px;
+      `;
+      
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.animation = 'slideOutNotification 0.5s ease-in';
+        setTimeout(() => {
+          if (notification.parentNode) {
+            document.body.removeChild(notification);
+          }
+        }, 500);
+      }, 3000);
+    }
+  }
+  
+  // Initialize when DOM is ready
+  document.addEventListener('DOMContentLoaded', () => {
+    window.agentRoleSelectorManager = new AgentRoleSelectorManager();
+  });
+</script>
