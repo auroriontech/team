@@ -27,7 +27,10 @@
     "test:debug": "playwright test --debug",
     "test:passkey": "playwright test passkey.spec.js",
     "dev:clean": "pkill -f 'astro.*dev' 2>/dev/null || true && rm -f dev.log astro.log && npm run dev",
-    "cleanup": "rm -f *.log test-*.html db.timestamp-*.mjs && echo 'Development environment cleaned'"
+    "cleanup": "rm -f *.log test-*.html db.timestamp-*.mjs && echo 'Development environment cleaned'",
+    "rag:setup": "npx tsx scripts/setup-cloudflare-rag.ts",
+    "rag:test": "npx tsx scripts/test-rag-system.ts",
+    "mcp:agent": "npx tsx mcp-rag-agent.ts"
   },
   "dependencies": {
     "@astrojs/db": "^0.14.14",

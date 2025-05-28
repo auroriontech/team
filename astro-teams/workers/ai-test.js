@@ -32,6 +32,10 @@ export default {
         return await queryVectorize(request, env, corsHeaders);
       } else if (path === '/api/models') {
         return await getAvailableModels(request, env, corsHeaders);
+      } else if (path === '/populate-vectorize') {
+        return await populateVectorize(request, env, corsHeaders);
+      } else if (path === '/rag-query') {
+        return await ragQuery(request, env, corsHeaders);
       } else {
         return new Response(getApiDocs(), {
           headers: { 'Content-Type': 'text/html', ...corsHeaders }
@@ -242,6 +246,117 @@ async function getAvailableModels(request, env, corsHeaders) {
   }), {
     headers: { 'Content-Type': 'application/json', ...corsHeaders }
   });
+}
+
+async function populateVectorize(request, env, corsHeaders) {
+  try {
+    const { vectors } = await request.json();
+    
+    if (!vectors || !Array.isArray(vectors)) {
+      return new Response(JSON.stringify({ 
+        error: 'Invalid vectors array' 
+      }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders }
+      });
+    }
+
+    // Insert vectors into Vectorize
+    const insertResult = await env.VECTORIZE.upsert(vectors);
+    
+    return new Response(JSON.stringify({
+      success: true,
+      inserted: insertResult.count || vectors.length,
+      message: `Successfully inserted ${vectors.length} vectors`
+    }), {
+      headers: { 'Content-Type': 'application/json', ...corsHeaders }
+    });
+
+  } catch (error) {
+    return new Response(JSON.stringify({
+      error: error.message,
+      success: false
+    }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json', ...corsHeaders }
+    });
+  }
+}
+
+async function ragQuery(request, env, corsHeaders) {
+  try {
+    const { query, limit = 5, filter = {} } = await request.json();
+    
+    if (!query) {
+      return new Response(JSON.stringify({ 
+        error: 'Query is required' 
+      }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders }
+      });
+    }
+
+    // Generate embedding for query using BGE model
+    const queryEmbeddingResponse = await env.AI.run('@cf/baai/bge-base-en-v1.5', {
+      text: [query]
+    });
+
+    const queryEmbedding = queryEmbeddingResponse.data[0];
+
+    // Search Vectorize index
+    const searchResults = await env.VECTORIZE.query(queryEmbedding, {
+      topK: limit,
+      filter,
+      returnMetadata: true,
+      returnValues: false
+    });
+
+    // Generate AI-powered response using the context
+    const contextTexts = searchResults.matches.map(match => 
+      `${match.metadata.title}: ${match.metadata.content}`
+    ).join('\n\n');
+
+    const aiResponse = await env.AI.run('@cf/meta/llama-3.1-8b-instruct', {
+      messages: [
+        {
+          role: 'system',
+          content: `You are an AI assistant for the Aurorion Teams project. Use the following context to answer questions accurately and helpfully. If the context doesn't contain enough information, say so.
+
+Context from project documentation:
+${contextTexts}`
+        },
+        {
+          role: 'user',
+          content: query
+        }
+      ],
+      max_tokens: 500,
+      temperature: 0.3
+    });
+
+    return new Response(JSON.stringify({
+      query,
+      answer: aiResponse.response,
+      sources: searchResults.matches.map(match => ({
+        title: match.metadata.title,
+        category: match.metadata.category,
+        similarity: match.score,
+        filePath: match.metadata.filePath
+      })),
+      context_used: searchResults.matches.length
+    }), {
+      headers: { 'Content-Type': 'application/json', ...corsHeaders }
+    });
+
+  } catch (error) {
+    return new Response(JSON.stringify({
+      error: error.message,
+      query: request.query || 'unknown'
+    }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json', ...corsHeaders }
+    });
+  }
 }
 
 function getApiDocs() {
