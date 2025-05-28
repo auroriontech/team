@@ -2,6 +2,9 @@ import { defineCollection, z } from 'astro:content';
 
 const teamMemberSchema = z.object({
   name: z.string(),
+  agentId: z.string().optional(),
+  userId: z.string().optional(),
+  organizationId: z.string().optional(),
   role: z.enum([
     'architect-engineer',
     'tester-reviewer', 
@@ -74,6 +77,7 @@ const teamMemberSchema = z.object({
 
 const agentRoleSchema = z.object({
   name: z.string(),
+  organizationId: z.string().optional(),
   icon: z.string(),
   description: z.string(),
   category: z.enum(['core', 'operational', 'support']),
@@ -138,6 +142,8 @@ const docsSchema = z.object({
 
 const projectSchema = z.object({
   name: z.string(),
+  organizationId: z.string().optional(),
+  userId: z.string().optional(),
   description: z.string(),
   status: z.enum(['active', 'completed', 'paused', 'archived', 'planning']).default('active'),
   priority: z.enum(['low', 'medium', 'high', 'critical']).default('medium'),

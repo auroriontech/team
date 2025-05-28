@@ -1,607 +1,1189 @@
 ---
 /**
- * Aurorion Teams - Homepage
+ * Aurorion Teams - Modern Dashboard Homepage
  * 
- * Main dashboard for the team management application.
- * Features:
- * - Welcome message and app overview
- * - Quick access to create new repositories
- * - Recent repositories list
- * - Theme demonstration
- * 
- * Team Input Incorporated:
- * - Architect-Engineer: Clean component structure with TypeScript
- * - Tester-Reviewer: Accessibility and error handling considerations
- * - Optimizer-Watchdog: Performance-optimized CSS and animations
- * - Scrum-Knowledge: Comprehensive documentation
- * - Morale-Catalyst: Fun celebrations and personality
- * - Technical Enablement: Robust data management setup
+ * Apple Activity-style dashboard for AI agent team management
+ * Features glass UI design with modern metrics and visualizations
  * 
  * @author Aurorion Teams Collective
- * @version 1.0.0
+ * @version 2.0.0
  */
 
 import BaseLayout from '../layouts/BaseLayout.astro';
-import RepositoryModal from '../components/RepositoryModal.astro';
-import RepositoryList from '../components/RepositoryList.astro';
 ---
 
 <BaseLayout 
-  title="Aurorion Teams - AI Agent Team Management"
-  description="Manage AI agent teams across multiple projects with customizable roles and themes"
+  title="Aurorion Teams - AI Agent Dashboard"
+  description="Modern dashboard for managing AI agent teams with real-time metrics and activity monitoring"
 >
-  <!-- Hero Section -->
-  <section class="hero-section">
-    <div class="hero-content">
-      <h1 class="hero-title">
-        Welcome to 
-        <span class="brand-highlight">Aurorion Teams</span>
-      </h1>
-      <p class="hero-description">
-        Manage AI agent teams across multiple projects. Configure specialized roles, 
-        customize behavior, and switch between professional and fun themes!
-      </p>
-      
-      <!-- Quick Actions -->
-      <div class="hero-actions">
-        <a href="/dashboard" class="btn btn-primary" aria-label="View team dashboard">
-          📊 Team Dashboard
-        </a>
-        <button class="btn btn-primary" id="create-repo-btn" aria-label="Create a new repository">
-          🚀 Create New Repository
+  <!-- Auth Guard & Welcome Section -->
+  <div class="dashboard-container">
+    <!-- Guest Landing (shown when not logged in) -->
+    <div class="guest-landing" id="guestLanding">
+      <div class="glass-hero">
+        <div class="hero-background"></div>
+        <div class="hero-content">
+          <h1 class="hero-title">
+            <span class="title-gradient">Aurorion Teams</span>
+            <span class="title-subtitle">AI Agent Management</span>
+          </h1>
+          <p class="hero-description">
+            Experience the future of AI team coordination with our glass-designed dashboard
+          </p>
+          <div class="hero-actions">
+            <a href="/login" class="glass-button primary">
+              <span class="button-icon">🚀</span>
+              Get Started
+            </a>
+            <button class="glass-button secondary" id="demoButton">
+              <span class="button-icon">👁️</span>
+              View Demo
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Dashboard (shown when logged in) -->
+    <div class="main-dashboard" id="mainDashboard" style="display: none;">
+      <!-- Welcome Header -->
+      <div class="dashboard-header">
+        <div class="welcome-section">
+          <h1 class="welcome-title">
+            <span class="greeting" id="greetingText">Welcome back</span>
+            <span class="user-name" id="userName">Team Leader</span>
+          </h1>
+          <p class="welcome-subtitle" id="lastActivity">Last activity: Today</p>
+        </div>
+        <div class="header-actions">
+          <button class="glass-button small" id="refreshDashboard">
+            <span class="button-icon">🔄</span>
+          </button>
+          <button class="glass-button small" id="settingsButton">
+            <span class="button-icon">⚙️</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Activity Rings Section (Apple Watch Style) -->
+      <div class="activity-section">
+        <h2 class="section-title">Team Activity</h2>
+        <div class="activity-rings">
+          <div class="activity-ring-container">
+            <div class="activity-ring" data-ring="tasks">
+              <svg viewBox="0 0 100 100" class="ring-svg">
+                <circle cx="50" cy="50" r="45" class="ring-background" />
+                <circle cx="50" cy="50" r="45" class="ring-progress" id="tasksRing" />
+              </svg>
+              <div class="ring-content">
+                <span class="ring-value" id="tasksValue">12</span>
+                <span class="ring-label">Tasks</span>
+              </div>
+            </div>
+            <div class="ring-stats">
+              <p class="stat-title">Daily Tasks</p>
+              <p class="stat-subtitle">8 completed today</p>
+            </div>
+          </div>
+
+          <div class="activity-ring-container">
+            <div class="activity-ring" data-ring="agents">
+              <svg viewBox="0 0 100 100" class="ring-svg">
+                <circle cx="50" cy="50" r="45" class="ring-background" />
+                <circle cx="50" cy="50" r="45" class="ring-progress" id="agentsRing" />
+              </svg>
+              <div class="ring-content">
+                <span class="ring-value" id="agentsValue">7</span>
+                <span class="ring-label">Agents</span>
+              </div>
+            </div>
+            <div class="ring-stats">
+              <p class="stat-title">Active Agents</p>
+              <p class="stat-subtitle">All systems operational</p>
+            </div>
+          </div>
+
+          <div class="activity-ring-container">
+            <div class="activity-ring" data-ring="efficiency">
+              <svg viewBox="0 0 100 100" class="ring-svg">
+                <circle cx="50" cy="50" r="45" class="ring-background" />
+                <circle cx="50" cy="50" r="45" class="ring-progress" id="efficiencyRing" />
+              </svg>
+              <div class="ring-content">
+                <span class="ring-value" id="efficiencyValue">94%</span>
+                <span class="ring-label">Efficiency</span>
+              </div>
+            </div>
+            <div class="ring-stats">
+              <p class="stat-title">Team Efficiency</p>
+              <p class="stat-subtitle">Above target 🎯</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Metrics Grid -->
+      <div class="metrics-section">
+        <h2 class="section-title">Quick Metrics</h2>
+        <div class="metrics-grid">
+          <div class="metric-card glass-card">
+            <div class="metric-header">
+              <span class="metric-icon">📊</span>
+              <span class="metric-trend up">+12%</span>
+            </div>
+            <div class="metric-content">
+              <h3 class="metric-value" id="projectsMetric">4</h3>
+              <p class="metric-label">Active Projects</p>
+            </div>
+          </div>
+
+          <div class="metric-card glass-card">
+            <div class="metric-header">
+              <span class="metric-icon">⚡</span>
+              <span class="metric-trend up">+8%</span>
+            </div>
+            <div class="metric-content">
+              <h3 class="metric-value" id="velocityMetric">2.4x</h3>
+              <p class="metric-label">Velocity</p>
+            </div>
+          </div>
+
+          <div class="metric-card glass-card">
+            <div class="metric-header">
+              <span class="metric-icon">🎯</span>
+              <span class="metric-trend neutral">~</span>
+            </div>
+            <div class="metric-content">
+              <h3 class="metric-value" id="accuracyMetric">98.2%</h3>
+              <p class="metric-label">Accuracy</p>
+            </div>
+          </div>
+
+          <div class="metric-card glass-card">
+            <div class="metric-header">
+              <span class="metric-icon">⏱️</span>
+              <span class="metric-trend down">-15%</span>
+            </div>
+            <div class="metric-content">
+              <h3 class="metric-value" id="responseMetric">1.2s</h3>
+              <p class="metric-label">Avg Response</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Activity Feed -->
+      <div class="activity-feed-section">
+        <h2 class="section-title">Recent Activity</h2>
+        <div class="activity-feed glass-card">
+          <div class="activity-item" id="activityFeed">
+            <div class="activity-icon">🤖</div>
+            <div class="activity-content">
+              <p class="activity-description">Architect-Engineer completed system design review</p>
+              <span class="activity-time">2 minutes ago</span>
+            </div>
+          </div>
+          <!-- More activity items will be dynamically added -->
+        </div>
+      </div>
+
+      <!-- Agent Status Grid -->
+      <div class="agents-section">
+        <h2 class="section-title">Agent Status</h2>
+        <div class="agents-grid">
+          <div class="agent-card glass-card" data-agent="architect">
+            <div class="agent-header">
+              <div class="agent-avatar">🏗️</div>
+              <div class="agent-status online"></div>
+            </div>
+            <h3 class="agent-name">Architect-Engineer</h3>
+            <p class="agent-activity">Designing system architecture</p>
+            <div class="agent-metrics">
+              <span class="metric-pill">4 tasks active</span>
+            </div>
+          </div>
+
+          <div class="agent-card glass-card" data-agent="tester">
+            <div class="agent-header">
+              <div class="agent-avatar">🧪</div>
+              <div class="agent-status online"></div>
+            </div>
+            <h3 class="agent-name">Tester-Reviewer</h3>
+            <p class="agent-activity">Running quality validation</p>
+            <div class="agent-metrics">
+              <span class="metric-pill">2 tests pending</span>
+            </div>
+          </div>
+
+          <div class="agent-card glass-card" data-agent="optimizer">
+            <div class="agent-header">
+              <div class="agent-avatar">⚡</div>
+              <div class="agent-status away"></div>
+            </div>
+            <h3 class="agent-name">Optimizer-Watchdog</h3>
+            <p class="agent-activity">Monitoring performance</p>
+            <div class="agent-metrics">
+              <span class="metric-pill">All systems green</span>
+            </div>
+          </div>
+
+          <div class="agent-card glass-card" data-agent="scrum">
+            <div class="agent-header">
+              <div class="agent-avatar">📋</div>
+              <div class="agent-status online"></div>
+            </div>
+            <h3 class="agent-name">Scrum-Knowledge</h3>
+            <p class="agent-activity">Coordinating workflows</p>
+            <div class="agent-metrics">
+              <span class="metric-pill">Sprint active</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions Bar -->
+      <div class="quick-actions">
+        <button class="action-button glass-card" id="createProject">
+          <span class="action-icon">➕</span>
+          <span class="action-label">New Project</span>
         </button>
-        <button class="btn btn-outline" id="demo-theme-btn" aria-label="Demonstrate theme switching">
-          🎨 Demo Themes
+        <button class="action-button glass-card" id="viewReports">
+          <span class="action-icon">📈</span>
+          <span class="action-label">View Reports</span>
+        </button>
+        <button class="action-button glass-card" id="teamBuilder">
+          <span class="action-icon">👥</span>
+          <span class="action-label">Team Builder</span>
+        </button>
+        <button class="action-button glass-card" id="exportData">
+          <span class="action-icon">💾</span>
+          <span class="action-label">Export Data</span>
         </button>
       </div>
     </div>
-    
-    <!-- Feature Cards -->
-    <div class="feature-grid">
-      <div class="feature-card">
-        <div class="feature-icon" aria-hidden="true">🛠️</div>
-        <h3>7 Specialized Roles</h3>
-        <p>From Architect-Engineer to Morale-Catalyst, each agent has unique responsibilities</p>
-      </div>
-      
-      <div class="feature-card">
-        <div class="feature-icon" aria-hidden="true">🎨</div>
-        <h3>Dual Themes</h3>
-        <p>Switch between Professional for work or Price is Right for fun!</p>
-      </div>
-      
-      <div class="feature-card">
-        <div class="feature-icon" aria-hidden="true">📦</div>
-        <h3>Project Management</h3>
-        <p>Create multiple repositories with customized team configurations</p>
-      </div>
-      
-      <div class="feature-card">
-        <div class="feature-icon" aria-hidden="true">💾</div>
-        <h3>Export & Import</h3>
-        <p>Save and share your team configurations across projects</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Repository Dashboard Section -->
-  <section class="dashboard-section">
-    <div class="section-header">
-      <h2 class="section-title">Your Repositories</h2>
-      <button class="btn btn-secondary" id="refresh-repos-btn" aria-label="Refresh repository list">
-        🔄 Refresh
-      </button>
-    </div>
-    
-    <!-- Repository List Component -->
-    <RepositoryList />
-  </section>
-
-  <!-- Quick Start Guide -->
-  <section class="guide-section">
-    <h2 class="section-title">Quick Start Guide</h2>
-    <div class="guide-steps">
-      <div class="guide-step">
-        <div class="step-number" aria-label="Step 1">1</div>
-        <div class="step-content">
-          <h3>Create Repository</h3>
-          <p>Start by creating a new repository for your project</p>
-        </div>
-      </div>
-      
-      <div class="guide-step">
-        <div class="step-number" aria-label="Step 2">2</div>
-        <div class="step-content">
-          <h3>Configure Team</h3>
-          <p>Add AI agents and customize their roles and behavior</p>
-        </div>
-      </div>
-      
-      <div class="guide-step">
-        <div class="step-number" aria-label="Step 3">3</div>
-        <div class="step-content">
-          <h3>Manage & Export</h3>
-          <p>Monitor your team and export configurations for reuse</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Repository Creation Modal -->
-  <RepositoryModal />
+  </div>
 </BaseLayout>
 
 <style>
   /* ========================================
-     HERO SECTION STYLES
+     GLASS UI DESIGN SYSTEM
      ======================================== */
-  
-  .hero-section {
-    text-align: center;
-    margin-bottom: var(--spacing-2xl);
-  }
-  
-  .hero-content {
-    margin-bottom: var(--spacing-2xl);
-  }
-  
-  .hero-title {
-    font-size: 3rem;
-    font-weight: 800;
-    color: var(--text-color);
-    margin-bottom: var(--spacing-lg);
-    line-height: 1.2;
-  }
-  
-  .brand-highlight {
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    /* Fallback for browsers that don't support background-clip */
-    color: var(--primary-color);
-  }
-  
-  .hero-description {
-    font-size: 1.25rem;
-    color: var(--text-muted);
-    max-width: 600px;
-    margin: 0 auto var(--spacing-xl);
-    line-height: 1.6;
-  }
-  
-  .hero-actions {
-    display: flex;
-    gap: var(--spacing-md);
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  
-  /* ========================================
-     FEATURE GRID STYLES
-     ======================================== */
-  
-  .feature-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: var(--spacing-lg);
-    margin-top: var(--spacing-2xl);
-  }
-  
-  .feature-card {
-    background: var(--card-bg);
-    padding: var(--spacing-xl);
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-md);
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: 2px solid transparent;
-    /* Performance optimization - prepare for animations */
-    will-change: transform;
-  }
-  
-  .feature-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-lg);
-  }
-  
-  .feature-card:focus-within {
-    outline: 2px solid var(--primary-color);
-    outline-offset: 2px;
-  }
-  
-  .feature-icon {
-    font-size: 3rem;
-    margin-bottom: var(--spacing-md);
-    display: block;
-  }
-  
-  .feature-card h3 {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--text-color);
-    margin-bottom: var(--spacing-sm);
-  }
-  
-  .feature-card p {
-    color: var(--text-muted);
-    line-height: 1.6;
-  }
-  
-  /* ========================================
-     DASHBOARD SECTION STYLES
-     ======================================== */
-  
-  .dashboard-section {
-    margin: var(--spacing-2xl) 0;
-  }
-  
-  .section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: var(--spacing-xl);
-    flex-wrap: wrap;
-    gap: var(--spacing-md);
-  }
-  
-  .section-title {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--text-color);
-  }
-  
-  .repo-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: var(--spacing-lg);
-  }
-  
-  /* ========================================
-     EMPTY STATE STYLES
-     ======================================== */
-  
-  .empty-state {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: var(--spacing-2xl);
-    background: var(--section-bg);
-    border-radius: var(--border-radius-lg);
-    border: 2px dashed var(--border-color);
-    transition: all 0.3s ease;
-  }
-  
-  .empty-state:hover {
-    border-style: solid;
-    transform: translateY(-2px);
-  }
-  
-  .empty-icon {
-    font-size: 4rem;
-    margin-bottom: var(--spacing-lg);
-    opacity: 0.6;
-    animation: float 3s ease-in-out infinite;
-  }
-  
-  .empty-state h3 {
-    font-size: 1.5rem;
-    color: var(--text-color);
-    margin-bottom: var(--spacing-sm);
-  }
-  
-  .empty-state p {
-    color: var(--text-muted);
-    margin-bottom: var(--spacing-lg);
-  }
-  
-  /* ========================================
-     GUIDE SECTION STYLES
-     ======================================== */
-  
-  .guide-section {
-    margin: var(--spacing-2xl) 0;
-    text-align: center;
-  }
-  
-  .guide-steps {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: var(--spacing-xl);
-    margin-top: var(--spacing-xl);
-  }
-  
-  .guide-step {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    transition: transform 0.3s ease;
-  }
-  
-  .guide-step:hover {
-    transform: translateY(-5px);
-  }
-  
-  .step-number {
-    width: 60px;
-    height: 60px;
-    background: var(--primary-color);
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: var(--spacing-lg);
-    transition: transform 0.3s ease;
-  }
-  
-  .step-number:hover {
-    transform: scale(1.1);
-  }
-  
-  .step-content h3 {
-    font-size: 1.25rem;
-    color: var(--text-color);
-    margin-bottom: var(--spacing-sm);
-  }
-  
-  .step-content p {
-    color: var(--text-muted);
-    line-height: 1.6;
-  }
-  
-  /* ========================================
-     PRICE IS RIGHT THEME ENHANCEMENTS
-     ======================================== */
-  
-  .price-is-right .feature-card {
-    border: 2px solid var(--border-color);
-    transform: rotate(-1deg);
+
+  .dashboard-container {
+    min-height: calc(100vh - 200px);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     position: relative;
     overflow: hidden;
   }
-  
-  .price-is-right .feature-card::before {
-    content: '✨';
+
+  .dashboard-container::before {
+    content: '';
     position: absolute;
-    top: 10px;
-    right: 10px;
-    animation: sparkle 2s infinite;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+      radial-gradient(circle at 40% 80%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
+    animation: backgroundMove 20s ease-in-out infinite;
   }
-  
-  .price-is-right .feature-card:nth-child(even) {
-    transform: rotate(1deg);
+
+  @keyframes backgroundMove {
+    0%, 100% { transform: translateX(0) translateY(0); }
+    25% { transform: translateX(-5px) translateY(-10px); }
+    50% { transform: translateX(10px) translateY(5px); }
+    75% { transform: translateX(-10px) translateY(10px); }
   }
-  
-  .price-is-right .feature-card:hover {
-    transform: rotate(0deg) translateY(-5px);
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
   }
-  
-  .price-is-right .step-number {
-    animation: pulse 2s infinite;
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-    border: 3px solid #ffd700;
+
+  .glass-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 
+      0 12px 40px rgba(0, 0, 0, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
   }
-  
-  .price-is-right .empty-state {
-    border-style: solid;
-    border-color: var(--primary-color);
-    background: var(--card-bg);
-    animation: gentle-bounce 3s ease-in-out infinite;
+
+  .glass-button {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 16px;
+    padding: 12px 24px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
   }
-  
+
+  .glass-button:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  .glass-button.primary {
+    background: rgba(59, 130, 246, 0.4);
+    border-color: rgba(59, 130, 246, 0.6);
+  }
+
+  .glass-button.secondary {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .glass-button.small {
+    padding: 8px 12px;
+    border-radius: 12px;
+  }
+
   /* ========================================
-     ADDITIONAL ANIMATIONS
+     GUEST LANDING SECTION
      ======================================== */
-  
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+
+  .guest-landing {
+    position: relative;
+    z-index: 2;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-  
-  @keyframes gentle-bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-3px); }
+
+  .glass-hero {
+    position: relative;
+    text-align: center;
+    padding: 60px 40px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border-radius: 32px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    max-width: 600px;
   }
-  
+
+  .hero-title {
+    margin-bottom: 24px;
+  }
+
+  .title-gradient {
+    font-size: 3.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #fff 0%, #e0e7ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .title-subtitle {
+    font-size: 1.5rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 400;
+    display: block;
+  }
+
+  .hero-description {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 40px;
+    line-height: 1.6;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* ========================================
+     MAIN DASHBOARD LAYOUT
+     ======================================== */
+
+  .main-dashboard {
+    position: relative;
+    z-index: 2;
+    padding: 32px;
+    display: grid;
+    gap: 32px;
+    grid-template-columns: 1fr;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .welcome-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 8px;
+  }
+
+  .greeting {
+    display: block;
+    font-size: 1.2rem;
+    font-weight: 400;
+    opacity: 0.8;
+  }
+
+  .user-name {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: 800;
+  }
+
+  .welcome-subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1rem;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 12px;
+  }
+
+  /* ========================================
+     ACTIVITY RINGS (APPLE WATCH STYLE)
+     ======================================== */
+
+  .activity-section {
+    padding: 32px;
+  }
+
+  .section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+
+  .activity-rings {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 32px;
+    justify-items: center;
+  }
+
+  .activity-ring-container {
+    text-align: center;
+  }
+
+  .activity-ring {
+    position: relative;
+    width: 160px;
+    height: 160px;
+    margin-bottom: 16px;
+  }
+
+  .ring-svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+  }
+
+  .ring-background {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.1);
+    stroke-width: 8;
+  }
+
+  .ring-progress {
+    fill: none;
+    stroke-width: 8;
+    stroke-linecap: round;
+    transition: stroke-dasharray 2s cubic-bezier(0.4, 0.0, 0.2, 1);
+    stroke-dasharray: 0 283;
+  }
+
+  .ring-progress[data-ring="tasks"] {
+    stroke: #ff6b6b;
+  }
+
+  .ring-progress[data-ring="agents"] {
+    stroke: #4ecdc4;
+  }
+
+  .ring-progress[data-ring="efficiency"] {
+    stroke: #45b7d1;
+  }
+
+  .ring-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  .ring-value {
+    display: block;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: white;
+  }
+
+  .ring-label {
+    display: block;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 4px;
+  }
+
+  .ring-stats {
+    color: white;
+  }
+
+  .stat-title {
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .stat-subtitle {
+    font-size: 0.9rem;
+    opacity: 0.7;
+  }
+
+  /* ========================================
+     METRICS GRID
+     ======================================== */
+
+  .metrics-section {
+    padding: 32px;
+  }
+
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+  }
+
+  .metric-card {
+    padding: 24px;
+    transition: all 0.3s ease;
+  }
+
+  .metric-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .metric-icon {
+    font-size: 1.5rem;
+  }
+
+  .metric-trend {
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .metric-trend.up {
+    background: rgba(34, 197, 94, 0.2);
+    color: #22c55e;
+  }
+
+  .metric-trend.down {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+  }
+
+  .metric-trend.neutral {
+    background: rgba(156, 163, 175, 0.2);
+    color: #9ca3af;
+  }
+
+  .metric-value {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 8px;
+  }
+
+  .metric-label {
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 500;
+  }
+
+  /* ========================================
+     ACTIVITY FEED
+     ======================================== */
+
+  .activity-feed-section {
+    padding: 32px;
+  }
+
+  .activity-feed {
+    padding: 24px;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .activity-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .activity-item:last-child {
+    border-bottom: none;
+  }
+
+  .activity-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+  }
+
+  .activity-description {
+    color: white;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  .activity-time {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+  }
+
+  /* ========================================
+     AGENT STATUS GRID
+     ======================================== */
+
+  .agents-section {
+    padding: 32px;
+  }
+
+  .agents-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+
+  .agent-card {
+    padding: 24px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .agent-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .agent-avatar {
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+  }
+
+  .agent-status {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid white;
+  }
+
+  .agent-status.online {
+    background: #22c55e;
+  }
+
+  .agent-status.away {
+    background: #f59e0b;
+  }
+
+  .agent-status.offline {
+    background: #ef4444;
+  }
+
+  .agent-name {
+    color: white;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .agent-activity {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    margin-bottom: 16px;
+  }
+
+  .metric-pill {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  /* ========================================
+     QUICK ACTIONS BAR
+     ======================================== */
+
+  .quick-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    padding: 0 32px 32px;
+  }
+
+  .action-button {
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    background: none;
+    color: white;
+  }
+
+  .action-icon {
+    display: block;
+    font-size: 2rem;
+    margin-bottom: 8px;
+  }
+
+  .action-label {
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+
   /* ========================================
      RESPONSIVE DESIGN
      ======================================== */
-  
+
+  @media (max-width: 1024px) {
+    .main-dashboard {
+      padding: 16px;
+      gap: 24px;
+    }
+
+    .dashboard-header {
+      flex-direction: column;
+      gap: 16px;
+      text-align: center;
+    }
+
+    .activity-rings {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 24px;
+    }
+
+    .activity-ring {
+      width: 120px;
+      height: 120px;
+    }
+  }
+
   @media (max-width: 768px) {
-    .hero-title {
+    .title-gradient {
+      font-size: 2.5rem;
+    }
+
+    .welcome-title {
       font-size: 2rem;
     }
-    
-    .hero-description {
-      font-size: 1rem;
+
+    .metrics-grid,
+    .agents-grid {
+      grid-template-columns: 1fr;
     }
-    
+
+    .quick-actions {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
     .hero-actions {
       flex-direction: column;
       align-items: center;
     }
-    
-    .section-header {
-      flex-direction: column;
-      text-align: center;
-    }
-    
-    .feature-grid,
-    .guide-steps {
-      grid-template-columns: 1fr;
-    }
-    
-    .repo-grid {
-      grid-template-columns: 1fr;
-    }
   }
-  
+
   /* ========================================
-     ACCESSIBILITY IMPROVEMENTS
+     THEME SUPPORT
      ======================================== */
-  
-  @media (prefers-reduced-motion: reduce) {
-    * {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
+
+  [data-theme="price-is-right"] .dashboard-container {
+    background: linear-gradient(135deg, #ff6b35 0%, #ffd700 50%, #ff1493 100%);
+  }
+
+  [data-theme="price-is-right"] .glass-card {
+    border-color: rgba(255, 215, 0, 0.3);
+    box-shadow: 
+      0 8px 32px rgba(255, 20, 147, 0.2),
+      inset 0 1px 0 rgba(255, 215, 0, 0.3);
+  }
+
+  [data-theme="price-is-right"] .ring-progress {
+    filter: hue-rotate(20deg) saturate(1.5);
+  }
+
+  /* ========================================
+     ANIMATIONS
+     ======================================== */
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
   }
-  
-  .btn:focus {
-    outline: 2px solid var(--primary-color);
-    outline-offset: 2px;
+
+  .glass-card {
+    animation: slideIn 0.6s ease-out;
+  }
+
+  .activity-ring {
+    animation: slideIn 0.8s ease-out;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+  }
+
+  .agent-status.online {
+    animation: pulse 2s infinite;
   }
 </style>
 
 <script>
   /**
-   * Homepage Interactive Functionality
-   * 
-   * Handles demo actions and repository management with error handling
-   * Team Input:
-   * - Tester-Reviewer: Added proper error handling and validation
-   * - Optimizer-Watchdog: Performance optimizations and error boundaries
-   * - Technical Enablement: Robust event handling
+   * Modern Dashboard JavaScript
+   * Handles authentication state, real-time updates, and interactions
    */
-  
-  // Error handling wrapper
-  function safeExecute(fn, errorMessage) {
-    try {
-      fn();
-    } catch (error) {
-      console.error(errorMessage, error);
-      // In production, would send to error monitoring service
+
+  // Dashboard state
+  let dashboardData = {
+    tasks: { completed: 8, total: 12 },
+    agents: { active: 7, total: 7 },
+    efficiency: 94,
+    projects: 4,
+    velocity: 2.4,
+    accuracy: 98.2,
+    responseTime: 1.2
+  };
+
+  // Authentication check
+  function checkAuthAndShowDashboard() {
+    const guestLanding = document.getElementById('guestLanding');
+    const mainDashboard = document.getElementById('mainDashboard');
+    const userName = document.getElementById('userName');
+    const greetingText = document.getElementById('greetingText');
+
+    // Check for user session
+    const persistentSession = localStorage.getItem('aurorion-user-session');
+    const temporarySession = localStorage.getItem('aurorion-user-session-temp');
+    const sessionData = persistentSession || temporarySession;
+
+    if (sessionData) {
+      try {
+        const session = JSON.parse(sessionData);
+        const loginTime = new Date(session.loginTime).getTime();
+        const now = Date.now();
+        const maxAge = session.rememberMe ? (30 * 24 * 60 * 60 * 1000) : (24 * 60 * 60 * 1000);
+
+        if ((now - loginTime) < maxAge) {
+          // Valid session - show dashboard
+          guestLanding.style.display = 'none';
+          mainDashboard.style.display = 'block';
+          
+          // Update user info
+          const firstName = session.email.split('@')[0].split('.')[0];
+          userName.textContent = firstName.charAt(0).toUpperCase() + firstName.slice(1);
+          
+          // Set greeting based on time
+          const hour = new Date().getHours();
+          if (hour < 12) {
+            greetingText.textContent = 'Good morning';
+          } else if (hour < 18) {
+            greetingText.textContent = 'Good afternoon';
+          } else {
+            greetingText.textContent = 'Good evening';
+          }
+
+          // Initialize dashboard
+          initializeDashboard();
+          return;
+        }
+      } catch (error) {
+        console.error('Failed to parse session:', error);
+      }
+    }
+
+    // No valid session - show guest landing
+    guestLanding.style.display = 'block';
+    mainDashboard.style.display = 'none';
+  }
+
+  // Initialize dashboard with animations and data
+  function initializeDashboard() {
+    // Animate activity rings
+    setTimeout(() => {
+      animateRing('tasksRing', dashboardData.tasks.completed / dashboardData.tasks.total);
+      animateRing('agentsRing', dashboardData.agents.active / dashboardData.agents.total);
+      animateRing('efficiencyRing', dashboardData.efficiency / 100);
+    }, 500);
+
+    // Update metrics
+    updateMetrics();
+    
+    // Start activity feed
+    initializeActivityFeed();
+
+    // Add event listeners
+    addDashboardEventListeners();
+  }
+
+  // Animate activity rings
+  function animateRing(ringId, percentage) {
+    const ring = document.getElementById(ringId);
+    const circumference = 2 * Math.PI * 45; // radius = 45
+    const offset = circumference * (1 - percentage);
+    
+    if (ring) {
+      ring.style.strokeDasharray = `${circumference} ${circumference}`;
+      ring.style.strokeDashoffset = offset;
     }
   }
-  
-  // Demo theme switching with celebration
-  document.getElementById('demo-theme-btn')?.addEventListener('click', () => {
-    safeExecute(() => {
-      if (window.themeManager) {
-        window.themeManager.toggleTheme();
-        
-        // Show demo message with celebration
-        const currentTheme = window.themeManager.getCurrentTheme();
-        
-        if (currentTheme === 'price-is-right') {
-          showThemeNotification('🎉 Welcome to the Price is Right theme! 🎪', 'celebration');
-        } else {
-          showThemeNotification('💼 Back to Professional theme for serious work!', 'professional');
-        }
+
+  // Update metrics with animation
+  function updateMetrics() {
+    const metrics = {
+      projectsMetric: dashboardData.projects,
+      velocityMetric: `${dashboardData.velocity}x`,
+      accuracyMetric: `${dashboardData.accuracy}%`,
+      responseMetric: `${dashboardData.responseTime}s`
+    };
+
+    Object.entries(metrics).forEach(([id, value]) => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.textContent = value;
       }
-    }, 'Failed to toggle theme');
-  });
-  
-  /**
-   * Show themed notification
-   * @param {string} message - Message to display
-   * @param {string} type - 'celebration' or 'professional'
-   */
-  function showThemeNotification(message, type) {
+    });
+
+    // Update activity ring values
+    document.getElementById('tasksValue').textContent = dashboardData.tasks.completed;
+    document.getElementById('agentsValue').textContent = dashboardData.agents.active;
+    document.getElementById('efficiencyValue').textContent = `${dashboardData.efficiency}%`;
+  }
+
+  // Initialize activity feed
+  function initializeActivityFeed() {
+    const activities = [
+      { icon: '🏗️', description: 'Architect-Engineer completed system design review', time: '2 minutes ago' },
+      { icon: '🧪', description: 'Tester-Reviewer validated code quality metrics', time: '5 minutes ago' },
+      { icon: '⚡', description: 'Optimizer-Watchdog improved response time by 15%', time: '12 minutes ago' },
+      { icon: '📋', description: 'Scrum-Knowledge updated sprint progress', time: '25 minutes ago' },
+      { icon: '🎯', description: 'Morale-Catalyst resolved team coordination issue', time: '1 hour ago' }
+    ];
+
+    const activityFeed = document.getElementById('activityFeed');
+    if (activityFeed) {
+      activityFeed.innerHTML = activities.map(activity => `
+        <div class="activity-item">
+          <div class="activity-icon">${activity.icon}</div>
+          <div class="activity-content">
+            <p class="activity-description">${activity.description}</p>
+            <span class="activity-time">${activity.time}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+  }
+
+  // Add dashboard event listeners
+  function addDashboardEventListeners() {
+    // Refresh dashboard
+    document.getElementById('refreshDashboard')?.addEventListener('click', () => {
+      // Simulate data update
+      dashboardData.efficiency = Math.min(100, dashboardData.efficiency + Math.floor(Math.random() * 3));
+      dashboardData.tasks.completed = Math.min(dashboardData.tasks.total, dashboardData.tasks.completed + 1);
+      
+      updateMetrics();
+      animateRing('efficiencyRing', dashboardData.efficiency / 100);
+      animateRing('tasksRing', dashboardData.tasks.completed / dashboardData.tasks.total);
+      
+      showNotification('Dashboard refreshed! 📊', 'success');
+    });
+
+    // Quick actions
+    document.getElementById('createProject')?.addEventListener('click', () => {
+      window.location.href = '/team-builder';
+    });
+
+    document.getElementById('viewReports')?.addEventListener('click', () => {
+      showNotification('Reports feature coming soon! 📈', 'info');
+    });
+
+    document.getElementById('teamBuilder')?.addEventListener('click', () => {
+      window.location.href = '/team-builder';
+    });
+
+    document.getElementById('exportData')?.addEventListener('click', () => {
+      exportDashboardData();
+    });
+
+    // Agent card interactions
+    document.querySelectorAll('.agent-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const agent = card.dataset.agent;
+        showNotification(`Opening ${agent} agent details...`, 'info');
+        // Could navigate to agent-specific page
+      });
+    });
+
+    // Demo button for guest users
+    document.getElementById('demoButton')?.addEventListener('click', () => {
+      // Create demo session and reload
+      const demoUser = {
+        userId: 'demo-user-' + Date.now(),
+        email: 'demo@aurorion.teams',
+        organizationId: 'demo-org',
+        loginTime: new Date().toISOString(),
+        rememberMe: false,
+        isDemo: true
+      };
+
+      localStorage.setItem('aurorion-user-session-temp', JSON.stringify(demoUser));
+      location.reload();
+    });
+  }
+
+  // Export dashboard data
+  function exportDashboardData() {
+    const exportData = {
+      timestamp: new Date().toISOString(),
+      metrics: dashboardData,
+      user: JSON.parse(localStorage.getItem('aurorion-user-session') || localStorage.getItem('aurorion-user-session-temp') || '{}')
+    };
+
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `aurorion-dashboard-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    showNotification('Dashboard data exported! 💾', 'success');
+  }
+
+  // Show notification
+  function showNotification(message, type = 'info') {
     const notification = document.createElement('div');
-    notification.className = `theme-notification ${type}`;
+    notification.className = `notification ${type}`;
     notification.textContent = message;
     notification.style.cssText = `
       position: fixed;
       top: 20px;
       right: 20px;
-      background: var(--card-bg);
-      color: var(--text-color);
-      padding: var(--spacing-lg);
-      border-radius: var(--border-radius-lg);
-      box-shadow: var(--shadow-lg);
-      border: 2px solid var(--primary-color);
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(20px);
+      color: white;
+      padding: 16px 24px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
       z-index: 1000;
       animation: slideInNotification 0.5s ease-out;
       max-width: 300px;
     `;
-    
-    // Add celebration effects for Price is Right theme
-    if (type === 'celebration') {
-      notification.style.animation = 'slideInNotification 0.5s ease-out, pulse 2s infinite 0.5s';
-    }
-    
+
     document.body.appendChild(notification);
-    
-    // Auto-remove after 3 seconds
+
     setTimeout(() => {
-      if (notification.parentNode) {
-        notification.style.animation = 'slideOutNotification 0.5s ease-in';
-        setTimeout(() => {
+      notification.style.animation = 'slideOutNotification 0.5s ease-in';
+      setTimeout(() => {
+        if (notification.parentNode) {
           document.body.removeChild(notification);
-        }, 500);
-      }
+        }
+      }, 500);
     }, 3000);
   }
-  
-  // Create repository - now fully functional!
-  document.getElementById('create-repo-btn')?.addEventListener('click', () => {
-    safeExecute(() => {
-      if (window.repositoryModal) {
-        window.repositoryModal.open();
-      } else {
-        showThemeNotification('🚧 Modal loading... Please try again!', 'professional');
+
+  // Auto-update dashboard every 30 seconds
+  setInterval(() => {
+    if (document.getElementById('mainDashboard').style.display !== 'none') {
+      // Simulate live data updates
+      const oldEfficiency = dashboardData.efficiency;
+      dashboardData.efficiency = Math.min(100, Math.max(85, dashboardData.efficiency + (Math.random() - 0.5) * 2));
+      
+      if (Math.abs(dashboardData.efficiency - oldEfficiency) > 0.5) {
+        animateRing('efficiencyRing', dashboardData.efficiency / 100);
+        updateMetrics();
       }
-    }, 'Failed to open repository creation modal');
-  });
-  
-  // Refresh repositories - now delegates to RepositoryList component
-  document.getElementById('refresh-repos-btn')?.addEventListener('click', () => {
-    safeExecute(() => {
-      if (window.repositoryListManager) {
-        window.repositoryListManager.loadRepositories();
-        showThemeNotification('🔄 Refreshing repositories...', 'professional');
-      } else {
-        showThemeNotification('🔄 Repository list loading...', 'professional');
-      }
-    }, 'Failed to refresh repositories');
-  });
-  
-  // Add notification animation styles
+    }
+  }, 30000);
+
+  // Initialize dashboard when page loads
+  document.addEventListener('DOMContentLoaded', checkAuthAndShowDashboard);
+
+  // Add notification styles
   const notificationStyles = document.createElement('style');
   notificationStyles.textContent = `
     @keyframes slideInNotification {
-      from {
-        transform: translateX(100%);
-        opacity: 0;
-      }
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
     }
-    
     @keyframes slideOutNotification {
-      from {
-        transform: translateX(0);
-        opacity: 1;
-      }
-      to {
-        transform: translateX(100%);
-        opacity: 0;
-      }
+      from { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(100%); opacity: 0; }
     }
   `;
   document.head.appendChild(notificationStyles);
-  
-  // Initialize page with accessibility improvements
-  document.addEventListener('DOMContentLoaded', () => {
-    safeExecute(() => {
-      // Add keyboard navigation for cards
-      const cards = document.querySelectorAll('.feature-card, .guide-step');
-      cards.forEach(card => {
-        card.setAttribute('tabindex', '0');
-        card.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            card.click();
-          }
-        });
-      });
-    }, 'Failed to initialize accessibility features');
-  });
+
+  console.log('Modern Dashboard initialized');
 </script>

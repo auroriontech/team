@@ -1,0 +1,818 @@
+---
+/**
+ * Login Page
+ * 
+ * Provides authentication interface for Aurorion Teams application
+ * Supports both organizational and individual user authentication
+ * Integrates with ID management system for organizationId, userId, agentId
+ * 
+ * @author Aurorion Teams Collective
+ * @version 1.0.0
+ */
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout 
+  title="Login - Aurorion Teams" 
+  description="Sign in to your Aurorion Teams account to manage AI agents and team configurations"
+>
+  <div class="login-container">
+    <div class="login-card">
+      <!-- Header Section -->
+      <div class="login-header">
+        <div class="login-logo">🤖</div>
+        <h1 class="login-title">Welcome to Aurorion Teams</h1>
+        <p class="login-subtitle">Sign in to manage your AI agent teams</p>
+      </div>
+
+      <!-- Login Form -->
+      <form class="login-form" id="loginForm">
+        <!-- Email Field -->
+        <div class="form-group">
+          <label for="email" class="form-label">Email Address</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            class="form-input" 
+            required 
+            autocomplete="email"
+            placeholder="Enter your email"
+          />
+          <div class="field-error" id="emailError"></div>
+        </div>
+
+        <!-- Password Field -->
+        <div class="form-group">
+          <label for="password" class="form-label">Password</label>
+          <div class="password-field">
+            <input 
+              type="password" 
+              id="password" 
+              name="password" 
+              class="form-input" 
+              required 
+              autocomplete="current-password"
+              placeholder="Enter your password"
+            />
+            <button type="button" class="password-toggle" id="passwordToggle">
+              <span class="show-password">👁️</span>
+              <span class="hide-password" style="display: none;">🙈</span>
+            </button>
+          </div>
+          <div class="field-error" id="passwordError"></div>
+        </div>
+
+        <!-- Organization ID Field (Optional) -->
+        <div class="form-group">
+          <label for="organizationId" class="form-label">
+            Organization ID 
+            <span class="optional-indicator">(Optional)</span>
+          </label>
+          <input 
+            type="text" 
+            id="organizationId" 
+            name="organizationId" 
+            class="form-input" 
+            placeholder="Enter organization ID"
+          />
+          <div class="field-hint">Leave blank for personal account</div>
+        </div>
+
+        <!-- Remember Me -->
+        <div class="form-group checkbox-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="rememberMe" name="rememberMe" class="checkbox-input">
+            <span class="checkbox-custom"></span>
+            <span class="checkbox-text">Remember me for 30 days</span>
+          </label>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="login-button" id="loginButton">
+          <span class="button-text">Sign In</span>
+          <div class="button-spinner" style="display: none;">
+            <div class="spinner"></div>
+          </div>
+        </button>
+
+        <!-- Form Status -->
+        <div class="form-status" id="formStatus"></div>
+      </form>
+
+      <!-- Additional Options -->
+      <div class="login-footer">
+        <div class="login-links">
+          <a href="/docs" class="link">Documentation</a>
+          <span class="link-separator">•</span>
+          <a href="/agents" class="link">Explore Agents</a>
+        </div>
+        
+        <div class="demo-section">
+          <p class="demo-text">Want to try without signing up?</p>
+          <button type="button" class="demo-button" id="demoButton">
+            Enter Demo Mode
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Features Sidebar -->
+    <div class="features-sidebar">
+      <h2 class="features-title">Aurorion Teams Features</h2>
+      <div class="features-list">
+        <div class="feature-item">
+          <div class="feature-icon">🏗️</div>
+          <div class="feature-content">
+            <h3>AI Agent Architecture</h3>
+            <p>Design and deploy specialized AI agents with defined roles and responsibilities</p>
+          </div>
+        </div>
+        
+        <div class="feature-item">
+          <div class="feature-icon">🔄</div>
+          <div class="feature-content">
+            <h3>Workflow Orchestration</h3>
+            <p>Automated handoffs and decision flows between agents following industry standards</p>
+          </div>
+        </div>
+        
+        <div class="feature-item">
+          <div class="feature-icon">📊</div>
+          <div class="feature-content">
+            <h3>Team Analytics</h3>
+            <p>Monitor performance, track progress, and optimize team efficiency</p>
+          </div>
+        </div>
+        
+        <div class="feature-item">
+          <div class="feature-icon">🎨</div>
+          <div class="feature-content">
+            <h3>Dynamic Customization</h3>
+            <p>Adapt agent behavior based on business culture and project requirements</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  /* ========================================
+     LOGIN PAGE LAYOUT
+     ======================================== */
+
+  .login-container {
+    min-height: calc(100vh - 200px);
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: var(--space-8);
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--space-8);
+    align-items: center;
+  }
+
+  .login-card {
+    background: var(--color-surface);
+    border-radius: var(--card-border-radius);
+    padding: var(--space-8);
+    box-shadow: var(--card-shadow);
+    border: var(--card-border-width) solid var(--color-border);
+    transition: var(--transition-base);
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .login-card:hover {
+    box-shadow: var(--card-shadow-hover);
+  }
+
+  /* ========================================
+     LOGIN HEADER
+     ======================================== */
+
+  .login-header {
+    text-align: center;
+    margin-bottom: var(--space-8);
+  }
+
+  .login-logo {
+    font-size: 4rem;
+    margin-bottom: var(--space-4);
+    animation: bounce 2s infinite;
+  }
+
+  .login-title {
+    font-size: var(--text-3xl);
+    font-weight: var(--font-bold);
+    color: var(--color-text);
+    margin: 0 0 var(--space-2) 0;
+  }
+
+  .login-subtitle {
+    font-size: var(--text-lg);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  /* ========================================
+     FORM STYLES
+     ======================================== */
+
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .form-label {
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    color: var(--color-text);
+  }
+
+  .optional-indicator {
+    font-weight: var(--font-normal);
+    color: var(--color-text-muted);
+    font-size: var(--text-xs);
+  }
+
+  .form-input {
+    padding: var(--input-padding);
+    border: var(--input-border-width) solid var(--color-border);
+    border-radius: var(--input-border-radius);
+    font-size: var(--input-font-size);
+    font-family: var(--font-primary);
+    transition: var(--transition-base);
+    background: var(--color-surface);
+    color: var(--color-text);
+  }
+
+  .form-input:focus {
+    outline: none;
+    border-color: var(--color-border-focus);
+    box-shadow: var(--shadow-focus);
+  }
+
+  .form-input:invalid:not(:focus):not(:placeholder-shown) {
+    border-color: var(--color-error);
+    box-shadow: var(--shadow-focus-error);
+  }
+
+  .password-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .password-toggle {
+    position: absolute;
+    right: var(--space-3);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--space-1);
+    border-radius: var(--radius-sm);
+    transition: var(--transition-base);
+  }
+
+  .password-toggle:hover {
+    background: var(--color-surface-hover);
+  }
+
+  .field-hint {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  .field-error {
+    font-size: var(--text-xs);
+    color: var(--color-error);
+    display: none;
+  }
+
+  .field-error.show {
+    display: block;
+  }
+
+  /* ========================================
+     CHECKBOX STYLES
+     ======================================== */
+
+  .checkbox-group {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    cursor: pointer;
+    font-size: var(--text-sm);
+  }
+
+  .checkbox-input {
+    display: none;
+  }
+
+  .checkbox-custom {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    position: relative;
+    transition: var(--transition-base);
+  }
+
+  .checkbox-input:checked + .checkbox-custom {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+
+  .checkbox-input:checked + .checkbox-custom::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  .checkbox-text {
+    color: var(--color-text-secondary);
+  }
+
+  /* ========================================
+     BUTTON STYLES
+     ======================================== */
+
+  .login-button {
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    padding: var(--button-padding-base);
+    border-radius: var(--button-border-radius);
+    font-size: var(--text-base);
+    font-weight: var(--button-font-weight);
+    font-family: var(--font-primary);
+    cursor: pointer;
+    transition: var(--transition-base);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+  }
+
+  .login-button:hover:not(:disabled) {
+    background: var(--color-primary-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .login-button:active {
+    transform: translateY(0);
+  }
+
+  .login-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .button-spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid transparent;
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .demo-button {
+    background: var(--color-surface-secondary);
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border);
+    padding: var(--button-padding-sm);
+    border-radius: var(--button-border-radius);
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    cursor: pointer;
+    transition: var(--transition-base);
+    width: 100%;
+  }
+
+  .demo-button:hover {
+    background: var(--color-surface-hover);
+    border-color: var(--color-border-hover);
+  }
+
+  /* ========================================
+     FORM STATUS
+     ======================================== */
+
+  .form-status {
+    padding: var(--space-3);
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    text-align: center;
+    display: none;
+  }
+
+  .form-status.success {
+    background: var(--color-success-100);
+    color: var(--color-success-800);
+    border: 1px solid var(--color-success-300);
+    display: block;
+  }
+
+  .form-status.error {
+    background: var(--color-error-100);
+    color: var(--color-error-800);
+    border: 1px solid var(--color-error-300);
+    display: block;
+  }
+
+  /* ========================================
+     LOGIN FOOTER
+     ======================================== */
+
+  .login-footer {
+    margin-top: var(--space-8);
+    text-align: center;
+    border-top: 1px solid var(--color-border);
+    padding-top: var(--space-6);
+  }
+
+  .login-links {
+    margin-bottom: var(--space-6);
+  }
+
+  .link {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    transition: var(--transition-base);
+  }
+
+  .link:hover {
+    color: var(--color-primary-hover);
+    text-decoration: underline;
+  }
+
+  .link-separator {
+    margin: 0 var(--space-3);
+    color: var(--color-text-muted);
+  }
+
+  .demo-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .demo-text {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  /* ========================================
+     FEATURES SIDEBAR
+     ======================================== */
+
+  .features-sidebar {
+    background: var(--color-surface-secondary);
+    border-radius: var(--card-border-radius);
+    padding: var(--space-6);
+    height: fit-content;
+  }
+
+  .features-title {
+    font-size: var(--text-xl);
+    font-weight: var(--font-bold);
+    color: var(--color-text);
+    margin: 0 0 var(--space-6) 0;
+    text-align: center;
+  }
+
+  .features-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .feature-item {
+    display: flex;
+    gap: var(--space-4);
+    align-items: flex-start;
+  }
+
+  .feature-icon {
+    font-size: var(--text-2xl);
+    flex-shrink: 0;
+  }
+
+  .feature-content h3 {
+    font-size: var(--text-base);
+    font-weight: var(--font-semibold);
+    color: var(--color-text);
+    margin: 0 0 var(--space-1) 0;
+  }
+
+  .feature-content p {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: var(--leading-relaxed);
+  }
+
+  /* ========================================
+     RESPONSIVE DESIGN
+     ======================================== */
+
+  @media (max-width: 768px) {
+    .login-container {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+      padding: var(--space-4);
+    }
+
+    .features-sidebar {
+      order: -1;
+    }
+
+    .login-card {
+      padding: var(--space-6);
+    }
+
+    .login-logo {
+      font-size: 3rem;
+    }
+
+    .login-title {
+      font-size: var(--text-2xl);
+    }
+  }
+
+  /* ========================================
+     THEME SUPPORT
+     ======================================== */
+
+  [data-theme="price-is-right"] .login-logo {
+    animation: sparkle 2s infinite;
+  }
+
+  [data-theme="price-is-right"] .login-button {
+    background: linear-gradient(45deg, #ff6b35, #ffd700);
+    border: 2px solid #ff1493;
+  }
+
+  [data-theme="price-is-right"] .login-button:hover {
+    background: linear-gradient(45deg, #e55a2b, #daa520);
+    transform: translateY(-2px) scale(1.02);
+  }
+
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+  }
+
+  @keyframes sparkle {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    25% { transform: scale(1.1) rotate(5deg); }
+    50% { transform: scale(1.2) rotate(-5deg); }
+    75% { transform: scale(1.1) rotate(5deg); }
+  }
+</style>
+
+<script>
+  /**
+   * Login Page JavaScript
+   * Handles form validation, authentication, and user state management
+   */
+
+  // DOM Elements
+  const loginForm = document.getElementById('loginForm');
+  const loginButton = document.getElementById('loginButton');
+  const buttonText = loginButton.querySelector('.button-text');
+  const buttonSpinner = loginButton.querySelector('.button-spinner');
+  const formStatus = document.getElementById('formStatus');
+  const passwordToggle = document.getElementById('passwordToggle');
+  const passwordInput = document.getElementById('password');
+  const demoButton = document.getElementById('demoButton');
+
+  // Form validation
+  function validateEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  function validatePassword(password) {
+    return password.length >= 6;
+  }
+
+  function showFieldError(fieldId, message) {
+    const errorElement = document.getElementById(fieldId + 'Error');
+    errorElement.textContent = message;
+    errorElement.classList.add('show');
+  }
+
+  function hideFieldError(fieldId) {
+    const errorElement = document.getElementById(fieldId + 'Error');
+    errorElement.classList.remove('show');
+  }
+
+  function showFormStatus(message, type = 'error') {
+    formStatus.textContent = message;
+    formStatus.className = `form-status ${type}`;
+  }
+
+  function hideFormStatus() {
+    formStatus.className = 'form-status';
+  }
+
+  // Password visibility toggle
+  passwordToggle.addEventListener('click', () => {
+    const isPassword = passwordInput.type === 'password';
+    passwordInput.type = isPassword ? 'text' : 'password';
+    
+    const showIcon = passwordToggle.querySelector('.show-password');
+    const hideIcon = passwordToggle.querySelector('.hide-password');
+    
+    if (isPassword) {
+      showIcon.style.display = 'none';
+      hideIcon.style.display = 'inline';
+    } else {
+      showIcon.style.display = 'inline';
+      hideIcon.style.display = 'none';
+    }
+  });
+
+  // Form submission
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    // Clear previous errors
+    hideFieldError('email');
+    hideFieldError('password');
+    hideFormStatus();
+
+    // Get form data
+    const formData = new FormData(loginForm);
+    const email = formData.get('email');
+    const password = formData.get('password');
+    const organizationId = formData.get('organizationId');
+    const rememberMe = formData.get('rememberMe') === 'on';
+
+    // Validate form
+    let hasErrors = false;
+
+    if (!validateEmail(email)) {
+      showFieldError('email', 'Please enter a valid email address');
+      hasErrors = true;
+    }
+
+    if (!validatePassword(password)) {
+      showFieldError('password', 'Password must be at least 6 characters');
+      hasErrors = true;
+    }
+
+    if (hasErrors) return;
+
+    // Show loading state
+    loginButton.disabled = true;
+    buttonText.style.display = 'none';
+    buttonSpinner.style.display = 'flex';
+
+    try {
+      // Simulate API call for demo purposes
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      // Generate user session data
+      const userData = {
+        userId: `user-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        email: email,
+        organizationId: organizationId || null,
+        loginTime: new Date().toISOString(),
+        rememberMe: rememberMe
+      };
+
+      // Store user session
+      const sessionKey = rememberMe ? 'aurorion-user-session' : 'aurorion-user-session-temp';
+      localStorage.setItem(sessionKey, JSON.stringify(userData));
+
+      // Update app state with user context
+      const appState = window.dataManager?.loadAppState() || {};
+      appState.userId = userData.userId;
+      appState.organizationId = userData.organizationId;
+      
+      if (window.dataManager?.saveAppState) {
+        window.dataManager.saveAppState(appState);
+      }
+
+      // Show success message
+      showFormStatus('Login successful! Redirecting...', 'success');
+
+      // Redirect to dashboard after short delay
+      setTimeout(() => {
+        window.location.href = '/dashboard';
+      }, 1500);
+
+    } catch (error) {
+      console.error('Login error:', error);
+      showFormStatus('Login failed. Please check your credentials and try again.');
+    } finally {
+      // Reset button state
+      loginButton.disabled = false;
+      buttonText.style.display = 'inline';
+      buttonSpinner.style.display = 'none';
+    }
+  });
+
+  // Demo mode
+  demoButton.addEventListener('click', () => {
+    // Create demo user session
+    const demoUser = {
+      userId: 'demo-user-' + Date.now(),
+      email: 'demo@aurorion.teams',
+      organizationId: 'demo-org',
+      loginTime: new Date().toISOString(),
+      isDemo: true
+    };
+
+    // Store demo session
+    localStorage.setItem('aurorion-user-session-temp', JSON.stringify(demoUser));
+
+    // Update app state
+    const appState = window.dataManager?.loadAppState() || {};
+    appState.userId = demoUser.userId;
+    appState.organizationId = demoUser.organizationId;
+    
+    if (window.dataManager?.saveAppState) {
+      window.dataManager.saveAppState(appState);
+    }
+
+    // Show demo message and redirect
+    showFormStatus('Entering demo mode...', 'success');
+    setTimeout(() => {
+      window.location.href = '/dashboard';
+    }, 1000);
+  });
+
+  // Real-time validation
+  document.getElementById('email').addEventListener('blur', (e) => {
+    if (e.target.value && !validateEmail(e.target.value)) {
+      showFieldError('email', 'Please enter a valid email address');
+    } else {
+      hideFieldError('email');
+    }
+  });
+
+  document.getElementById('password').addEventListener('blur', (e) => {
+    if (e.target.value && !validatePassword(e.target.value)) {
+      showFieldError('password', 'Password must be at least 6 characters');
+    } else {
+      hideFieldError('password');
+    }
+  });
+
+  // Check if user is already logged in
+  function checkExistingSession() {
+    const tempSession = localStorage.getItem('aurorion-user-session-temp');
+    const persistentSession = localStorage.getItem('aurorion-user-session');
+    
+    if (tempSession || persistentSession) {
+      // User already logged in, redirect to dashboard
+      window.location.href = '/dashboard';
+    }
+  }
+
+  // Initialize page
+  checkExistingSession();
+
+  console.log('Login page initialized');
+</script>
