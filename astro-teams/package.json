@@ -31,7 +31,9 @@
     "rag:setup": "npx tsx scripts/simple-rag-setup.ts",
     "rag:test": "npx tsx scripts/test-rag-system.ts",
     "rag:demo": "npx tsx scripts/demo-rag-capabilities.ts",
-    "mcp:agent": "npx tsx mcp-rag-agent.ts"
+    "mcp:agent": "npx tsx mcp-rag-agent.ts",
+    "mcp:vectorize": "npx tsx mcp-vectorize-server.ts",
+    "worker:vectorize": "wrangler dev workers/vectorize-api.js --local --port=8788"
   },
   "dependencies": {
     "@astrojs/db": "^0.14.14",
