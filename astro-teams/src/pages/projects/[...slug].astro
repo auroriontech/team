@@ -139,7 +139,7 @@ const relatedProjects = allProjects
                 <div class="team-role">AI Agents ({project.data.team.agents.length})</div>
                 <div class="agents-list">
                   {project.data.team.agents.map(agent => (
-                    <a href={`/agents/${agent}`} class="agent-link" key={agent}>
+                    <a href={`/team/${agent}`} class="agent-link" key={agent}>
                       {agent.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
                     </a>
                   ))}

@@ -102,7 +102,25 @@
 4. Document workflow patterns for team use
 **Success Metric**: Agents provide specific, actionable guidance for project tasks
 
-#### **Task 6: Performance Optimization Refinement**
+#### **Task 6: AutoRAG Integration Investigation** 🆕
+**Goal**: Evaluate and potentially implement Cloudflare AutoRAG as an enhanced alternative
+**Steps**:
+1. Compare AutoRAG vs current custom RAG implementation
+2. Analyze AutoRAG's fully-managed pipeline benefits (automatic indexing, multitenancy, caching)
+3. Test AutoRAG's native R2 integration with existing bucket strategy
+4. Evaluate AutoRAG's advanced features: recursive chunking, reranking, vision-to-language
+5. Consider migration path from current RAG to AutoRAG if beneficial
+**Success Metric**: Clear recommendation on AutoRAG adoption with implementation plan
+**Key Features to Evaluate**:
+- Automatic continuous indexing vs manual setup
+- Built-in multitenancy and metadata filtering
+- Native Worker binding integration
+- Advanced document processing (PDFs, images, HTML, CSV)
+- Query caching and performance optimization
+
+### **🔮 LOW PRIORITY (Future Sessions)**
+
+#### **Task 7: Performance Optimization Refinement**
 **Goal**: Improve and automate the optimization framework
 **Steps**:
 1. Review optimization results from today's 16 improvements
@@ -111,21 +129,19 @@
 4. Implement continuous optimization monitoring
 **Success Metric**: Safe, automated code optimization pipeline
 
-### **🔮 LOW PRIORITY (Future Sessions)**
-
-#### **Task 7: Advanced RAG Features**
+#### **Task 8: Advanced RAG Features**
 - Multi-language document support
 - Advanced search filtering by date, priority, agent
 - Automated document updates and re-indexing
 - Cost optimization and usage monitoring
 
-#### **Task 8: Team Collaboration Features**
+#### **Task 9: Team Collaboration Features**
 - Shared agent knowledge base
 - Team-specific document access
 - Collaborative optimization workflows
 - Cross-project knowledge sharing
 
-#### **Task 9: Production Deployment**
+#### **Task 10: Production Deployment**
 - Deploy all systems to production Cloudflare
 - Set up monitoring and alerting
 - Create CI/CD pipelines for documentation

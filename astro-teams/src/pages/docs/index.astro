@@ -91,7 +91,7 @@ const categoryInfo = {
             <p>Configure and deploy AI agent teams</p>
           </div>
         </a>
-        <a href="/agents" class="quick-link">
+        <a href="/team" class="quick-link">
           <span class="link-icon">🤖</span>
           <div class="link-content">
             <h3>Agent Profiles</h3>
@@ -171,7 +171,7 @@ const categoryInfo = {
       
       <div class="docs-grid">
         {agentRoles.map((role) => (
-          <a href={`/agents/${role.id}`} class="doc-card agent-card" key={role.id}>
+          <a href={`/team/${role.id}`} class="doc-card agent-card" key={role.id}>
             <div class="doc-header">
               <h3 class="doc-title">
                 <span class="role-icon">{role.data.icon}</span>
