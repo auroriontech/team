@@ -1,0 +1,16 @@
+name = "ai-test-worker"
+main = "ai-test.js"
+compatibility_date = "2024-01-15"
+
+# AI binding for 2025 models
+[ai]
+binding = "AI"
+
+# Vectorize binding
+[[vectorize]]
+binding = "VECTORIZE"
+index_name = "aurorion-project-knowledge"
+
+# Development settings
+[env.development]
+name = "ai-test-worker-dev"

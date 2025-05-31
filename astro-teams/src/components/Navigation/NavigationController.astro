@@ -1,0 +1,253 @@
+---
+/**
+ * Navigation Controller
+ * Handles navigation state and mobile interactions
+ */
+---
+
+<script>
+  class NavigationController {
+    private mobileToggle: HTMLElement | null;
+    private mobileNav: HTMLElement | null;
+    private mobileClose: HTMLElement | null;
+    private mobileBackdrop: HTMLElement | null;
+    private themeToggle: HTMLElement | null;
+    private mobileThemeToggle: HTMLElement | null;
+
+    constructor() {
+      this.mobileToggle = document.getElementById('mobileToggle');
+      this.mobileNav = document.getElementById('mobileNav');
+      this.mobileClose = document.getElementById('mobileClose');
+      this.mobileBackdrop = document.getElementById('mobileBackdrop');
+      this.themeToggle = document.getElementById('themeToggle');
+      this.mobileThemeToggle = document.getElementById('mobileThemeToggle');
+
+      this.init();
+    }
+
+    private init() {
+      this.setupEventListeners();
+      this.setActiveNavLinks();
+      this.initTheme();
+      this.setupMobileTouchOptimization();
+    }
+
+    private setupEventListeners() {
+      // Mobile menu toggle
+      this.mobileToggle?.addEventListener('click', () => this.toggleMobileNav());
+      this.mobileClose?.addEventListener('click', () => this.closeMobileNav());
+      this.mobileBackdrop?.addEventListener('click', () => this.closeMobileNav());
+
+      // Theme toggles
+      this.themeToggle?.addEventListener('click', () => this.toggleTheme());
+      this.mobileThemeToggle?.addEventListener('click', () => this.toggleTheme());
+
+      // Keyboard navigation
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          this.closeMobileNav();
+        }
+      });
+
+      // Close mobile nav on route change
+      window.addEventListener('beforeunload', () => this.closeMobileNav());
+    }
+
+    private toggleMobileNav() {
+      const isOpen = this.mobileNav?.classList.contains('open');
+      
+      if (isOpen) {
+        this.closeMobileNav();
+      } else {
+        this.openMobileNav();
+      }
+    }
+
+    private openMobileNav() {
+      this.mobileNav?.classList.add('open');
+      this.mobileToggle?.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    private closeMobileNav() {
+      this.mobileNav?.classList.remove('open');
+      this.mobileToggle?.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    private setActiveNavLinks() {
+      const currentPath = window.location.pathname;
+      const navLinks = document.querySelectorAll('.nav-link, .mobile-nav-link, .bottom-nav-item');
+      
+      navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        link.classList.remove('active');
+        
+        if (href) {
+          // Check if item is active (supports nested routes)
+          const isActive = href === '/' ? currentPath === '/' : currentPath.startsWith(href);
+          if (isActive) {
+            link.classList.add('active');
+          }
+        }
+      });
+    }
+
+    private toggleTheme() {
+      const body = document.body;
+      const isDark = body.classList.contains('dark-theme');
+      const themeIcons = document.querySelectorAll('#themeToggle svg, #mobileThemeToggle svg');
+      const themeText = document.querySelector('#mobileThemeToggle span');
+      
+      if (isDark) {
+        body.classList.remove('dark-theme');
+        themeIcons.forEach(icon => icon.setAttribute('name', 'lucide:moon'));
+        if (themeText) themeText.textContent = 'Dark Mode';
+        localStorage.setItem('theme', 'light');
+      } else {
+        body.classList.add('dark-theme');
+        themeIcons.forEach(icon => icon.setAttribute('name', 'lucide:sun'));
+        if (themeText) themeText.textContent = 'Light Mode';
+        localStorage.setItem('theme', 'dark');
+      }
+    }
+
+    private initTheme() {
+      const savedTheme = localStorage.getItem('theme');
+      const body = document.body;
+      const themeIcons = document.querySelectorAll('#themeToggle svg, #mobileThemeToggle svg');
+      const themeText = document.querySelector('#mobileThemeToggle span');
+      
+      if (savedTheme === 'dark') {
+        body.classList.add('dark-theme');
+        themeIcons.forEach(icon => icon.setAttribute('name', 'lucide:sun'));
+        if (themeText) themeText.textContent = 'Light Mode';
+      } else {
+        themeIcons.forEach(icon => icon.setAttribute('name', 'lucide:moon'));
+        if (themeText) themeText.textContent = 'Dark Mode';
+      }
+    }
+
+    private setupMobileTouchOptimization() {
+      if ('ontouchstart' in window) {
+        // Add touch-friendly classes
+        document.body.classList.add('touch-device');
+        
+        // Prevent zoom on double tap for buttons
+        const buttons = document.querySelectorAll('button, .nav-link, .mobile-nav-link');
+        buttons.forEach(button => {
+          (button as HTMLElement).style.touchAction = 'manipulation';
+        });
+        
+        // Add faster click response on mobile
+        const clickableElements = document.querySelectorAll('.nav-link, .mobile-nav-link, button, a');
+        clickableElements.forEach(element => {
+          element.addEventListener('touchstart', () => {}, { passive: true });
+        });
+      }
+    }
+  }
+
+  // Initialize navigation when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => new NavigationController());
+  } else {
+    new NavigationController();
+  }
+</script>
+
+<style>
+  /* Touch device optimizations */
+  .touch-device .nav-link,
+  .touch-device .mobile-nav-link {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  
+  .touch-device button {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* iOS Safari specific fixes */
+  @supports (-webkit-touch-callout: none) {
+    .mobile-nav-panel {
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    .mobile-nav-links {
+      -webkit-overflow-scrolling: touch;
+    }
+  }
+  
+  /* Dark theme support */
+  .dark-theme .mobile-nav-panel {
+    background: var(--color-neutral-900);
+    border-right: var(--border-width) solid var(--color-neutral-700);
+  }
+  
+  .dark-theme .mobile-header {
+    border-bottom-color: var(--color-neutral-700);
+  }
+  
+  .dark-theme .mobile-brand h2 {
+    color: var(--color-neutral-100);
+  }
+  
+  .dark-theme .mobile-brand span {
+    color: var(--color-neutral-400);
+  }
+  
+  .dark-theme .mobile-stats {
+    border-bottom-color: var(--color-neutral-700);
+  }
+  
+  .dark-theme .stat {
+    background: var(--color-neutral-800);
+  }
+  
+  .dark-theme .stat-value {
+    color: var(--color-neutral-100);
+  }
+  
+  .dark-theme .mobile-nav-link {
+    color: var(--color-neutral-300);
+  }
+  
+  .dark-theme .mobile-nav-link:hover {
+    background: var(--color-neutral-800);
+    color: var(--color-primary-400);
+  }
+  
+  .dark-theme .mobile-footer {
+    background: var(--color-neutral-800);
+    border-top-color: var(--color-neutral-700);
+  }
+  
+  .dark-theme .mobile-action-btn {
+    background: var(--color-neutral-900);
+    border-color: var(--color-neutral-700);
+    color: var(--color-neutral-300);
+  }
+  
+  .dark-theme .nav-header {
+    background: var(--color-neutral-900);
+    border-bottom-color: var(--color-neutral-700);
+  }
+  
+  .dark-theme .nav-title {
+    color: var(--color-neutral-100);
+  }
+  
+  .dark-theme .nav-subtitle {
+    color: var(--color-neutral-400);
+  }
+  
+  .dark-theme .bottom-nav {
+    background: var(--color-neutral-900);
+    border-top-color: var(--color-neutral-700);
+  }
+</style>

@@ -1,74 +1,213 @@
 ---
-title: "aurorion-teams - Overview"
-description: "Project overview and architecture for aurorion-teams"
-category: "architecture"
+title: "Aurorion Teams - Complete Project Overview"
+description: "Comprehensive top-to-bottom documentation of the Aurorion Teams platform"
+category: "projects"
 priority: "high"
-lastUpdated: 2025-05-27
+lastUpdated: 2025-05-28
 status: "active"
-tags: ["project", "aurorion-teams", "overview", "architecture"]
-authors: ["Aurorion Teams"]
+tags: ["platform", "architecture", "overview", "documentation", "agents", "webauthn"]
+authors: ["aurorion-teams-collective"]
 ---
 
-# aurorion-teams - Project Overview
+# Aurorion Teams - Complete Project Overview
+*Comprehensive Top-to-Bottom Documentation*
 
-## Project Description
+## 📋 **Project Summary**
 
-Project description
+**Aurorion Teams** is a sophisticated AI agent team management platform that enables dynamic configuration of specialized AI agents across different projects and repositories. Built with modern web technologies and enterprise-grade authentication, it provides a comprehensive framework for managing multi-agent AI workflows.
 
-## Architecture Overview
+### Quick Facts
+- **Version**: 0.0.1 (Early Development)
+- **Technology**: Astro v5.8.0 + TypeScript + WebAuthn
+- **Database**: Turso (libSQL) with Astro DB integration
+- **Deployment**: Cloudflare Pages + Workers
+- **Authentication**: Passkey/WebAuthn with SimpleWebAuthn
+- **Development URL**: https://team.homedevenv.com
 
-*This section should describe the overall system architecture, key components, and design decisions.*
+## 🏗️ **System Architecture**
 
-### Core Components
+### **Core Technology Stack**
 
-- **Frontend**: 
-- **Backend**: 
-- **Database**: 
-- **Infrastructure**: 
+#### Frontend Technologies
+- **Framework**: Astro v5.8.0 (SSR enabled)
+- **Language**: TypeScript (strict mode)
+- **Content**: MDX for documentation
+- **Styling**: CSS Custom Properties + Design System
+- **Icons**: Astro Icon with Lucide icons
+- **State Management**: Vanilla TypeScript (localStorage-based)
 
-### Key Features
+#### Backend Technologies
+- **Runtime**: Node.js 20+ 
+- **API Routes**: Astro SSR endpoints
+- **Database**: Astro DB + Turso (libSQL)
+- **Authentication**: WebAuthn/Passkey (SimpleWebAuthn)
+- **Deployment**: Cloudflare Workers
 
-*List the main features and capabilities of this project.*
+#### Development Tools
+- **Build Tool**: Astro/Vite
+- **Testing**: Playwright (E2E) + Vitest (Unit)
+- **Linting**: ESLint + TypeScript
+- **Code Quality**: Prettier, Stylelint
+- **Package Manager**: npm
 
-## Technology Stack
+### **Architecture Diagram**
 
-*Document the technologies, frameworks, and tools used in this project.*
-
-### Frontend Technologies
-- Framework: 
-- Language: 
-- Styling: 
-
-### Backend Technologies
-- Runtime: 
-- Framework: 
-- Database: 
-
-### Development Tools
-- Build Tool: 
-- Testing: 
-- Deployment: 
-
-## Getting Started
-
-### Prerequisites
-
-*List any software or tools needed to work on this project.*
-
-### Installation
-
-```bash
-# Add installation steps here
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Aurorion Teams Platform                  │
+├─────────────────────────────────────────────────────────────┤
+│  Frontend (Astro SSR)                                      │
+│  ├── Pages & Components     ├── Authentication             │
+│  ├── Agent Role Management  ├── Project Configuration      │
+│  ├── Team Customization     └── Documentation System       │
+├─────────────────────────────────────────────────────────────┤
+│  API Layer (Astro Endpoints)                               │
+│  ├── WebAuthn Authentication ├── User Management           │
+│  ├── Agent Configuration     ├── Project Management        │
+│  └── Team Data Operations    └── Content Management        │
+├─────────────────────────────────────────────────────────────┤
+│  Database Layer (Astro DB + Turso)                         │
+│  ├── User Profiles          ├── WebAuthn Credentials       │
+│  ├── Team Members           ├── Projects                   │
+│  ├── Activity Logs          └── WebAuthn Challenges        │
+├─────────────────────────────────────────────────────────────┤
+│  Infrastructure (Cloudflare)                               │
+│  ├── Pages (Static Hosting) ├── Workers (API Endpoints)    │
+│  ├── D1 Database           └── SSL/CDN                     │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-### Development
+## 🎯 **Core Features**
 
+### **AI Agent Management**
+- **7 Specialized Agent Roles**: Each with distinct responsibilities and decision authority
+  - 🎯 **Standup Facilitator**: Cross-agent coordination and synthesis
+  - 🏗️ **Architect-Engineer**: System design and implementation
+  - 🧪 **Tester-Reviewer**: Quality validation and standards compliance
+  - ⚡ **Optimizer-Watchdog**: Performance optimization and risk management
+  - ⚙️ **Technical Enablement**: Tool provisioning and MCP integration
+  - 🎉 **Morale Catalyst**: Team health monitoring and intervention
+  - 📋 **Scrum-Knowledge**: Workflow coordination and documentation
+
+### **Authentication System**
+- **Passkey/WebAuthn Authentication**: Modern, passwordless security
+- **Multi-Device Support**: Register and use passkeys across devices
+- **Fallback Authentication**: Traditional email/password with demo mode
+- **Security Features**: Challenge-based authentication, counter tracking
+
+### **Project Management**
+- **Multi-Project Support**: Manage multiple repositories and configurations
+- **Agent Customization**: Per-project agent behavior configuration
+- **Dynamic Theming**: Professional and "Price is Right" themes
+- **Configuration Export/Import**: Portable team configurations
+
+## 🛠️ **Development Workflow**
+
+### **Environment Setup**
+
+#### Prerequisites
+- Node.js 20+
+- npm 8+
+- Git 2.30+
+
+#### Installation
 ```bash
-# Add development setup steps here
+# Clone repository
+git clone <repository-url>
+cd astro-teams
+
+# Install dependencies
+npm install
+
+# Configure environment
+cp .env.example .env
+# Edit .env with your Turso database credentials
+
+# Start development server
+npm run dev
 ```
 
-## Related Documentation
+#### Development URLs
+- **Primary**: https://team.homedevenv.com (proxy to port 4000)
+- **Local**: http://localhost:4000 (direct access)
+- **API Base**: https://team.homedevenv.com/api
 
-- [API Documentation](./api.mdx)
-- [Deployment Guide](./deployment.mdx)
-- [Contributing Guidelines](./contributing.mdx)
+### **Available Scripts**
+
+#### Development
+```bash
+npm run dev          # Start development server
+npm run dev:clean    # Clean restart (kills existing servers)
+npm run dev:local    # Build and serve via Wrangler
+npm run dev:full     # Concurrent Astro + Wrangler development
+```
+
+#### Testing
+```bash
+npm run test         # Run Playwright E2E tests
+npm run test:ui      # Interactive test runner
+npm run test:debug   # Debug mode testing
+npm run test:passkey # Specific passkey authentication tests
+```
+
+#### Database Operations
+```bash
+npm run db:push      # Sync database schema
+npm run db:verify    # Verify database connection
+npm run db:shell     # Interactive database shell
+npm run db:seed      # Seed database with test data
+```
+
+## 📊 **Current Status**
+
+### **✅ Completed Features**
+- ✅ **WebAuthn Authentication**: Fully functional passkey system
+- ✅ **Agent Role System**: Complete 7-agent framework
+- ✅ **Database Integration**: Turso + Astro DB working
+- ✅ **Documentation System**: Comprehensive docs with search
+- ✅ **Testing Framework**: Playwright E2E testing setup
+- ✅ **Development Workflow**: Optimized proxy-based development
+
+### **⚠️ In Progress**
+- 🚀 **MCP Integration**: Converting agents to Model Context Protocol servers
+- ⚠️ **Production Deployment**: Missing Cloudflare adapter
+- ⚠️ **Security Updates**: 4 moderate npm vulnerabilities
+- ⚠️ **API Test Coverage**: Needs comprehensive endpoint testing
+
+### **🚀 Current Sprint: MCP Integration**
+1. **MCP Foundation**: Install TypeScript SDK and create server template
+2. **Technical Enablement Server**: Convert first agent to MCP endpoint
+3. **Agent Communication**: Implement standardized protocols
+4. **Local Model Integration**: Set up Ollama deployment
+
+### **🎯 Upcoming Priorities**
+1. **Production Readiness**: Install Cloudflare adapter
+2. **Security Resolution**: Fix npm audit issues
+3. **Enhanced Testing**: API and performance testing
+4. **CI/CD Pipeline**: Automated testing and deployment
+
+## 📚 **Documentation Access**
+
+### **Primary Documentation**
+- **Project Overview**: `/docs/projects/aurorion-teams/overview` (this page)
+- **API Documentation**: `/docs/projects/aurorion-teams/api`
+- **Deployment Guide**: `/docs/projects/aurorion-teams/deployment`
+- **Contributing Guidelines**: `/docs/projects/aurorion-teams/contributing`
+
+### **Technical Documentation**
+- **Agent Roles**: `/docs/agent-prompts-[role-name]`
+- **Architecture**: `/docs/architecture/typescript-improvements`
+- **Testing Strategy**: `/docs/tools/testing-strategies`
+- **Database Design**: `/docs/tools/database-design`
+
+### **Additional Resources**
+- **Sprint Retrospective**: `SPRINT_RETROSPECTIVE.md`
+- **Testing Documentation**: `TESTING.md`
+- **Configuration Guide**: `CONFIGURATION_OPTIMIZATION.md`
+- **Complete Overview**: `PROJECT_OVERVIEW.md`
+
+## 🚀 **Getting Started**
+
+Ready to contribute? Check out our [Contributing Guidelines](./contributing) and follow the [Development Setup](#development-workflow) instructions above.
+
+For questions or support, refer to the comprehensive documentation in the `/docs` section or contact the development team.

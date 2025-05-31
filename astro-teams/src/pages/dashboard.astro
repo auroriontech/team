@@ -34,21 +34,25 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
       </div>
 
-      <!-- Sprint Progress -->
-      <div class="widget sprint-progress">
-        <h2>🎯 Sprint Progress</h2>
+      <!-- RAG System Status -->
+      <div class="widget rag-system">
+        <h2>🧠 RAG System Status</h2>
         <div class="progress-bar">
-          <div class="progress-fill" style="width: 65%"></div>
-          <span class="progress-text">65% Complete</span>
+          <div class="progress-fill" style="width: 85%"></div>
+          <span class="progress-text">85% Complete</span>
         </div>
-        <div class="sprint-metrics">
+        <div class="rag-metrics">
           <div class="metric">
-            <span class="label">Story Points</span>
-            <span class="value">26/40</span>
+            <span class="label">Documents Indexed</span>
+            <span class="value">55+ files</span>
           </div>
           <div class="metric">
-            <span class="label">Days Remaining</span>
-            <span class="value">3</span>
+            <span class="label">AI Models Active</span>
+            <span class="value">4/4</span>
+          </div>
+          <div class="metric">
+            <span class="label">Vectorize Status</span>
+            <span class="value status-good">Ready</span>
           </div>
         </div>
       </div>
@@ -79,7 +83,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </div>
           <div class="agent-item">
             <span class="agent-name">Technical Enablement</span>
-            <span class="status status-active">Provisioning</span>
+            <span class="status status-good">MCP Ready</span>
           </div>
           <div class="agent-item">
             <span class="agent-name">Standup Facilitator</span>
@@ -88,21 +92,21 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
       </div>
 
-      <!-- Analytics Overview -->
-      <div class="widget analytics-overview">
-        <h2>📊 Analytics Overview</h2>
-        <div class="analytics-metrics">
+      <!-- Infrastructure Status -->
+      <div class="widget infrastructure-status">
+        <h2>☁️ Infrastructure Status</h2>
+        <div class="infrastructure-metrics">
           <div class="metric">
-            <span class="label">Conversion Rate</span>
-            <span class="value">2.3%</span>
+            <span class="label">Cloudflare AI Worker</span>
+            <span class="value status-good">Active</span>
           </div>
           <div class="metric">
-            <span class="label">Daily Users</span>
-            <span class="value" id="daily-users">Loading...</span>
+            <span class="label">R2 Buckets</span>
+            <span class="value">4 Created</span>
           </div>
           <div class="metric">
-            <span class="label">Performance Score</span>
-            <span class="value status-good">95/100</span>
+            <span class="label">System Quality</span>
+            <span class="value status-good">97%</span>
           </div>
         </div>
       </div>
@@ -112,16 +116,24 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <h2>📋 Recent Activity</h2>
         <div class="activity-list" id="activity-feed">
           <div class="activity-item">
-            <span class="timestamp">09:15</span>
-            <span class="message">Standup Facilitator initiated daily sync</span>
+            <span class="timestamp">Now</span>
+            <span class="message">AutoRAG investigation added to tomorrow's tasks</span>
           </div>
           <div class="activity-item">
-            <span class="timestamp">09:12</span>
-            <span class="message">Architect-Engineer completed feature design</span>
+            <span class="timestamp">14:45</span>
+            <span class="message">RAG system successfully deployed with 5 documents</span>
           </div>
           <div class="activity-item">
-            <span class="timestamp">09:08</span>
-            <span class="message">Tester-Reviewer validated test cases</span>
+            <span class="timestamp">14:30</span>
+            <span class="message">Cloudflare AI Worker activated on port 8788</span>
+          </div>
+          <div class="activity-item">
+            <span class="timestamp">14:15</span>
+            <span class="message">MCP agent framework configured for Claude</span>
+          </div>
+          <div class="activity-item">
+            <span class="timestamp">13:45</span>
+            <span class="message">R2 infrastructure setup completed (4 buckets)</span>
           </div>
         </div>
       </div>
@@ -131,19 +143,19 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <h2>🎯 Key Metrics</h2>
         <div class="metrics-grid">
           <div class="metric-card">
-            <h3>Velocity</h3>
-            <span class="big-number">6.5</span>
-            <span class="unit">pts/day</span>
+            <h3>AI Models</h3>
+            <span class="big-number">4</span>
+            <span class="unit">active</span>
           </div>
           <div class="metric-card">
-            <h3>Quality</h3>
-            <span class="big-number">98%</span>
-            <span class="unit">pass rate</span>
+            <h3>Embeddings</h3>
+            <span class="big-number">1024</span>
+            <span class="unit">dimensions</span>
           </div>
           <div class="metric-card">
-            <h3>Uptime</h3>
-            <span class="big-number">99.9%</span>
-            <span class="unit">availability</span>
+            <h3>System</h3>
+            <span class="big-number">85%</span>
+            <span class="unit">complete</span>
           </div>
         </div>
       </div>
@@ -151,17 +163,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     <!-- Quick Actions -->
     <div class="quick-actions">
-      <button class="action-btn primary" onclick="initiateStandup()">
-        🎤 Start Daily Standup
+      <button class="action-btn primary" onclick="testRAGSystem()">
+        🧠 Test RAG System
       </button>
-      <button class="action-btn secondary" onclick="viewAnalytics()">
-        📊 View Analytics
+      <button class="action-btn secondary" onclick="viewSessionStatus()">
+        📊 View Session Status
       </button>
-      <button class="action-btn secondary" onclick="checkTeamHealth()">
-        🏥 Check Team Health
+      <button class="action-btn secondary" onclick="startMCPAgent()">
+        🔌 Start MCP Agent
       </button>
-      <button class="action-btn secondary" onclick="generateReport()">
-        📄 Generate Report
+      <button class="action-btn secondary" onclick="checkWorkerStatus()">
+        ☁️ Check AI Worker
       </button>
     </div>
   </div>
@@ -172,7 +184,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       margin: 0 auto;
       padding: 2rem;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh;
+      min-height: calc(100vh - 200px);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-lg);
     }
 
     .dashboard-header {
@@ -224,7 +238,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       font-weight: 600;
     }
 
-    .health-metrics, .sprint-metrics, .analytics-metrics {
+    .health-metrics, .rag-metrics, .infrastructure-metrics {
       display: flex;
       flex-direction: column;
       gap: 0.75rem;
@@ -504,29 +518,33 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     }
 
     // Quick action functions
-    function initiateStandup() {
-      addActivity('Standup Facilitator: Initiating daily standup...');
-      alert('Daily standup initiated! All agents will provide status updates.');
+    function testRAGSystem() {
+      addActivity('Technical Enablement: Testing RAG system functionality...');
+      window.open('http://localhost:8788/api/models', '_blank');
     }
 
-    function viewAnalytics() {
-      window.open('/docs/tools/analytics-implementation', '_blank');
+    function viewSessionStatus() {
+      addActivity('Scrum-Knowledge: Opening session status report...');
+      alert('Session Status: RAG system 85% complete, 4 AI models active, MCP ready');
     }
 
-    function checkTeamHealth() {
-      addActivity('Morale-Catalyst: Performing team health check...');
-      alert('Team health check initiated. All systems green!');
+    function startMCPAgent() {
+      addActivity('Technical Enablement: Starting MCP agent for Claude...');
+      alert('Run: npm run mcp:agent to start MCP integration');
     }
 
-    function generateReport() {
-      addActivity('Scrum-Knowledge: Generating daily report...');
-      alert('Daily report generated successfully!');
+    function checkWorkerStatus() {
+      addActivity('Optimizer-Watchdog: Checking Cloudflare AI Worker status...');
+      fetch('http://localhost:8788/api/models')
+        .then(response => response.json())
+        .then(data => alert(`AI Worker Status: ${data.count} models available`))
+        .catch(() => alert('AI Worker offline. Run: cd workers && wrangler dev --port 8788'));
     }
 
     // Simulate some activity
-    setTimeout(() => addActivity('Optimizer-Watchdog: Performance monitoring active'), 2000);
-    setTimeout(() => addActivity('Technical Enablement: MCP tools provisioned'), 5000);
-    setTimeout(() => addActivity('Architect-Engineer: Design review completed'), 8000);
+    setTimeout(() => addActivity('RAG System: Document embeddings generated'), 2000);
+    setTimeout(() => addActivity('Cloudflare AI: BGE-M3 model responding'), 5000);
+    setTimeout(() => addActivity('Vectorize: Search index optimized'), 8000);
 
     // Analytics integration (if PostHog is available)
     if (typeof posthog !== 'undefined') {

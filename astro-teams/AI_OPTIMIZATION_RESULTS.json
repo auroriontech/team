@@ -1,0 +1,40 @@
+{
+  "timestamp": "2025-05-28T23:19:33.366Z",
+  "results": [
+    {
+      "file": ".astro/collections/projects.schema.json",
+      "suggestion": "Consider splitting large file into smaller modules",
+      "status": "no_changes",
+      "reason": "AI determined no changes needed"
+    },
+    {
+      "file": ".astro/data-store.json",
+      "suggestion": "Consider splitting large file into smaller modules",
+      "status": "no_changes",
+      "reason": "AI determined no changes needed"
+    },
+    {
+      "file": ".astro/integrations/astro_db/db.d.ts",
+      "suggestion": "Consider splitting large file into smaller modules",
+      "status": "no_changes",
+      "reason": "AI determined no changes needed"
+    },
+    {
+      "file": "AI_INTEGRATION_STATUS.md",
+      "suggestion": "Add comprehensive error handling for async operations",
+      "status": "no_changes",
+      "reason": "AI determined no changes needed"
+    },
+    {
+      "file": "CLAUDE_WORKFLOW_PROMPTS.md",
+      "suggestion": "Consider splitting large file into smaller modules",
+      "status": "no_changes",
+      "reason": "AI determined no changes needed"
+    }
+  ],
+  "summary": {
+    "applied": 0,
+    "failed": 0,
+    "noChanges": 5
+  }
+}
